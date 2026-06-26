@@ -1,257 +1,197 @@
 /* ============================================================
-   Nx Growth Partners — all site copy (v2 positioning).
-
-   Nx is an EMBEDDED TECHNOLOGY PARTNER — "your team, extended,
-   not replaced." Senior operators + engineers work inside the
-   client's business across three EQUAL pillars: Go-to-Market,
-   AI Engineering, Product Development. AI is one of three — never
-   the top-line. Buyers: Private Equity, Enterprise, Government.
-   The spine is the operating loop: Discover → Prioritize →
-   Deliver → Optimize. One CTA everywhere: Book a call.
+   NX Growth Partners — all site copy.
+   Positioning rule: agents are INTERNAL studio leverage only.
+   Never "agents run/operate the companies". People own decisions;
+   the fleet does the volume — internally.
    ============================================================ */
 
-export const brand = 'Nx Growth Partners'
-
 export const nav = {
-  brand,
+  brand: 'NX Growth Partners',
   links: [
-    { label: 'How we work', id: 'how-we-work' },
-    { label: 'Services', id: 'services' },
-    { label: 'Industries', id: 'industries' },
-    { label: 'Work', id: 'work' },
+    { label: 'Studio', id: 'studio' },
+    { label: 'Portfolio', id: 'portfolio' },
+    { label: 'Approach', id: 'approach' },
     { label: 'About', id: 'about' },
   ],
-  cta: 'Book a call',
+  portal: 'Portal',
+  cta: 'Start a venture',
 }
 
 export const hero = {
-  eyebrow: 'An embedded technology partner',
-  h1a: 'Your team, extended —',
-  h1b: 'not replaced.',
-  sub: 'Nx Growth Partners embeds experienced operators and engineers inside your business — to find the highest-impact opportunities, align technology to business outcomes, and build the systems that move you forward.',
-  ctaPrimary: 'Book a call',
-  ctaSecondary: 'See how we work',
-  note: 'Across go-to-market, AI engineering and product development — for private equity, enterprise and government.',
+  pill: 'An AI-native venture studio',
+  h1: ['Build companies', 'like software.'],
+  sub: 'NX Growth Partners is a holding company and venture studio. We design, build and operate exceptional companies — and run the studio itself on a fleet of AI agents, so a small team ships at the scale of a large one.',
+  ctaPrimary: 'Start a venture',
+  ctaSecondary: 'See the portfolio',
+  inputPlaceholder: 'you@company.com',
+  note: 'A growing portfolio across healthcare, reliability and developer tools.',
 }
 
 export const proof = {
-  // Honest frame: team pedigree, not a "Trusted by" claim. Swap to
-  // "Trusted by" only for contracted, paying clients (see brief §6).
-  label: 'Our team has delivered for',
-  wordmarks: ['Western Digital', 'TraPac', 'Harbor Industrial', 'IntelliGenix', 'Mentera'],
+  label: 'The studio behind a growing portfolio',
+  wordmarks: ['Mentera', 'Convey', 'Logbook', 'Koitel', 'Agentics', 'WD Chat'],
 }
 
-export const operatingModel = {
-  kicker: 'How we work',
-  h2: 'One loop, tied to your business — not just your backlog.',
-  sub: 'We embed a cross-functional senior team and run a continuous loop that ties every release to a business outcome. It is the most ownable thing we do.',
-  steps: [
+export const studio = {
+  kicker: 'The studio',
+  h2: 'Everything a company needs, under one roof.',
+  sub: 'We design, build and take companies to market — and run all of it on one internal operating model, so we can do it again and again.',
+  pillars: [
     {
-      n: '01',
-      title: 'Discover',
-      body: 'Find what actually moves the business before writing any code. We surface where time, revenue and customer experience leak across people, process and technology.',
+      title: 'Engineering',
+      body: 'Full-stack product, mobile, backend and cloud — built AI-native, in-house. The same team builds every venture, Mentera included.',
+      icon: 'Code2',
     },
     {
-      n: '02',
-      title: 'Prioritize',
-      body: 'Rank every opportunity by business impact, implementation effort and organizational readiness — so resources go where adoption and ROI are highest.',
+      title: 'Go-to-market',
+      body: 'Sourcing, outreach and partnerships that put new ventures in front of the right people.',
+      icon: 'Rocket',
     },
     {
-      n: '03',
-      title: 'Deliver',
-      body: 'Engineers work inside your environment, releasing in weekly increments that create measurable value — production software that gets used, not closed tickets.',
+      title: 'Brand & marketing',
+      body: 'Positioning, content and demand, produced at studio scale.',
+      icon: 'Sparkles',
     },
     {
-      n: '04',
-      title: 'Optimize',
-      body: 'Every deployment feeds new insight. We track outcomes, find the next constraint and compound improvement over time.',
+      title: 'Operations & sales',
+      body: 'Pipeline, close and the day-to-day that keeps companies moving.',
+      icon: 'LineChart',
+    },
+    {
+      title: 'Investments',
+      body: 'Capital behind the model, and the companies we choose to hold.',
+      icon: 'Landmark',
     },
   ],
 }
 
-export type Pillar = {
-  title: string
-  outcome: string
-  body: string
-  caps: string[]
-  icon: string
-}
-
-export const services = {
-  kicker: 'What we do',
-  h2: 'Three pillars. One embedded team.',
-  sub: 'Engage one pillar, or a cross-functional team across all three. Each is led by the outcome — the capabilities are the proof of range.',
-  pillars: [
+export const howItWorks = {
+  kicker: 'Our edge',
+  h2: 'Hiring to grow is so last decade.',
+  sub: "Our leverage isn't headcount — it's a standing internal fleet and one operating spine. People own the consequential decisions; agents do the volume.",
+  states: [
     {
-      title: 'Go-to-Market',
-      outcome: 'Grow pipeline and revenue.',
-      body: 'Revenue operations that compound — the systems and motions that turn effort into pipeline.',
-      caps: [
-        'Revenue Operations',
-        'CRM',
-        'Sales Automation',
-        'Marketing Automation',
-        'Analytics',
-      ],
-      icon: 'TrendingUp',
+      title: 'One internal fleet, every function',
+      body: "A standing fleet of 25 specialist agents and an orchestrator handles the studio's engineering, outreach, marketing and sales — across every venture at once.",
     },
     {
-      title: 'AI Engineering',
-      outcome: 'Put AI to work where it actually pays off.',
-      body: 'Applied AI inside your workflows — shipped to production, measured by outcome, not demos.',
-      caps: [
-        'AI SDRs',
-        'AI Agents',
-        'Workflow Automation',
-        'Knowledge Search',
-        'RAG',
-        'LLM Integrations',
-        'Internal Copilots',
-      ],
-      icon: 'Sparkles',
+      title: 'People hold the consequential calls',
+      body: 'Agents run at fixed autonomy tiers (T0–T3). Anything that ships, sends or spends above its tier waits for a person — and every approval is signed to a name and logged.',
     },
     {
-      title: 'Product Development',
-      outcome: "Ship the software your team can't build fast enough.",
-      body: 'Full-stack product, mobile and infrastructure — built to a real bar, inside your stack.',
-      caps: [
-        'SaaS Products',
-        'Internal Tooling',
-        'Customer Portals',
-        'Mobile Apps',
-        'APIs',
-        'Cloud Infrastructure',
-      ],
-      icon: 'Boxes',
+      title: 'One spine under the studio',
+      body: 'Shared auth, data, audit and per-venture isolation, so spinning up the next company re-architects nothing.',
     },
-  ] as Pillar[],
+  ],
 }
 
-export const embedded = {
-  kicker: 'The embedded model',
-  h2: 'Embedded, not handed off.',
-  sub: 'Most firms sell you projects or bodies. We put a senior team inside your environment and make ourselves accountable to the outcome.',
-  embed: {
-    label: 'Embedded — the Nx way',
-    points: [
-      'Inside your stack, standups and Slack',
-      'A senior, cross-functional team',
-      'Accountable to outcomes, not tickets',
-      'Production releases every week',
-      'Full transparency — you see the board live',
-      'Direct access to the people building',
-    ],
-  },
-  handoff: {
-    label: 'Hand-off / staff-aug',
-    points: [
-      'Over the wall, mostly async',
-      'Bodies you have to manage',
-      'Accountable to a statement of work',
-      'Big-bang delivery, months later',
-      'A status deck once a month',
-      'Account managers in between',
-    ],
-  },
-  cadence: ['Plan', 'Build', 'Demo', 'Ship'],
-  cadenceNote: 'A predictable weekly rhythm you can plan around.',
-}
-
-export type Industry = {
+export type Venture = {
   name: string
-  buyer: string
-  frame: string
-  visual: 'pe' | 'enterprise' | 'gov'
-  accent: string
-  note?: string
-}
-
-export const industries = {
-  kicker: 'Who we serve',
-  h2: "Built for the buyers who can't wait.",
-  sub: 'Enter by industry or by service. Private equity and enterprise lead on proof; government is where we are building.',
-  items: [
-    {
-      name: 'Private Equity',
-      buyer: 'Operating partners & portfolio-company leadership',
-      frame:
-        'Portfolio value creation, technical diligence and speed across portcos — one partner spanning GTM, AI and product, without standing up an in-house tech org.',
-      visual: 'pe',
-      accent: '#0057FF',
-    },
-    {
-      name: 'Enterprise',
-      buyer: 'Revenue, IT, product and data leaders',
-      frame:
-        'Senior capacity and outcomes without long agency cycles or heavy hiring — an embedded team that ships inside your stack and displaces slow integrators and staff aug.',
-      visual: 'enterprise',
-      accent: '#47C7F0',
-    },
-    {
-      name: 'Government',
-      buyer: 'Procurement-driven buyers',
-      frame:
-        'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly — and never claim posture we do not hold.',
-      visual: 'gov',
-      accent: '#6C5CE7',
-      note: 'Capabilities & teaming',
-    },
-  ] as Industry[],
-}
-
-export type CaseStudy = {
   tag: string
-  title: string
-  situation: string
-  built: string
-  result: string
-  metric: string
-  metricLabel: string
+  domain: string
+  blurb: string
+  visual:
+    | 'vitals'
+    | 'uptime'
+    | 'build'
+    | 'assets'
+    | 'scaffold'
+    | 'orchestrator'
+    | 'messages'
+  accent: string
 }
 
-export const work = {
-  kicker: 'Selected work',
-  h2: 'Outcomes, not deliverables.',
-  sub: 'Situation, what we built embedded, the operational result. Named stories are added as clients approve them.',
-  cases: [
+export const portfolio = {
+  kicker: 'The portfolio',
+  h2: "Companies we've built and hold.",
+  sub: 'Some are ours end to end; some are client ventures we operate. Each is described by what it is — built to a real bar.',
+  ventures: [
     {
-      tag: 'Private Equity',
-      title: 'Modernized an acquired company without an in-house tech org',
-      situation: 'A portco inherited a stalled roadmap and a manual revenue stack.',
-      built: 'Embedded a senior team, rebuilt the GTM data flow and shipped weekly.',
-      result: 'Pipeline visibility in weeks, not quarters — and a team that kept shipping.',
-      metric: 'wks',
-      metricLabel: 'to first production value',
+      name: 'Mentera',
+      tag: 'Flagship · Healthcare AI',
+      domain: 'Clinical platform',
+      blurb:
+        'An end-to-end clinical platform: backend, web, native iOS and Android, and 50+ EHR integrations, with AI woven through the clinical workflow. Built in full, to a regulated bar.',
+      visual: 'vitals',
+      accent: '#0E9F6E',
     },
     {
-      tag: 'Enterprise',
-      title: 'Replaced a stalled systems-integrator engagement',
-      situation: 'An enterprise revenue team was stuck behind a slow SI and a long backlog.',
-      built: 'Embedded inside their stack, displaced the SI and released every week.',
-      result: 'Working software in production each sprint, accountable to outcomes.',
-      metric: 'wkly',
-      metricLabel: 'production releases',
+      name: 'Convey',
+      tag: 'Client · Reliability',
+      domain: 'Operations platform',
+      blurb:
+        'An autonomous reliability agent for an operations platform serving regulated utilities — it compresses root-cause analysis from days to under an hour, and acts as institutional memory over the codebase. Built self-hosted to a strict compliance bar.',
+      visual: 'uptime',
+      accent: '#3B7DE9',
     },
     {
-      tag: 'AI Engineering',
-      title: 'An autonomous reliability agent for regulated operations',
-      situation: 'Root-cause analysis on a complex platform took days of engineer time.',
-      built: 'A self-hosted reliability agent and institutional memory over the codebase.',
-      result: 'Compressed root-cause from days to under an hour, inside compliance.',
-      metric: '<1hr',
-      metricLabel: 'root-cause, from days',
+      name: 'Logbook',
+      tag: 'Venture · Maritime ops',
+      domain: 'Port operations platform',
+      blurb:
+        'An asset and maintenance platform for ports and terminals — locations, assets, alerts and reports in one system, with Harbor Copilot, an AI assistant that answers questions over the logbook.',
+      visual: 'assets',
+      accent: '#6C5CE7',
     },
-  ] as CaseStudy[],
+    {
+      name: 'Koitel',
+      tag: 'Internal · In build',
+      domain: 'In active development',
+      blurb:
+        'An internal venture in active development, incubated on the same spine.',
+      visual: 'scaffold',
+      accent: '#E08A3B',
+    },
+    {
+      name: 'Agentics',
+      tag: 'Client · Agent products',
+      domain: 'Applied agent products',
+      blurb:
+        'An applied-agents engagement — our orchestration patterns put to work for a client.',
+      visual: 'orchestrator',
+      accent: '#0E9F6E',
+    },
+    {
+      name: 'WD Chat',
+      tag: 'Venture · Conversational',
+      domain: 'Conversational product',
+      blurb:
+        'A conversational product in the portfolio, with its own audience and shape.',
+      visual: 'messages',
+      accent: '#D14B8F',
+    },
+  ] as Venture[],
+}
+
+export const engineering = {
+  kicker: 'How we build',
+  h2: 'Full-stack, AI-native — and all in-house.',
+  sub: 'Every venture is built by the same team, end to end: design, web, mobile, backend, cloud and the AI woven through it. No outsourcing, no handoffs.',
+  capabilities: [
+    { title: 'Product design & UX', body: 'Interfaces people actually understand.', tags: ['Design systems', 'Prototyping', 'User research'] },
+    { title: 'Modern web apps', body: 'Fast, resilient web products.', tags: ['React / Next.js', 'State & data', 'Performance'] },
+    { title: 'Cloud & DevOps', body: 'Infrastructure that scales without drama.', tags: ['IaC', 'Containers', 'CI/CD'] },
+    { title: 'Backend & APIs', body: 'Robust foundations under everything.', tags: ['Serverless', 'Data engineering', 'Security'] },
+    { title: 'AI & machine learning', body: 'AI woven into the product, not bolted on.', tags: ['LLM integration', 'MLOps', 'Vector search'] },
+    { title: 'Mobile', body: 'Native iOS and Android, shipped together.', tags: ['iOS', 'Android', 'Offline-first'] },
+  ],
+  stack: ['React', 'Next.js', 'React Native', 'TypeScript', 'Node', 'Python', 'Postgres', 'Supabase', 'Docker', 'Kubernetes', 'AWS', 'Vercel', 'Claude', 'pgvector'],
+  proof: {
+    label: 'Flagship proof',
+    name: 'Mentera',
+    line: 'A regulated clinical product, taken from zero to shipped — in full.',
+    chips: ['Backend', 'Web', 'Native iOS / Android', '50+ EHR integrations', 'AI clinical workflow'],
+  },
 }
 
 export const stats = {
-  h2: 'Senior people, inside your business, shipping every week.',
-  note: 'One unified brand, one accountable team — no delivery sub-brands, no offshore vendors surfaced as separate entities.',
+  h2: "You're building something to stand the test of time. So are we.",
+  note: 'The agent fleet is internal — it powers how the studio works, not the companies it builds.',
   items: [
-    { value: 3, suffix: '', label: 'service pillars, equal weight' },
-    { value: 3, suffix: '', label: 'industries: PE, enterprise, government' },
-    { value: 4, suffix: '', label: 'steps in the operating loop' },
-    { value: 0, valueOverride: 'Weekly', label: 'production release cadence' },
+    { value: 5, suffix: '+', label: 'companies & engagements in the portfolio' },
+    { value: 25, suffix: '', label: 'specialist agents in the internal fleet (+ orchestrator)' },
+    { value: 1, suffix: '', label: 'operating spine under all of them' },
+    { value: 0, prefix: 'T0–T', valueOverride: '3', label: 'autonomy tiers, human-gated' },
   ] as {
     value: number
     suffix?: string
@@ -262,59 +202,38 @@ export const stats = {
 }
 
 export const quote = {
-  text: 'Most firms sell you projects or people. We embed a team and tie every release to an outcome.',
-  attribution: 'The Nx Growth Partners operating principle',
+  text: "A company's cost used to be its payroll. We changed the denominator.",
+  attribution: 'The NX Growth Partners operating thesis',
 }
 
-export const about = {
-  kicker: 'About',
-  h2: "A senior team you'd want inside your business.",
-  sub: "You're deciding whether to trust people inside your business — so we lead with experience, judgment and accountability, not headcount.",
-  points: [
-    {
-      title: 'Senior by default',
-      body: 'Operators and engineers who have shipped real systems — not a bench of juniors you have to manage.',
-    },
-    {
-      title: 'Cross-functional',
-      body: 'GTM, AI and product under one accountable team, so the work connects instead of fragmenting.',
-    },
-    {
-      title: 'Accountable to outcomes',
-      body: 'We tie every engagement to a business result and stay until it lands — embedded, not handed off.',
-    },
+export const approach = {
+  kicker: 'How we operate',
+  h2: 'The same loop, every time — which is exactly why it compounds.',
+  steps: [
+    { n: '01', title: 'Underwrite the bet', body: "We only start what we'd put our own capital and fleet-time behind. The thesis gets pressure-tested before a line of code exists." },
+    { n: '02', title: 'Build it well', body: 'Our in-house team and the internal fleet design and ship the product — full-stack, mobile, AI-native — to a real quality bar.' },
+    { n: '03', title: 'People hold the calls', body: 'Agents run at tiers T0–T3; anything above tier waits for a person, signed and logged.' },
+    { n: '04', title: 'Operate, hold, recycle', body: 'The company goes live on the shared spine and we hold it. What the fleet learns makes the next venture cheaper and faster.' },
   ],
 }
 
 export const cta = {
-  h2Lines: ['Let’s find what', 'moves your business.'],
-  sub: "Tell us where you are — PE, enterprise or government — and we'll map the highest-impact opportunities. A 30-minute intro, no pitch deck.",
+  h2Lines: ['Have a company to build?', 'Let’s talk.'],
+  sub: 'A venture to scale, a company to operate, or capital to put behind the model — start the conversation.',
   email: 'hello@nxgp.io',
-  ctaPrimary: 'Book a call',
-  ctaSecondary: 'See the pillars',
+  ctaPrimary: 'hello@nxgp.io',
+  ctaSecondary: 'Explore the portfolio',
 }
 
 export const footer = {
   blurb:
-    'An embedded technology partner across go-to-market, AI engineering and product development. Your team, extended — not replaced.',
-  tagline: 'Your team, extended.',
-  copyright: '© 2026 Nx Growth Partners · nxgp.io',
+    'A holding company and venture studio. We build, hold and operate companies — run on an AI-native operating model.',
+  tagline: 'Multiply the companies. Compound the value.',
+  copyright: '© 2026 NX Growth Partners · nxgp.io',
   columns: [
-    {
-      heading: 'Services',
-      links: ['Go-to-Market', 'AI Engineering', 'Product Development'],
-    },
-    {
-      heading: 'Industries',
-      links: ['Private Equity', 'Enterprise', 'Government'],
-    },
-    {
-      heading: 'Company',
-      links: ['How we work', 'Work', 'About', 'Book a call'],
-    },
-    {
-      heading: 'Connect',
-      links: ['hello@nxgp.io', 'LinkedIn', 'X', 'nxgp.io'],
-    },
+    { heading: 'Studio', links: ['The model', 'Our edge', 'Portfolio', 'Investments'] },
+    { heading: 'Ventures', links: ['Mentera', 'Convey', 'Logbook', 'Agentics'] },
+    { heading: 'Company', links: ['About', 'Approach', 'Contact', 'Portal'] },
+    { heading: 'Connect', links: ['hello@nxgp.io', 'LinkedIn', 'X', 'nxgp.io'] },
   ],
 }

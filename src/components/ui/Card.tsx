@@ -1,6 +1,11 @@
+import { motion } from 'motion/react'
 import { cn } from '../../lib/cn'
+import { prefersReducedMotion } from '../../lib/reducedMotion'
 
-/** Surface card with the soft layered shadow and a CSS spring-ish lift on hover. */
+/**
+ * Surface card with the signature soft layered shadow and a spring lift on
+ * hover. Hover motion is suppressed under reduced-motion.
+ */
 export function Card({
   children,
   className,
@@ -10,18 +15,24 @@ export function Card({
   children: React.ReactNode
   className?: string
   interactive?: boolean
-} & React.HTMLAttributes<HTMLDivElement>) {
+} & React.ComponentProps<typeof motion.div>) {
+  const reduce = prefersReducedMotion()
   return (
-    <div
+    <motion.div
       className={cn(
         'rounded-card border border-line bg-surface shadow-sm',
-        interactive &&
-          'transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 hover:shadow-lg',
+        interactive && 'transition-shadow',
         className,
       )}
+      whileHover={
+        interactive && !reduce
+          ? { y: -4, boxShadow: 'var(--shadow-lg)' }
+          : undefined
+      }
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       {...rest}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }

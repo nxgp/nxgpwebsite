@@ -1,41 +1,32 @@
 @import 'tailwindcss';
 
 /* ============================================================
-   NX Growth Partners — design system
-   Intercom-inspired: high-contrast neutral base, electric blue +
-   soft cyan/sky accents. Montserrat headlines, Lora supporting copy.
-   Performance-first: motion is CSS + IntersectionObserver only
-   (no scroll-animation libraries), gated by prefers-reduced-motion.
+   NX Growth Partners — design system (Mercury-quality)
+   One source of truth for tokens. No inline magic numbers.
    ============================================================ */
 
 @theme {
   /* ---- color ---- */
-  --color-bg: #f1f1f1; /* light grey page base */
+  --color-bg: #f7f6f2; /* warm near-white canvas */
   --color-surface: #ffffff; /* cards */
-  --color-ink: #0a0a0b; /* near-black headings + body */
-  --color-ink-soft: #494c52;
-  --color-ink-faint: #8a8d93;
-  --color-line: #e2e2e2;
+  --color-ink: #16181c; /* text + dark pill buttons */
+  --color-ink-soft: #5c6068;
+  --color-ink-faint: #8b8f97;
+  --color-line: #e9e7e0;
+  --color-accent: #0e9f6e; /* emerald — growth; interactive accent */
+  --color-accent-deep: #0a7e58; /* AA on light */
+  --color-accent-wash: #e7f5ee;
 
-  --color-accent: #0057ff; /* primary — CTAs, key links */
-  --color-accent-deep: #003fcc; /* AA text-on-light variant */
-  --color-accent-wash: #e6edff; /* tinted panels / icon chips */
-  --color-accent-2: #47c7f0; /* secondary cyan — icons, hovers */
-
-  --color-soft-cyan: #bff5f8; /* soft aqua blocks */
-  --color-soft-sky: #c4e0fd; /* pale sky bands */
-
-  /* aurora tints (static, low-opacity) — blue/cyan family */
-  --color-au-peri: #c4e0fd;
-  --color-au-mint: #bff5f8;
-  --color-au-peach: #d4e4ff;
-  --color-au-lilac: #d9d6ff;
+  /* aurora pastels (blurred, low-opacity, drifting) */
+  --color-au-peri: #c6d0ff;
+  --color-au-mint: #bdebd6;
+  --color-au-peach: #ffd9c2;
+  --color-au-lilac: #e3d4ff;
 
   /* ---- type ---- */
   --font-sans:
-    'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+    'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
 
   /* numeric weight utilities (font-500 … font-800) */
   --font-weight-500: 500;
@@ -44,33 +35,32 @@
   --font-weight-800: 800;
 
   /* ---- radius ---- */
-  --radius-card: 22px;
-  --radius-inner: 14px;
+  --radius-card: 26px;
+  --radius-inner: 18px;
   --radius-pill: 999px;
 
-  /* ---- shadow ---- */
-  --shadow-sm: 0 1px 2px rgba(10, 12, 24, 0.05), 0 2px 6px rgba(10, 12, 24, 0.04);
-  --shadow-soft: 0 2px 4px rgba(10, 12, 24, 0.04),
-    0 14px 36px rgba(10, 12, 24, 0.08);
-  --shadow-lg: 0 6px 16px rgba(10, 12, 24, 0.07),
-    0 28px 64px rgba(10, 12, 24, 0.12);
+  /* ---- shadow (Mercury's signature soft layered depth) ---- */
+  --shadow-sm: 0 1px 2px rgba(20, 22, 30, 0.04), 0 2px 6px rgba(20, 22, 30, 0.04);
+  --shadow-soft: 0 2px 4px rgba(20, 22, 30, 0.04),
+    0 14px 40px rgba(20, 22, 30, 0.07);
+  --shadow-lg: 0 6px 16px rgba(20, 22, 30, 0.06),
+    0 30px 70px rgba(20, 22, 30, 0.1);
 
   /* ---- motion ---- */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* ---- rhythm ---- */
-  --space-section: clamp(76px, 10vw, 132px);
+  /* ---- section rhythm ---- */
+  --space-section: clamp(80px, 11vw, 140px);
 }
 
 :root {
-  --shell: min(1180px, 92vw);
-  --nav-h: 70px;
+  --shell: min(1200px, 92vw);
+  --nav-h: 72px;
   color-scheme: light;
 }
 
 /* ============================================================
-   base — in @layer base so element resets stay BELOW utilities
-   (an unlayered `a { color: inherit }` would beat text-* utils).
+   base — in @layer base so element resets sit BELOW utilities
    ============================================================ */
 
 @layer base {
@@ -81,8 +71,6 @@
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    scroll-behavior: smooth;
-    scroll-padding-top: 88px;
   }
 
   body {
@@ -91,9 +79,9 @@
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: 1.04rem;
+    font-size: 1.05rem;
     line-height: 1.6;
-    letter-spacing: -0.006em;
+    letter-spacing: -0.011em;
     overflow-x: clip;
   }
 
@@ -117,52 +105,55 @@
   }
 }
 
+/* Lenis smooth scroll plumbing */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
 /* ============================================================
-   typography — Montserrat headings, Lora supporting copy
+   typography scale (sentence case everywhere)
    ============================================================ */
 
 .t-h1 {
-  font-size: clamp(2.5rem, 6.4vw, 4.8rem);
+  font-size: clamp(2.5rem, 6.6vw, 5rem);
   font-weight: 800;
   line-height: 1.04;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
 }
 
 .t-h2 {
-  font-size: clamp(1.95rem, 4.3vw, 3.2rem);
+  font-size: clamp(2rem, 4.4vw, 3.3rem);
   font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -0.025em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .t-h3 {
   font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-  font-weight: 700;
-  line-height: 1.14;
-  letter-spacing: -0.015em;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
-/* Lora serif — the supporting / reading voice */
 .t-lead {
-  font-family: var(--font-serif);
-  font-size: clamp(1.12rem, 1.5vw, 1.34rem);
-  font-weight: 400;
-  line-height: 1.55;
+  font-size: clamp(1.1rem, 1.5vw, 1.32rem);
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--color-ink-soft);
-  letter-spacing: 0;
-}
-
-.t-serif {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: 0;
+  letter-spacing: -0.014em;
 }
 
 .t-eyebrow {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--color-accent-deep);
 }
 
@@ -181,40 +172,13 @@
 }
 
 /* ============================================================
-   reveal-on-scroll — CSS transition toggled by IntersectionObserver.
-   Add `data-reveal` to any element; optional --reveal-delay for stagger.
+   motion utilities + reduced-motion guard
    ============================================================ */
 
-[data-reveal] {
+.reveal-init {
   opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.6s var(--ease-out-expo),
-    transform 0.6s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
-}
-[data-reveal].is-in {
-  opacity: 1;
-  transform: none;
-  will-change: auto;
-}
-
-/* hero load — CSS auto-play (no observer dependency, always fires) */
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.rise {
-  opacity: 0;
-  animation: rise 0.7s var(--ease-out-expo) forwards;
-  animation-delay: var(--rise-delay, 0ms);
+  transform: translateY(24px);
+  will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -224,13 +188,47 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
-  html {
-    scroll-behavior: auto;
-  }
-  [data-reveal] {
+  .reveal-init {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   aurora drift — slow, alternating, independent of scroll
+   ============================================================ */
+@keyframes au-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, -8%, 0) scale(1.12);
+  }
+  100% {
+    transform: translate3d(-4%, 5%, 0) scale(1.04);
+  }
+}
+.au-blob {
+  animation-name: au-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.au-blob:nth-child(even) {
+  animation-direction: alternate-reverse;
+}
+@media (prefers-reduced-motion: reduce) {
+  .au-blob {
+    animation: none !important;
   }
 }
 
@@ -251,24 +249,53 @@
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.3s var(--ease-out-expo);
+  transition: transform 0.32s var(--ease-out-expo);
 }
 .link-underline:hover::after {
   transform: scaleX(1);
 }
 
 .nav-frost {
-  background: color-mix(in srgb, var(--color-bg) 78%, transparent);
-  backdrop-filter: saturate(140%) blur(12px);
-  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  background: color-mix(in srgb, var(--color-bg) 72%, transparent);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid var(--color-line);
 }
 
 .grid-faint {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  border-radius: 999px;
+  transform: translate3d(-50%, -50%, 0);
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+}
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  transition: width 0.25s var(--ease-out-expo),
+    height 0.25s var(--ease-out-expo), background 0.25s var(--ease-out-expo);
+}
+.cursor-ring.is-hot {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .win-dots span {
@@ -276,17 +303,4 @@
   width: 10px;
   height: 10px;
   border-radius: 999px;
-}
-
-/* horizontal scroll-snap carousel (portfolio) */
-.snap-x {
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.snap-x::-webkit-scrollbar {
-  display: none;
-}
-.snap-item {
-  scroll-snap-align: start;
 }

@@ -1,159 +1,128 @@
 import {
-  Radar,
-  ListChecks,
+  Activity,
   Hammer,
-  RefreshCw,
-  TrendingUp,
+  Send,
+  Megaphone,
+  CircleDollarSign,
+  ShieldCheck,
   Check,
-  GitBranch,
 } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
 /**
- * The embedded-engagement console — how an Nx engagement looks from inside the
- * client's business: the operating loop on the left, this week's work tied to
- * business outcomes on the right. Shows the operating model, not a product.
+ * NX's internal operating console — "NXGP · studio operations".
+ * Shows how the STUDIO runs its own cross-functional work. It does NOT
+ * depict an agent running a portfolio company. Every animatable element
+ * carries `data-console` so the Hero can stagger the assembly on load.
  */
-const loop = [
-  { icon: Radar, label: 'Discover' },
-  { icon: ListChecks, label: 'Prioritize' },
-  { icon: Hammer, label: 'Deliver', active: true },
-  { icon: RefreshCw, label: 'Optimize' },
+const ventures = [
+  { name: 'Mentera', dot: '#0E9F6E', active: true },
+  { name: 'Convey', dot: '#3B7DE9' },
+  { name: 'Logbook', dot: '#6C5CE7' },
+  { name: 'Agentics', dot: '#0E9F6E' },
+  { name: 'WD Chat', dot: '#D14B8F' },
 ]
 
 const feed = [
-  {
-    icon: GitBranch,
-    text: 'Quote-to-cash API shipped',
-    meta: 'Product · in prod',
-    tone: 'done',
-  },
-  {
-    icon: TrendingUp,
-    text: 'CRM automation live',
-    meta: 'Go-to-market · +18% qualified pipeline',
-    tone: 'win',
-  },
-  {
-    icon: Radar,
-    text: '3 revenue leaks found',
-    meta: 'Discover · prioritized',
-    tone: 'run',
-  },
+  { icon: Hammer, fn: 'Build', text: 'EHR sync shipped', meta: 'Mentera · 2m ago', tone: 'done' },
+  { icon: Send, fn: 'Outreach', text: '1,240 prospects sourced', meta: 'Go-to-market · 11m ago', tone: 'run' },
+  { icon: Megaphone, fn: 'Marketing', text: 'Launch brief drafted', meta: 'Convey · 26m ago', tone: 'run' },
 ]
 
 export function HeroConsole() {
   return (
-    <div className="relative w-full overflow-hidden rounded-card border border-line bg-surface shadow-lg">
-      {/* window chrome */}
-      <div className="flex items-center gap-3 border-b border-line px-4 py-3">
+    <div
+      className="relative w-full overflow-hidden rounded-card border border-line bg-surface shadow-lg"
+      style={{ willChange: 'transform' }}
+    >
+      <div data-console className="flex items-center gap-3 border-b border-line px-4 py-3">
         <div className="win-dots flex gap-1.5">
           <span style={{ background: '#FF5F57' }} />
           <span style={{ background: '#FEBC2E' }} />
           <span style={{ background: '#28C840' }} />
         </div>
         <div className="ml-1 flex items-center gap-2 text-[0.78rem] font-700 text-ink-soft">
-          <span className="size-2 rounded-full bg-accent" />
-          Nx · live engagement
+          <Activity className="size-3.5 text-accent" />
+          NXGP · studio operations
         </div>
-        <div className="ml-auto rounded-pill bg-accent-wash px-2.5 py-1 text-[0.68rem] font-700 text-accent-deep">
-          week 6
+        <div className="ml-auto flex items-center gap-1.5 rounded-pill bg-accent-wash px-2.5 py-1 text-[0.68rem] font-700 text-accent-deep">
+          <span className="size-1.5 rounded-full bg-accent" /> fleet live
         </div>
       </div>
 
       <div className="grid grid-cols-[128px_1fr] sm:grid-cols-[148px_1fr]">
-        {/* left rail — the operating loop */}
-        <aside className="border-r border-line bg-bg/40 px-2.5 py-3">
+        <aside data-console className="border-r border-line bg-bg/40 px-2.5 py-3">
           <p className="px-2 pb-2 text-[0.62rem] font-700 uppercase tracking-[0.08em] text-ink-faint">
-            The loop
+            Ventures
           </p>
           <ul className="flex flex-col gap-0.5">
-            {loop.map((s) => (
+            {ventures.map((v) => (
               <li
-                key={s.label}
+                key={v.name}
                 className={cn(
                   'flex items-center gap-2 rounded-[10px] px-2 py-1.5 text-[0.8rem] font-600',
-                  s.active ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft',
+                  v.active ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft',
                 )}
               >
-                <s.icon
-                  className={cn(
-                    'size-3.5',
-                    s.active ? 'text-accent' : 'text-ink-faint',
-                  )}
-                />
-                {s.label}
+                <span className="size-2 rounded-full" style={{ background: v.dot }} />
+                {v.name}
               </li>
             ))}
           </ul>
           <div className="mt-3 rounded-inner border border-dashed border-line px-2 py-2 text-[0.66rem] font-600 text-ink-faint">
-            embedded · senior team
+            + 1 internal in build
           </div>
         </aside>
 
-        {/* main — this week's work, tied to outcomes */}
         <main className="p-3 sm:p-4">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-[0.82rem] font-800 tracking-[-0.01em]">
-              This week
-            </p>
-            <span className="flex items-center gap-1.5 rounded-pill bg-bg px-2 py-0.5 text-[0.66rem] font-700 text-ink-soft">
-              <span className="size-1.5 rounded-full bg-accent" />
-              shipping weekly
-            </span>
+            <p className="text-[0.82rem] font-800 tracking-[-0.01em]">Work in flight</p>
+            <span className="text-[0.7rem] font-600 text-ink-faint">today</span>
           </div>
 
           <ul className="flex flex-col gap-2">
-            {feed.map((f) => (
-              <li
-                key={f.text}
-                className="flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2.5"
-              >
-                <span
-                  className={cn(
-                    'flex size-8 shrink-0 items-center justify-center rounded-[10px]',
-                    f.tone === 'done' || f.tone === 'win'
-                      ? 'bg-accent-wash text-accent-deep'
-                      : 'bg-bg text-ink-soft',
+            {feed.map((f) => {
+              const Icon = f.icon
+              return (
+                <li key={f.text} data-console className="flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2.5">
+                  <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-[10px]', f.tone === 'done' ? 'bg-accent-wash text-accent-deep' : 'bg-bg text-ink-soft')}>
+                    <Icon className="size-4" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-[0.84rem] font-700">{f.text}</span>
+                    <span className="block text-[0.7rem] font-600 text-ink-faint">{f.fn} · {f.meta.split(' · ')[1]}</span>
+                  </span>
+                  {f.tone === 'done' ? (
+                    <span className="ml-auto flex items-center gap-1 rounded-pill bg-accent-wash px-2 py-0.5 text-[0.66rem] font-700 text-accent-deep">
+                      <Check className="size-3" /> shipped
+                    </span>
+                  ) : (
+                    <span className="ml-auto flex items-center gap-1.5 rounded-pill bg-bg px-2 py-0.5 text-[0.66rem] font-700 text-ink-soft">
+                      <span className="size-1.5 animate-pulse rounded-full bg-accent" />
+                      running
+                    </span>
                   )}
-                >
-                  <f.icon className="size-4" />
+                </li>
+              )
+            })}
+
+            <li data-console className="relative overflow-hidden rounded-inner border border-[#E08A3B]/30 bg-[#FFF7EF] px-3 py-3">
+              <div className="flex items-center gap-3">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-[#E08A3B]/15 text-[#B96C1E]">
+                  <CircleDollarSign className="size-4" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block truncate text-[0.84rem] font-700">
-                    {f.text}
-                  </span>
-                  <span className="block truncate text-[0.7rem] font-600 text-ink-faint">
-                    {f.meta}
-                  </span>
+                  <span className="block text-[0.84rem] font-700">Approval needed · $14k spend</span>
+                  <span className="block text-[0.7rem] font-600 text-[#B96C1E]">waiting on operator — above tier T2</span>
                 </span>
-                {f.tone === 'done' && (
-                  <span className="ml-auto flex items-center gap-1 rounded-pill bg-accent-wash px-2 py-0.5 text-[0.66rem] font-700 text-accent-deep">
-                    <Check className="size-3" /> live
-                  </span>
-                )}
-                {f.tone === 'win' && (
-                  <span className="ml-auto rounded-pill bg-[#E7F8EF] px-2 py-0.5 text-[0.66rem] font-700 text-[#0A7E45]">
-                    outcome
-                  </span>
-                )}
-                {f.tone === 'run' && (
-                  <span className="ml-auto rounded-pill bg-bg px-2 py-0.5 text-[0.66rem] font-700 text-ink-soft">
-                    queued
-                  </span>
-                )}
-              </li>
-            ))}
-
-            {/* outcome strip */}
-            <li className="mt-1 flex items-center gap-3 rounded-inner bg-ink px-3.5 py-3 text-white">
-              <TrendingUp className="size-4 text-au-mint" />
-              <span className="text-[0.82rem] font-700">
-                Tied to a business outcome
-              </span>
-              <span className="ml-auto text-[0.78rem] font-800 text-au-mint">
-                +18% pipeline
-              </span>
+              </div>
+              <div className="mt-2.5 flex items-center gap-2 pl-11">
+                <button className="rounded-pill bg-ink px-3 py-1 text-[0.72rem] font-700 text-white">Approve</button>
+                <button className="rounded-pill border border-line bg-surface px-3 py-1 text-[0.72rem] font-700 text-ink-soft">Hold</button>
+                <span className="ml-auto flex items-center gap-1 text-[0.66rem] font-700 text-ink-faint">
+                  <ShieldCheck className="size-3.5" /> signed & logged
+                </span>
+              </div>
             </li>
           </ul>
         </main>

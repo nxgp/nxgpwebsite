@@ -7,12 +7,15 @@ type Blob = {
   left?: string
   right?: string
   bottom?: string
+  delay?: number
+  duration?: number
   opacity?: number
 }
 
 /**
- * Static soft aurora — blurred, low-opacity tint blobs. No animation (painted
- * once) so it costs nothing at runtime; just sets the calm pastel mood.
+ * Soft pastel aurora — blurred, low-opacity blobs that drift slowly.
+ * Pure CSS keyframes so it costs almost nothing and animates independently
+ * of scroll. Pointer-events off; decorative.
  */
 export function Aurora({
   blobs,
@@ -35,6 +38,7 @@ export function Aurora({
       {blobs.map((b, i) => (
         <span
           key={i}
+          className="au-blob"
           style={{
             position: 'absolute',
             width: b.size,
@@ -44,9 +48,11 @@ export function Aurora({
             right: b.right,
             bottom: b.bottom,
             background: b.color,
-            opacity: b.opacity ?? (dark ? 0.5 : 0.6),
+            opacity: b.opacity ?? (dark ? 0.5 : 0.55),
             borderRadius: '50%',
-            filter: `blur(${Math.round(b.size * 0.4)}px)`,
+            filter: `blur(${Math.round(b.size * 0.42)}px)`,
+            animationDelay: `${b.delay ?? 0}s`,
+            animationDuration: `${b.duration ?? 22}s`,
           }}
         />
       ))}
