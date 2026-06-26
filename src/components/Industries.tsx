@@ -4,6 +4,8 @@ import { useReveal } from '../hooks/useReveal'
 import { industries } from '../data/content'
 import type { Industry } from '../data/content'
 import { SectionHeader } from './ui/SectionHeader'
+import { Button } from './ui/Button'
+import { scrollToId } from '../lib/useSmoothScroll'
 
 const icons: Record<Industry['visual'], LucideIcon> = { pe: Briefcase, enterprise: Building2, gov: Landmark }
 
@@ -35,6 +37,15 @@ export function Industries() {
               </article>
             )
           })}
+        </div>
+
+        <div data-reveal className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <p className="text-[0.95rem] font-600 text-ink-soft">
+            Not sure where you fit? We map it on the first call.
+          </p>
+          <Button variant="dark" onClick={() => scrollToId('cta')}>
+            Book a call
+          </Button>
         </div>
       </div>
     </section>

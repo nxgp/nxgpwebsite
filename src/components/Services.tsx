@@ -4,6 +4,8 @@ import { useReveal } from '../hooks/useReveal'
 import { services } from '../data/content'
 import { SectionHeader } from './ui/SectionHeader'
 import { Card } from './ui/Card'
+import { Button } from './ui/Button'
+import { scrollToId } from '../lib/useSmoothScroll'
 
 const icons: Record<string, LucideIcon> = { TrendingUp, Sparkles, Boxes }
 
@@ -44,9 +46,14 @@ export function Services() {
           })}
         </div>
 
-        <p data-reveal className="mt-6 text-center text-[0.9rem] font-600 text-ink-faint">
-          Engage one pillar — or a cross-functional team across all three.
-        </p>
+        <div data-reveal className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <p className="text-[0.95rem] font-600 text-ink-soft">
+            Engage one pillar — or a cross-functional team across all three.
+          </p>
+          <Button variant="dark" onClick={() => scrollToId('cta')}>
+            Book a call
+          </Button>
+        </div>
       </div>
     </section>
   )

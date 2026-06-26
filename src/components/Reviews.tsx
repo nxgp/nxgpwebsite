@@ -7,7 +7,7 @@ import { Card } from './ui/Card'
 export function Reviews() {
   const ref = useReveal<HTMLDivElement>()
   return (
-    <section id="reviews" className="section bg-surface/40">
+    <section id="reviews" className="section">
       <div ref={ref} className="shell">
         <SectionHeader kicker={reviews.kicker} title={reviews.h2} sub={reviews.sub} />
 

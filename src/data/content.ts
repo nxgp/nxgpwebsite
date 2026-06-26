@@ -266,6 +266,66 @@ export const about = {
   ],
 }
 
+export type Outcome = { tag: string; metric: string; metricLabel: string; situation: string; result: string }
+
+// Anonymized outcomes — replace the metrics/details with real, client-approved
+// numbers before publishing.
+export const outcomes = {
+  kicker: 'Outcomes',
+  h2: 'Embedded work, measured by what it moved.',
+  sub: 'The bar is a result you can name — not a closed ticket. Stories are anonymized until clients approve them.',
+  items: [
+    {
+      tag: 'Private Equity',
+      metric: '6 wks',
+      metricLabel: 'to first production value',
+      situation: 'A portfolio company inherited a stalled roadmap and a manual revenue stack.',
+      result: 'Rebuilt the GTM data flow inside their stack and shipped weekly — pipeline visibility in weeks, not quarters.',
+    },
+    {
+      tag: 'Enterprise',
+      metric: 'Weekly',
+      metricLabel: 'production releases',
+      situation: 'A revenue team was stuck behind a slow systems integrator and a long backlog.',
+      result: 'Embedded a senior team, displaced the SI, and put working software into production every sprint.',
+    },
+    {
+      tag: 'AI Engineering',
+      metric: '<1 hr',
+      metricLabel: 'root-cause, down from days',
+      situation: 'Root-cause analysis on a complex regulated platform took days of engineer time.',
+      result: 'Built a self-hosted reliability agent and institutional memory over the codebase — inside compliance.',
+    },
+  ] as Outcome[],
+}
+
+export const faq = {
+  kicker: 'Questions',
+  h2: 'The things buyers ask first.',
+  items: [
+    {
+      q: 'How is this different from staff aug or a systems integrator?',
+      a: "We're embedded and accountable to the outcome — not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.",
+    },
+    {
+      q: 'How do you handle security, data and compliance?',
+      a: "We work inside your environment and to your controls — and for regulated work we run self-hosted, keeping data in your boundary. We'll tell you plainly what we do and don't hold rather than claim a posture we can't back. Detailed posture shared on request.",
+    },
+    {
+      q: 'How do we contract and get started?',
+      a: 'We start with a paid discovery to find the highest-impact opportunities, then scope an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.',
+    },
+    {
+      q: 'Are you big enough to handle our scale?',
+      a: 'Our leverage is senior people and one operating loop, not headcount. The embedded model and weekly cadence scale with the work, backed by named proof of what the team has shipped.',
+    },
+    {
+      q: 'Do we have to engage all three pillars?',
+      a: 'No — engage one (go-to-market, AI engineering or product) or a cross-functional team across all three. We help you pick on the first call, based on what moves your numbers.',
+    },
+  ],
+}
+
 export const cta = {
   h2Lines: ['Let’s find what', 'moves your business.'],
   sub: "Tell us where you are — PE, enterprise or government — and we'll map the highest-impact opportunities. A 30-minute intro, no pitch deck.",

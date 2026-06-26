@@ -10,10 +10,12 @@ import { Services } from './components/Services'
 import { Embedded } from './components/Embedded'
 import { Industries } from './components/Industries'
 import { Work } from './components/Work'
+import { Outcomes } from './components/Outcomes'
 import { Reviews } from './components/Reviews'
 import { Stats } from './components/Stats'
 import { Quote } from './components/Quote'
 import { About } from './components/About'
+import { FAQ } from './components/FAQ'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 
@@ -44,10 +46,12 @@ export default function App() {
         <Embedded />
         <Industries />
         <Work />
+        <Outcomes />
         <Reviews />
         <Stats />
         <Quote />
         <About />
+        <FAQ />
         <CTA />
       </main>
       <Footer />
