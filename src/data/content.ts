@@ -49,12 +49,12 @@ export type LoopStep = { n: string; title: string; body: string }
 export const operatingModel = {
   kicker: 'How we work',
   h2: 'One loop, tied to your business — not just your backlog.',
-  sub: 'We embed a cross-functional senior team and run a continuous loop that ties every release to a business outcome. It is the most ownable thing we do.',
+  sub: "We don't start from a backlog. We embed a senior team, find what actually moves your numbers, and run the same four steps until it does — every release pointed at a result you can name.",
   steps: [
-    { n: '01', title: 'Discover', body: 'Find what actually moves the business before writing any code. We surface where time, revenue and customer experience leak across people, process and technology.' },
-    { n: '02', title: 'Prioritize', body: 'Rank every opportunity by business impact, implementation effort and organizational readiness — so resources go where adoption and ROI are highest.' },
-    { n: '03', title: 'Deliver', body: 'Engineers work inside your environment, releasing in weekly increments that create measurable value — production software that gets used, not closed tickets.' },
-    { n: '04', title: 'Optimize', body: 'Every deployment feeds new insight. We track outcomes, find the next constraint and compound improvement over time.' },
+    { n: '01', title: 'Discover', body: "First we find what's worth building. Working inside the business, we follow where time, money and customers slip away — and come back with the few moves that matter most." },
+    { n: '02', title: 'Prioritize', body: 'Then we sequence them. Each opportunity gets weighed by impact, effort and how ready your team is to adopt it, so we start where the return shows up fastest.' },
+    { n: '03', title: 'Deliver', body: 'We build inside your stack and ship every week — real software in production that people use, not a pile of closed tickets or a demo that never lands.' },
+    { n: '04', title: 'Optimize', body: 'Then we watch what it does. Every release tells us the next move, so the work compounds instead of resetting each quarter.' },
   ] as LoopStep[],
 }
 
@@ -132,19 +132,76 @@ export const industries = {
   ] as Industry[],
 }
 
-export type CaseStudy = { tag: string; accent: string; title: string; situation: string; built: string; result: string; metric: string; metricLabel: string }
+export type Venture = {
+  name: string
+  tag: string
+  domain: string
+  blurb: string
+  visual: 'vitals' | 'uptime' | 'build' | 'assets' | 'scaffold' | 'orchestrator' | 'messages'
+  accent: string
+}
 
+// The portfolio of real products the team has shipped — proof for the
+// embedded pitch. These are builds, not "companies we own and hold".
 export const work = {
   kicker: 'Selected work',
-  h2: 'Outcomes, not deliverables.',
-  sub: 'Situation, what we built embedded, the operational result. Named stories are added as clients approve them.',
-  cases: [
-    { tag: 'Private Equity', accent: '#0E9F6E', title: 'Modernized an acquired company without an in-house tech org', situation: 'A portco inherited a stalled roadmap and a manual revenue stack.', built: 'Embedded a senior team, rebuilt the GTM data flow and shipped weekly.', result: 'Pipeline visibility in weeks, not quarters — and a team that kept shipping.', metric: 'wks', metricLabel: 'to first production value' },
-    { tag: 'Enterprise', accent: '#3B7DE9', title: 'Replaced a stalled systems-integrator engagement', situation: 'An enterprise revenue team was stuck behind a slow SI and a long backlog.', built: 'Embedded inside their stack, displaced the SI and released every week.', result: 'Working software in production each sprint, accountable to outcomes.', metric: 'wkly', metricLabel: 'production releases' },
-    { tag: 'AI Engineering', accent: '#6C5CE7', title: 'An autonomous reliability agent for regulated operations', situation: 'Root-cause analysis on a complex platform took days of engineer time.', built: 'A self-hosted reliability agent and institutional memory over the codebase.', result: 'Compressed root-cause from days to under an hour, inside compliance.', metric: '<1hr', metricLabel: 'root-cause, from days' },
-    { tag: 'Go-to-Market', accent: '#E08A3B', title: 'Rebuilt a revenue engine that was leaking pipeline', situation: 'Disconnected CRM, manual hand-offs and no view of what was working.', built: 'One source of truth, automated routing and analytics the team trusts.', result: 'Cleaner pipeline, faster follow-up and decisions backed by data.', metric: '1', metricLabel: 'source of truth, finally' },
-    { tag: 'Product', accent: '#D14B8F', title: 'Shipped the customer portal the team could not get to', situation: 'A roadmap item that kept slipping while customers asked for self-serve.', built: 'A production portal and the APIs under it, built inside their stack.', result: 'Self-serve in customers’ hands, off the backlog and into production.', metric: 'live', metricLabel: 'in production' },
-  ] as CaseStudy[],
+  h2: "The proof isn't a deck. It's what we've shipped.",
+  sub: 'Real products in production — some built end to end for clients, some ventures we shipped ourselves. This is the bar the embedded team works to.',
+  ventures: [
+    {
+      name: 'Mentera',
+      tag: 'Healthcare AI',
+      domain: 'Clinical platform',
+      blurb:
+        'A full clinical platform, built end to end — backend, web, native iOS and Android, and 50+ EHR integrations, with AI woven through the workflow. Shipped to a regulated bar.',
+      visual: 'vitals',
+      accent: '#0E9F6E',
+    },
+    {
+      name: 'Convey',
+      tag: 'Reliability',
+      domain: 'Operations platform',
+      blurb:
+        'An autonomous reliability agent for regulated utilities — it cuts root-cause analysis from days to under an hour, and remembers the codebase so the team does not have to.',
+      visual: 'uptime',
+      accent: '#3B7DE9',
+    },
+    {
+      name: 'Logbook',
+      tag: 'Maritime ops',
+      domain: 'Port operations',
+      blurb:
+        'An asset and maintenance platform for ports and terminals, with Harbor Copilot — an AI assistant that answers questions straight from the logbook.',
+      visual: 'assets',
+      accent: '#6C5CE7',
+    },
+    {
+      name: 'Koitel',
+      tag: 'In build',
+      domain: 'In development',
+      blurb:
+        'A venture in active development, being built on the same operating model the embedded team runs.',
+      visual: 'scaffold',
+      accent: '#E08A3B',
+    },
+    {
+      name: 'Agentics',
+      tag: 'Agent products',
+      domain: 'Applied agents',
+      blurb:
+        'Applied agent products — the orchestration patterns we use day to day, packaged and put to work for others.',
+      visual: 'orchestrator',
+      accent: '#0E9F6E',
+    },
+    {
+      name: 'WD Chat',
+      tag: 'Conversational',
+      domain: 'Conversational product',
+      blurb: 'A conversational product with its own audience and shape.',
+      visual: 'messages',
+      accent: '#D14B8F',
+    },
+  ] as Venture[],
 }
 
 export const stats = {
