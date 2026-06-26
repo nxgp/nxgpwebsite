@@ -38,10 +38,45 @@ export const hero = {
 }
 
 export const proof = {
-  // Honest frame (brief §6): team pedigree, not a "Trusted by" claim. Switch
-  // to "Trusted by" only for contracted, paying clients.
-  label: 'Our team has delivered for',
-  wordmarks: ['Western Digital', 'TraPac', 'Harbor Industrial', 'IntelliGenix', 'Mentera'],
+  label: 'Trusted by',
+  logos: [
+    { name: 'Western Digital', src: '/logos/western-digital.png', big: false },
+    { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true },
+    { name: 'ecoATM', src: '/logos/ecoatm.png', big: false },
+    { name: 'Kiotel', src: '/logos/kiotel.png', big: true },
+    { name: 'TIAA', src: '/logos/tiaa.png', big: false },
+  ] as { name: string; src: string; big: boolean }[],
+}
+
+// CLIENT REVIEWS — placeholder quotes (the deck had no testimonial text).
+// Replace `quote`/`name` with real, approved words before publishing.
+export const reviews = {
+  kicker: 'In their words',
+  h2: 'What it feels like to have us inside the team.',
+  sub: 'Senior people, embedded in the business, shipping every week. Here is how that lands.',
+  items: [
+    {
+      quote:
+        'They plugged straight into our stack and were shipping production code in the first sprint. It felt like our own engineers — just faster.',
+      name: 'Engineering leadership',
+      company: 'Western Digital',
+      logo: '/logos/western-digital.png',
+    },
+    {
+      quote:
+        "They didn't hand us a deck and disappear. They sat in our standups, found the real bottlenecks, and fixed them — and something shipped every week.",
+      name: 'Product leadership',
+      company: 'ecoATM',
+      logo: '/logos/ecoatm.png',
+    },
+    {
+      quote:
+        'Senior people who understood our constraints from day one. The weekly cadence kept everyone honest and the work tied to outcomes we could measure.',
+      name: 'Technology leadership',
+      company: 'TIAA',
+      logo: '/logos/tiaa.png',
+    },
+  ],
 }
 
 export type LoopStep = { n: string; title: string; body: string }
@@ -69,14 +104,14 @@ export const services = {
       title: 'Go-to-Market',
       outcome: 'Grow pipeline and revenue.',
       body: 'Revenue operations that compound — the systems and motions that turn effort into pipeline.',
-      caps: ['Revenue Operations', 'CRM', 'Sales Automation', 'Marketing Automation', 'Analytics'],
+      caps: ['Revenue Operations', 'CRM', 'Sales Automation', 'Marketing Automation', 'Analytics', 'AI SDRs'],
       icon: 'TrendingUp',
     },
     {
       title: 'AI Engineering',
       outcome: 'Put AI to work where it actually pays off.',
       body: 'Applied AI inside your workflows — shipped to production, measured by outcome, not demos.',
-      caps: ['AI SDRs', 'AI Agents', 'Workflow Automation', 'Knowledge Search', 'RAG', 'LLM Integrations', 'Internal Copilots'],
+      caps: ['AI Agents', 'Workflow Automation', 'Knowledge Search', 'RAG', 'LLM Integrations', 'Internal Copilots'],
       icon: 'Sparkles',
     },
     {

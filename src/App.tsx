@@ -10,6 +10,7 @@ import { Services } from './components/Services'
 import { Embedded } from './components/Embedded'
 import { Industries } from './components/Industries'
 import { Work } from './components/Work'
+import { Reviews } from './components/Reviews'
 import { Stats } from './components/Stats'
 import { Quote } from './components/Quote'
 import { About } from './components/About'
@@ -43,6 +44,7 @@ export default function App() {
         <Embedded />
         <Industries />
         <Work />
+        <Reviews />
         <Stats />
         <Quote />
         <About />

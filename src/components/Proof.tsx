@@ -14,15 +14,19 @@ export function Proof() {
         </p>
         <div
           data-reveal
-          className="mt-7 flex flex-wrap items-center justify-center gap-x-10 gap-y-5 sm:gap-x-14"
+          className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-7 sm:gap-x-16"
         >
-          {proof.wordmarks.map((w) => (
-            <span
-              key={w}
-              className="text-[1.25rem] font-800 tracking-[-0.03em] text-ink/45 transition-colors duration-300 hover:text-ink/80 sm:text-[1.4rem]"
-            >
-              {w}
-            </span>
+          {proof.logos.map((l) => (
+            <img
+              key={l.name}
+              src={l.src}
+              alt={l.name}
+              loading="lazy"
+              className={
+                'w-auto object-contain opacity-50 grayscale transition-all duration-300 hover:opacity-90 hover:grayscale-0 ' +
+                (l.big ? 'h-12 max-w-[80px] sm:h-14' : 'h-7 max-w-[130px] sm:h-8')
+              }
+            />
           ))}
         </div>
       </div>
