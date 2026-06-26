@@ -26,7 +26,7 @@ export function About() {
                 0{i + 1}
               </span>
               <div>
-                <h3 className="text-[1.15rem] font-800 tracking-[-0.01em]">{p.title}</h3>
+                <h3 className="font-display text-[1.2rem] font-800 tracking-[-0.01em]">{p.title}</h3>
                 <p className="mt-2 text-[0.96rem] leading-relaxed text-ink-soft">{p.body}</p>
               </div>
             </div>

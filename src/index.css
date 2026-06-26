@@ -27,6 +27,10 @@
   --font-sans:
     'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
+  /* characterful display face — headlines only; deliberate pairing with the
+     neutral Manrope body so the type itself carries the personality. */
+  --font-display:
+    'Bricolage Grotesque', 'Manrope', ui-sans-serif, system-ui, sans-serif;
 
   /* numeric weight utilities (font-500 … font-800) */
   --font-weight-500: 500;
@@ -122,24 +126,27 @@ html.lenis body {
    ============================================================ */
 
 .t-h1 {
+  font-family: var(--font-display);
   font-size: clamp(2.5rem, 6.6vw, 5rem);
   font-weight: 800;
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
 }
 
 .t-h2 {
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4.4vw, 3.3rem);
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
 }
 
 .t-h3 {
+  font-family: var(--font-display);
   font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.12;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.012em;
 }
 
 .t-lead {

@@ -23,7 +23,7 @@ export function Services() {
                   <span className="flex size-11 items-center justify-center rounded-inner bg-accent-wash text-accent-deep">
                     <Icon className="size-5" />
                   </span>
-                  <h3 className="mt-5 text-[1.35rem] font-800 tracking-[-0.015em]">{p.title}</h3>
+                  <h3 className="mt-5 font-display text-[1.4rem] font-800 tracking-[-0.015em]">{p.title}</h3>
                   <p className="mt-2 text-[1rem] font-700 text-accent-deep">{p.outcome}</p>
                   <p className="mt-3 text-[0.96rem] leading-relaxed text-ink-soft">{p.body}</p>
 
