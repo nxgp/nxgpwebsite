@@ -18,16 +18,11 @@ export function Outcomes() {
                   {o.tag}
                 </span>
 
-                <div className="mt-6 flex items-baseline gap-2">
-                  <span className="font-display text-[2.6rem] font-800 leading-none tracking-[-0.03em] text-accent">
-                    {o.metric}
-                  </span>
-                  <span className="text-[0.86rem] font-600 leading-tight text-ink-faint">
-                    {o.metricLabel}
-                  </span>
-                </div>
+                <h3 className="mt-5 font-display text-[1.4rem] font-700 leading-snug tracking-[-0.015em] text-accent-deep">
+                  {o.outcome}
+                </h3>
 
-                <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5 text-[0.93rem] leading-relaxed">
+                <div className="mt-auto flex flex-col gap-3 border-t border-line pt-5 text-[0.93rem] leading-relaxed">
                   <p className="text-ink-soft">{o.situation}</p>
                   <p className="font-600 text-ink">{o.result}</p>
                 </div>

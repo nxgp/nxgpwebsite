@@ -266,10 +266,10 @@ export const about = {
   ],
 }
 
-export type Outcome = { tag: string; metric: string; metricLabel: string; situation: string; result: string }
+export type Outcome = { tag: string; outcome: string; situation: string; result: string }
 
-// Anonymized outcomes — replace the metrics/details with real, client-approved
-// numbers before publishing.
+// Anonymized outcomes — qualitative, no hard timeline claims. Swap for real,
+// client-approved stories before publishing.
 export const outcomes = {
   kicker: 'Outcomes',
   h2: 'Embedded work, measured by what it moved.',
@@ -277,24 +277,21 @@ export const outcomes = {
   items: [
     {
       tag: 'Private Equity',
-      metric: '6 wks',
-      metricLabel: 'to first production value',
+      outcome: 'Pipeline visibility, fast — and a team that kept shipping.',
       situation: 'A portfolio company inherited a stalled roadmap and a manual revenue stack.',
-      result: 'Rebuilt the GTM data flow inside their stack and shipped weekly — pipeline visibility in weeks, not quarters.',
+      result: 'We rebuilt the GTM data flow inside their stack and shipped in weekly increments.',
     },
     {
       tag: 'Enterprise',
-      metric: 'Weekly',
-      metricLabel: 'production releases',
+      outcome: 'Working software back in production.',
       situation: 'A revenue team was stuck behind a slow systems integrator and a long backlog.',
-      result: 'Embedded a senior team, displaced the SI, and put working software into production every sprint.',
+      result: 'We embedded a senior team, displaced the SI, and got releases flowing again.',
     },
     {
       tag: 'AI Engineering',
-      metric: '<1 hr',
-      metricLabel: 'root-cause, down from days',
-      situation: 'Root-cause analysis on a complex regulated platform took days of engineer time.',
-      result: 'Built a self-hosted reliability agent and institutional memory over the codebase — inside compliance.',
+      outcome: 'Root-cause in a fraction of the time.',
+      situation: 'Root-cause analysis on a complex regulated platform was eating days of engineer time.',
+      result: 'We built a self-hosted reliability agent and institutional memory over the codebase — inside compliance.',
     },
   ] as Outcome[],
 }
