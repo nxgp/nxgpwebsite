@@ -1,4 +1,5 @@
 import { footer } from '../data/content'
+import { Logo } from './ui/Logo'
 
 export function Footer() {
   return (
@@ -6,14 +7,10 @@ export function Footer() {
       <div className="shell py-16">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(4,1fr)]">
           <div>
-            <div className="flex items-center gap-2.5 font-800 tracking-[-0.03em]">
-              <svg width="24" height="24" viewBox="0 0 26 26" fill="none" aria-hidden>
-                <rect width="26" height="26" rx="8" fill="#16181C" />
-                <path d="M7 18.5V7.5h2.1l6 7.4V7.5h2.1v11h-2.1l-6-7.4v7.4H7Z" fill="#fff" />
-                <circle cx="19" cy="9" r="2.2" fill="#0E9F6E" />
-              </svg>
+            <Logo />
+            <p className="mt-3 text-[0.78rem] font-700 uppercase tracking-[0.14em] text-ink-faint">
               Nx Growth Partners
-            </div>
+            </p>
             <p className="mt-4 max-w-[32ch] text-[0.95rem] leading-relaxed text-ink-soft">
               {footer.blurb}
             </p>

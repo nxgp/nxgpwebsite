@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { Button } from './ui/Button'
+import { Logo } from './ui/Logo'
 import { nav } from '../data/content'
 import { scrollToId } from '../lib/useSmoothScroll'
 import { cn } from '../lib/cn'
@@ -33,10 +34,9 @@ export function Nav() {
             e.preventDefault()
             scrollToId('top')
           }}
-          className="flex items-center gap-2.5 font-800 tracking-[-0.03em]"
+          aria-label="Nx Growth Partners — home"
         >
-          <Mark />
-          <span className="text-[1.02rem]">{nav.brand}</span>
+          <Logo />
         </a>
 
         <div className="hidden items-center gap-7 md:flex">
@@ -88,15 +88,5 @@ export function Nav() {
         </div>
       </motion.div>
     </motion.header>
-  )
-}
-
-function Mark() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
-      <rect width="26" height="26" rx="8" fill="#16181C" />
-      <path d="M7 18.5V7.5h2.1l6 7.4V7.5h2.1v11h-2.1l-6-7.4v7.4H7Z" fill="#fff" />
-      <circle cx="19" cy="9" r="2.2" fill="#0E9F6E" />
-    </svg>
   )
 }
