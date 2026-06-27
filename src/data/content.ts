@@ -49,32 +49,30 @@ export const proof = {
 }
 
 // CLIENT REVIEWS — placeholder quotes (the deck had no testimonial text).
-// Replace `quote`/`name` with real, approved words before publishing.
+// Attribution is anonymized to role + sector so we never put invented words
+// in a named client's mouth. Swap in real, approved quote + name before publishing.
 export const reviews = {
   kicker: 'In their words',
   h2: 'What it feels like to have us inside the team.',
-  sub: 'Senior people, embedded in the business, shipping every week. Here is how that lands.',
+  sub: 'Senior people, embedded in the business, shipping every week — here is how that lands. Quotes are anonymized until clients approve attribution.',
   items: [
     {
       quote:
         'They plugged straight into our stack and were shipping production code in the first sprint. It felt like our own engineers — just faster.',
       name: 'Engineering leadership',
-      company: 'Western Digital',
-      logo: '/logos/western-digital.png',
+      context: 'Enterprise storage',
     },
     {
       quote:
         "They didn't hand us a deck and disappear. They sat in our standups, found the real bottlenecks, and fixed them — and something shipped every week.",
       name: 'Product leadership',
-      company: 'ecoATM',
-      logo: '/logos/ecoatm.png',
+      context: 'Connected hardware',
     },
     {
       quote:
         'Senior people who understood our constraints from day one. The weekly cadence kept everyone honest and the work tied to outcomes we could measure.',
       name: 'Technology leadership',
-      company: 'TIAA',
-      logo: '/logos/tiaa.png',
+      context: 'Financial services',
     },
   ],
 }
@@ -239,22 +237,6 @@ export const work = {
   ] as Venture[],
 }
 
-export const stats = {
-  h2: 'Senior people, inside your business, shipping every week.',
-  note: 'One unified brand, one accountable team — no delivery sub-brands, no offshore vendors surfaced as separate entities.',
-  items: [
-    { value: 3, suffix: '', label: 'service pillars, equal weight' },
-    { value: 3, suffix: '', label: 'industries: PE, enterprise, government' },
-    { value: 4, suffix: '', label: 'steps in the operating loop' },
-    { value: 0, valueOverride: 'Weekly', label: 'production release cadence' },
-  ] as { value: number; suffix?: string; prefix?: string; valueOverride?: string; label: string }[],
-}
-
-export const quote = {
-  text: 'Most firms sell you projects or people. We embed a team and tie every release to an outcome.',
-  attribution: 'The Nx Growth Partners operating principle',
-}
-
 export const about = {
   kicker: 'About',
   h2: "A senior team you'd want inside your business.",
@@ -264,36 +246,6 @@ export const about = {
     { title: 'Cross-functional', body: 'GTM, AI and product under one accountable team, so the work connects instead of fragmenting.' },
     { title: 'Accountable to outcomes', body: 'We tie every engagement to a business result and stay until it lands — embedded, not handed off.' },
   ],
-}
-
-export type Outcome = { tag: string; outcome: string; situation: string; result: string }
-
-// Anonymized outcomes — qualitative, no hard timeline claims. Swap for real,
-// client-approved stories before publishing.
-export const outcomes = {
-  kicker: 'Outcomes',
-  h2: 'Embedded work, measured by what it moved.',
-  sub: 'The bar is a result you can name — not a closed ticket. Stories are anonymized until clients approve them.',
-  items: [
-    {
-      tag: 'Private Equity',
-      outcome: 'Pipeline visibility, fast — and a team that kept shipping.',
-      situation: 'A portfolio company inherited a stalled roadmap and a manual revenue stack.',
-      result: 'We rebuilt the GTM data flow inside their stack and shipped in weekly increments.',
-    },
-    {
-      tag: 'Enterprise',
-      outcome: 'Working software back in production.',
-      situation: 'A revenue team was stuck behind a slow systems integrator and a long backlog.',
-      result: 'We embedded a senior team, displaced the SI, and got releases flowing again.',
-    },
-    {
-      tag: 'AI Engineering',
-      outcome: 'Root-cause in a fraction of the time.',
-      situation: 'Root-cause analysis on a complex regulated platform was eating days of engineer time.',
-      result: 'We built a self-hosted reliability agent and institutional memory over the codebase — inside compliance.',
-    },
-  ] as Outcome[],
 }
 
 export const faq = {
