@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react'
  * A single fixed background layer whose tint shifts very subtly between
  * sections as you scroll (warm → cooler → warm). Sells continuity.
  */
-const WARM = [247, 246, 242]
-const COOL = [238, 243, 244]
+const WARM = [253, 253, 252]
+const COOL = [241, 242, 251]
 
 export function TonalBackground() {
   const ref = useRef<HTMLDivElement>(null)
@@ -38,5 +38,5 @@ export function TonalBackground() {
     }
   }, [])
 
-  return <div ref={ref} aria-hidden className="fixed inset-0 -z-50" style={{ backgroundColor: 'rgb(247,246,242)' }} />
+  return <div ref={ref} aria-hidden className="fixed inset-0 -z-50" style={{ backgroundColor: 'rgb(253,253,252)' }} />
 }

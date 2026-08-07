@@ -5,8 +5,10 @@ import { TonalBackground } from './components/TonalBackground'
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
 import { Proof } from './components/Proof'
+import { Shift } from './components/Shift'
 import { OperatingModel } from './components/OperatingModel'
 import { Services } from './components/Services'
+import { Engagement } from './components/Engagement'
 import { Embedded } from './components/Embedded'
 import { Industries } from './components/Industries'
 import { Work } from './components/Work'
@@ -38,8 +40,10 @@ export default function App() {
       <main>
         <Hero />
         <Proof />
+        <Shift />
         <OperatingModel />
         <Services />
+        <Engagement />
         <Embedded />
         <Industries />
         <Work />

@@ -1,4 +1,4 @@
-import { TrendingUp, Sparkles, Boxes, Check } from 'lucide-react'
+import { TrendingUp, Sparkles, Boxes, Users, Check } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 import { services } from '../data/content'
@@ -7,7 +7,7 @@ import { Card } from './ui/Card'
 import { Button } from './ui/Button'
 import { scrollToId } from '../lib/useSmoothScroll'
 
-const icons: Record<string, LucideIcon> = { TrendingUp, Sparkles, Boxes }
+const icons: Record<string, LucideIcon> = { TrendingUp, Sparkles, Boxes, Users }
 
 export function Services() {
   const ref = useReveal<HTMLDivElement>()

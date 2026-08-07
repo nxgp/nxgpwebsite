@@ -1,33 +1,69 @@
 @import 'tailwindcss';
 
 /* ============================================================
-   NX Growth Partners — design system (Mercury-quality)
-   One source of truth for tokens. No inline magic numbers.
+   Nx Growth Partners — design system
+   Brand palette per "Nx Growth Partners Logo Branding" guidelines:
+   Soft White FDFDFC · Warm Ivory EAE6DC · Slate Grey 76736C ·
+   Ink Black 1A1A17 · Periwinkle 8080FF · Electric Blue 0000F4 ·
+   Midnight Navy 060B33. One source of truth for tokens.
    ============================================================ */
+
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSans-Regular.woff2') format('woff2');
+  font-weight: 300 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSans-SemiBold.woff2') format('woff2');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}
+/* Poppins Medium is reserved for the logo wordmark, per brand guidelines. */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Medium.woff2') format('woff2');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
   /* ---- color ---- */
-  --color-bg: #f7f6f2; /* warm near-white canvas */
+  --color-bg: #fdfdfc; /* Soft White canvas */
   --color-surface: #ffffff; /* cards */
-  --color-ink: #16181c; /* text + dark pill buttons */
-  --color-ink-soft: #5c6068;
-  --color-ink-faint: #8b8f97;
-  --color-line: #e9e7e0;
-  --color-accent: #0e9f6e; /* emerald — growth; interactive accent */
-  --color-accent-deep: #0a7e58; /* AA on light */
-  --color-accent-wash: #e7f5ee;
+  --color-ink: #14161f; /* text + dark pill buttons (ink black ↔ navy) */
+  --color-ink-soft: #565963;
+  --color-ink-faint: #8a8d96;
+  --color-line: #e8e6df; /* warm-ivory hairline */
+  --color-navy: #060b33; /* Midnight Navy — dark surfaces, logotype */
+  --color-peri: #8080ff; /* Periwinkle Blue — secondary accent */
+  --color-accent: #0000f4; /* Electric Blue — interactive accent */
+  --color-accent-deep: #0000c9; /* AA on light */
+  --color-accent-wash: #ececfe;
 
   /* aurora pastels (blurred, low-opacity, drifting) */
-  --color-au-peri: #c6d0ff;
-  --color-au-mint: #bdebd6;
-  --color-au-peach: #ffd9c2;
-  --color-au-lilac: #e3d4ff;
+  --color-au-peri: #c3c6ff;
+  --color-au-mint: #a9aeff; /* light periwinkle — also the accent on dark */
+  --color-au-peach: #eae6dc; /* warm ivory */
+  --color-au-lilac: #dcd6ff;
 
   /* ---- type ---- */
   --font-sans:
-    'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Google Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
-  --font-display: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Google Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-logo: 'Poppins', 'Google Sans', ui-sans-serif, system-ui, sans-serif;
 
   /* numeric weight utilities (font-500 … font-800) */
   --font-weight-500: 500;
