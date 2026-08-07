@@ -14,6 +14,7 @@
  * Missing integrations degrade gracefully — chat keeps working.
  */
 import { SYSTEM_PROMPT, LEAD_TOOL, CALENDLY_URL } from './_knowledge'
+import { loadMemory, renderMemory } from './_memory'
 
 export const config = { runtime: 'edge' }
 
@@ -141,7 +142,17 @@ type ContentBlock =
 async function anthropicStream(
   messages: unknown[],
   onDelta: (text: string) => void,
+  memoryBlock: string,
 ): Promise<{ blocks: ContentBlock[]; stopReason: string }> {
+  // Two cache breakpoints: the base prompt stays cached even when approved
+  // memory changes, so learning never costs a full cache rebuild.
+  const system: unknown[] = [
+    { type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } },
+  ]
+  if (memoryBlock) {
+    system.push({ type: 'text', text: memoryBlock, cache_control: { type: 'ephemeral' } })
+  }
+
   const r = await fetch(`${ANTHROPIC_BASE_URL}/v1/messages`, {
     method: 'POST',
     headers: {
@@ -152,7 +163,7 @@ async function anthropicStream(
     body: JSON.stringify({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+      system,
       tools: [LEAD_TOOL],
       messages,
       stream: true,
@@ -284,11 +295,17 @@ export default async function handler(req: Request): Promise<Response> {
       let leadCaptured = false
 
       try {
+        // Approved, anonymized learning from previous conversations.
+        // Never raw transcripts — see api/_memory.ts privacy contract.
+        const memoryBlock = renderMemory(
+          await loadMemory(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY),
+        )
+
         const apiMessages: unknown[] = [...messages]
         let round = await anthropicStream(apiMessages, (t) => {
           assistantText += t
           send({ t: 'delta', text: t })
-        })
+        }, memoryBlock)
 
         // one tool round max — capture_lead, then let the model confirm
         if (round.stopReason === 'tool_use') {
@@ -331,7 +348,7 @@ export default async function handler(req: Request): Promise<Response> {
             round = await anthropicStream(apiMessages, (t) => {
               assistantText += t
               send({ t: 'delta', text: t })
-            })
+            }, memoryBlock)
           }
         }
 
