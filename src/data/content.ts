@@ -53,7 +53,7 @@ export const proof = {
 export const reviews = {
   kicker: 'In their words',
   h2: 'What it feels like to have us inside the team.',
-  sub: 'Senior people, embedded in the business, shipping every week — here is how that lands with the leaders we work for.',
+  sub: 'Three engagements, told by the leaders who ran them.',
   items: [
     {
       quote:
@@ -111,12 +111,12 @@ export type LoopStep = { n: string; title: string; body: string }
 export const operatingModel = {
   kicker: 'How we work',
   h2: 'One loop, tied to your business — not just your backlog.',
-  sub: "We don't start from a backlog. We embed a senior team, find what actually moves your numbers, and run the same four steps until it does — every release pointed at a result you can name.",
+  sub: "We don't start from a backlog. We find what actually moves your numbers, then run the same four steps until it does — every release pointed at a result you can name.",
   steps: [
     { n: '01', title: 'Discover', body: "First we find what's worth building. Working inside the business, we follow where time, money and customers slip away — and come back with the few moves that matter most." },
     { n: '02', title: 'Prioritize', body: 'Then we sequence them. Each opportunity gets weighed by impact, effort and how ready your team is to adopt it, so we start where the return shows up fastest.' },
-    { n: '03', title: 'Deliver', body: 'We build inside your stack and ship every week — real software in production that people use, not a pile of closed tickets or a demo that never lands.' },
-    { n: '04', title: 'Optimize', body: 'Then we watch what it does. Every release tells us the next move, so the work compounds instead of resetting each quarter.' },
+    { n: '03', title: 'Deliver', body: 'We build inside your stack and ship continuously — real software in production that people use, not a pile of closed tickets or a demo that never lands.' },
+    { n: '04', title: 'Optimize', body: 'Then we watch what it does. Every release tells us the next move — what to scale, what to fix, and what to build next.' },
   ] as LoopStep[],
 }
 
@@ -331,11 +331,6 @@ export const about = {
       bio: 'Versatile business leader and transformational operator with experience helping SaaS organizations scale through strategic sales, operational leadership, and cross-functional team transformation.',
     },
   ],
-  points: [
-    { title: 'Senior by default', body: 'Operators and engineers who have shipped real systems — not a bench of juniors you have to manage.' },
-    { title: 'Cross-functional', body: 'AI, software and delivery under one accountable team, so the work connects instead of fragmenting.' },
-    { title: 'Accountable to outcomes', body: 'We tie every engagement to a business result and stay until it lands — embedded, not handed off.' },
-  ],
 }
 
 export const faq = {
@@ -352,7 +347,7 @@ export const faq = {
     },
     {
       q: 'How do we contract and get started?',
-      a: 'We start with the Nx Blueprint — a 2–4 week discovery that maps the highest-impact opportunities into a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.',
+      a: 'We start with the Nx Blueprint — a 2–4 week discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.',
     },
     {
       q: 'Are you big enough to handle our scale?',
@@ -367,7 +362,7 @@ export const faq = {
 
 export const cta = {
   h2Lines: ['Let’s find what', 'moves your business.'],
-  sub: "Tell us where you are — PE, enterprise or government — and we'll map the highest-impact opportunities. A 30-minute intro, no pitch deck.",
+  sub: "Tell us where you are — PE, enterprise or government — and we'll map where technology can create the most value. A 30-minute intro, no pitch deck.",
   email: 'hello@nxgp.io',
   ctaPrimary: 'Book a call',
   ctaSecondary: 'See the pillars',
