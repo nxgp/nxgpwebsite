@@ -31,3 +31,23 @@ Private equity (portfolio value creation), enterprise (revenue, IT, product and 
 ## How we work
 
 One operating loop — Discover, Prioritize, Deliver, Optimize — run by an embedded senior team, shipping production releases every week, accountable to business outcomes rather than tickets.
+
+## Frequently asked questions
+
+**How is this different from staff aug or a systems integrator?**
+We're embedded and accountable to the outcome — not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.
+
+**How do you handle security, data and compliance?**
+We work inside your environment and to your controls — and for regulated work we run self-hosted, keeping data in your boundary. Detailed posture shared on request.
+
+**How do we contract and get started?**
+We start with the Nx Blueprint — a 2–4 week discovery that maps the highest-impact opportunities into a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.
+
+**Are you big enough to handle our scale?**
+Our leverage is senior people and one operating loop, not headcount. The embedded model and weekly cadence scale with the work, backed by named proof of what the team has shipped.
+
+**Do we have to engage all three pillars?**
+No — engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call.
+
+---
+Last updated: 2026-08-07

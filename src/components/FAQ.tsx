@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion } from 'motion/react'
 import { Plus } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 import { faq } from '../data/content'
@@ -38,16 +37,18 @@ export function FAQ() {
                     )}
                   />
                 </button>
-                <motion.div
-                  initial={false}
-                  animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="overflow-hidden"
+                <div
+                  className={cn(
+                    'grid transition-[grid-template-rows,opacity] duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+                  )}
                 >
-                  <p className="max-w-[44rem] pb-6 text-[0.98rem] leading-relaxed text-ink-soft">
-                    {item.a}
-                  </p>
-                </motion.div>
+                  <div className="overflow-hidden">
+                    <p className="max-w-[44rem] pb-6 text-[0.98rem] leading-relaxed text-ink-soft">
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
               </div>
             )
           })}

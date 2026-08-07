@@ -27,11 +27,23 @@ const graph = {
       },
       image: `${SITE}/og.png`,
       email: 'hello@nxgp.io',
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          email: 'hello@nxgp.io',
+          contactType: 'sales',
+          availableLanguage: 'English',
+        },
+      ],
       foundingDate: '2018',
+      numberOfEmployees: { '@type': 'QuantitativeValue', minValue: 40 },
       slogan: 'Your team, extended. From idea to production.',
       description:
         'An embedded technology partner across AI engineering, custom software and embedded delivery. Senior operators and engineers work inside the client’s business and ship in weekly increments tied to business outcomes.',
-      sameAs: ['https://www.linkedin.com/company/nx-growth-parnters'],
+      sameAs: [
+        'https://www.linkedin.com/company/nx-growth-parnters',
+        'https://github.com/nxgp',
+      ],
       founder: about.team.map((t) => ({
         '@type': 'Person',
         name: t.name,

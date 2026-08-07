@@ -21,6 +21,8 @@ export function Proof() {
               key={l.name}
               src={l.src}
               alt={l.name}
+              width={l.w}
+              height={l.h}
               loading="lazy"
               decoding="async"
               className={

@@ -295,6 +295,21 @@ html.lenis body {
   transform: scaleX(1);
 }
 
+/* nav entrance — once, on load (CSS replaces the old motion/react header) */
+@keyframes nav-enter {
+  from {
+    transform: translateY(-24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.nav-enter {
+  animation: nav-enter 0.7s var(--ease-out-expo) 0.1s both;
+}
+
 .nav-frost {
   background: color-mix(in srgb, var(--color-bg) 72%, transparent);
   backdrop-filter: saturate(140%) blur(14px);

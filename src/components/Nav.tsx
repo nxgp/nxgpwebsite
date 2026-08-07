@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'motion/react'
 import { Button } from './ui/Button'
 import { Logo } from './ui/Logo'
 import { nav } from '../data/content'
@@ -18,12 +17,9 @@ export function Nav() {
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+    <header
       className={cn(
-        'fixed inset-x-0 top-0 z-[100] transition-[background,box-shadow] duration-300',
+        'nav-enter fixed inset-x-0 top-0 z-[100] transition-[background,box-shadow] duration-300',
         scrolled ? 'nav-frost' : 'bg-transparent',
       )}
     >
@@ -74,13 +70,13 @@ export function Nav() {
         </button>
       </nav>
 
-      <motion.div
-        initial={false}
-        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="overflow-hidden md:hidden"
+      <div
+        className={cn(
+          'grid transition-[grid-template-rows,opacity] duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] md:hidden',
+          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+        )}
       >
-        <div className="nav-frost flex flex-col gap-1 px-[4vw] pb-5 pt-2">
+        <div className="nav-frost flex flex-col gap-1 overflow-hidden px-[4vw] pb-5 pt-2">
           {nav.links.map((l) => (
             <a
               key={l.id}
@@ -95,7 +91,7 @@ export function Nav() {
             {nav.cta}
           </Button>
         </div>
-      </motion.div>
-    </motion.header>
+      </div>
+    </header>
   )
 }

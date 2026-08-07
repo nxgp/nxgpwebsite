@@ -36,15 +36,17 @@ export const hero = {
   note: 'AI engineering · custom software · embedded delivery — for private equity, enterprise and government.',
 }
 
+// Intrinsic pixel dimensions let the browser reserve the right aspect ratio
+// before each image loads — zero layout shift (CLS) from the logo strip.
 export const proof = {
   label: 'Trusted by',
   logos: [
-    { name: 'Western Digital', src: '/logos/western-digital.png', big: false },
-    { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true },
-    { name: 'ecoATM', src: '/logos/ecoatm.png', big: false },
-    { name: 'Kiotel', src: '/logos/kiotel.png', big: true },
-    { name: 'TIAA', src: '/logos/tiaa.png', big: false },
-  ] as { name: string; src: string; big: boolean }[],
+    { name: 'Western Digital', src: '/logos/western-digital.png', big: false, w: 2048, h: 565 },
+    { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true, w: 184, h: 178 },
+    { name: 'ecoATM', src: '/logos/ecoatm.png', big: false, w: 2033, h: 741 },
+    { name: 'Kiotel', src: '/logos/kiotel.png', big: true, w: 1563, h: 1563 },
+    { name: 'TIAA', src: '/logos/tiaa.png', big: false, w: 598, h: 151 },
+  ] as { name: string; src: string; big: boolean; w: number; h: number }[],
 }
 
 // CLIENT REVIEWS — real quotes and attributions from the company deck.
