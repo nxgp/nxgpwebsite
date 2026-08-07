@@ -18,6 +18,7 @@ import { FAQ } from './components/FAQ'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 import { Seo } from './components/Seo'
+import { ChatWidget } from './components/chat/ChatWidget'
 
 export default function App() {
   useSmoothScroll()
@@ -57,6 +58,7 @@ export default function App() {
         <CTA />
       </main>
       <Footer />
+      <ChatWidget />
       <Seo />
     </>
   )
