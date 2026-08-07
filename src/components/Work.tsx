@@ -104,7 +104,7 @@ export function Work() {
             ))}
             <div className="swipe-item flex w-[60vw] shrink-0 items-center">
               <p className="t-h3 max-w-[14ch] text-ink-faint">
-                The bar the embedded team works to.
+                What should we ship for you next?
               </p>
             </div>
           </div>
@@ -138,7 +138,7 @@ export function Work() {
             </div>
           ))}
           <div className="flex w-[min(60vw,300px)] shrink-0 items-center">
-            <p className="t-h3 max-w-[16ch] text-ink-faint">The bar the embedded team works to.</p>
+            <p className="t-h3 max-w-[16ch] text-ink-faint">What should we ship for you next?</p>
           </div>
         </div>
       </div>
