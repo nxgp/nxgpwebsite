@@ -18,7 +18,7 @@ export function Engagement() {
       <div ref={ref} className="shell">
         <SectionHeader kicker={engagement.kicker} title={engagement.h2} sub={engagement.sub} />
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {engagement.items.map((e, i) => {
             const Icon = icons[i]
             return (

@@ -16,7 +16,7 @@ export function Services() {
       <div ref={ref} className="shell">
         <SectionHeader kicker={services.kicker} title={services.h2} sub={services.sub} />
 
-        <div className="mt-14 grid gap-4 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
           {services.pillars.map((p) => {
             const Icon = icons[p.icon]
             return (

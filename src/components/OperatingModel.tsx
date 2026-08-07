@@ -18,7 +18,7 @@ export function OperatingModel() {
         />
 
         {/* desktop: horizontal flow · mobile: vertical timeline */}
-        <div className="relative mt-16">
+        <div className="relative mt-12">
           {/* connecting rail — horizontal on desktop, vertical on mobile */}
           <div className="absolute left-0 right-0 top-[26px] hidden h-px bg-line lg:block" />
           <div className="absolute left-[26px] top-8 bottom-8 w-px bg-line lg:hidden" />
@@ -53,7 +53,7 @@ export function OperatingModel() {
         {/* the loop closes — make the cycle explicit */}
         <div
           data-reveal
-          className="mt-12 flex flex-col items-center gap-4 rounded-card border border-accent/20 bg-accent-wash/50 px-6 py-6 text-center sm:flex-row sm:justify-center sm:gap-3 sm:text-left"
+          className="mt-8 flex flex-col items-center gap-4 rounded-card border border-accent/20 bg-accent-wash/50 px-6 py-6 text-center sm:flex-row sm:justify-center sm:gap-3 sm:text-left"
         >
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent text-white">
             <RotateCw className="size-5" />

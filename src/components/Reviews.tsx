@@ -11,7 +11,7 @@ export function Reviews() {
       <div ref={ref} className="shell">
         <SectionHeader kicker={reviews.kicker} title={reviews.h2} sub={reviews.sub} />
 
-        <div className="mt-14 grid gap-4 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
           {reviews.items.map((r) => (
             <div data-reveal key={r.name}>
               <Card className="flex h-full flex-col p-7">
