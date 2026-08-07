@@ -106,11 +106,21 @@ Three defences against leaking a visitor's identity:
 3. Insights are stripped again on write, and `renderMemory()` scrubs once
    more before injection.
 
-Nothing is auto-promoted. In testing, the extractor proposed a response
-claiming *"we maintain SOC 2 Type II certification"* — a fact nobody had
-given it. The approval gate is what stops a hallucinated compliance claim
-from being told to a hospital procurement team. **Read every insight before
-approving it.**
+Learning is **fully automated**: after extraction, a second AI pass verifies
+each insight against the assistant's actual knowledge base.
+
+- **grounded + low-stakes** → auto-promoted into `assistant_memory`
+  (`approved_by = 'auto-verifier'`), live within ~60s
+- **not grounded, or high-stakes** (certifications, compliance, legal,
+  pricing, named clients) → held as `pending`, never auto-promoted
+- every run posts a Slack digest: what went live, what was held and why
+
+Why the verifier exists: in testing the extractor invented *"we maintain
+SOC 2 Type II certification"* — a fact nobody supplied. The verifier holds
+exactly that class of claim while letting ordinary learnings flow through
+automatically. Skim the Slack digest; if something held looks worth
+teaching, approve it manually with the SQL below. To retire a bad
+auto-learned memory: `update assistant_memory set active=false where id=N;`
 
 ## Running a learning pass
 
@@ -136,7 +146,7 @@ Concurrent runs are refused (429) for 60s after the previous one — that stops
 an overlapping cron + manual run from mining the same window twice. Approvals
 go live within ~60s (the chat endpoint caches memory per isolate).
 
-## Reviewing and approving
+## Manually approving held insights (optional)
 
 ```sql
 -- what's waiting
