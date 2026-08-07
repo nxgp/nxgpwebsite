@@ -41,10 +41,14 @@ export function Embedded() {
             {embedded.cadence.map((c, i) => (
               <span key={c} className="flex items-center gap-2">
                 <span className="rounded-pill bg-white/10 px-4 py-1.5 text-[0.86rem] font-700">{c}</span>
-                {i < embedded.cadence.length - 1 && <ArrowRight className="size-4 text-white/40" />}
+                {/* arrows are hidden once the chips wrap — a trailing arrow
+                    pointing at a line break reads as broken */}
+                {i < embedded.cadence.length - 1 && (
+                  <ArrowRight className="hidden size-4 text-white/40 sm:block" />
+                )}
               </span>
             ))}
-            <span className="ml-1 rounded-pill bg-accent px-3 py-1.5 text-[0.78rem] font-700">every week</span>
+            <span className="rounded-pill bg-accent px-3 py-1.5 text-[0.78rem] font-700 sm:ml-1">every week</span>
           </div>
           <p className="text-center text-[0.95rem] text-white/60 sm:text-right">{embedded.cadenceNote}</p>
         </div>

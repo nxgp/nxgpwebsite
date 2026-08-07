@@ -25,17 +25,21 @@ export function FAQ() {
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-6 py-5 text-left"
+                  className="flex w-full items-center justify-between gap-4 py-5 text-left sm:gap-6"
                 >
-                  <span className="font-display text-[1.12rem] font-700 tracking-[-0.01em] text-ink">
+                  <span className="min-w-0 font-display text-[1.12rem] font-700 tracking-[-0.01em] text-ink">
                     {item.q}
                   </span>
-                  <Plus
-                    className={cn(
-                      'size-5 shrink-0 text-accent transition-transform duration-300',
-                      isOpen && 'rotate-45',
-                    )}
-                  />
+                  {/* the 45° rotation grows the icon's visual box past its
+                      layout box — give it room so it can't overflow the row */}
+                  <span className="grid size-8 shrink-0 place-items-center">
+                    <Plus
+                      className={cn(
+                        'size-5 text-accent transition-transform duration-300',
+                        isOpen && 'rotate-45',
+                      )}
+                    />
+                  </span>
                 </button>
                 <div
                   className={cn(
