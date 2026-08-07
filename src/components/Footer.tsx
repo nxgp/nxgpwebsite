@@ -5,8 +5,10 @@ export function Footer() {
   return (
     <footer className="border-t border-line bg-surface/50">
       <div className="shell py-16">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(4,1fr)]">
-          <div>
+        {/* two columns on phones — four stacked link lists made the footer
+            an endless scroll */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-9 md:grid-cols-[1.4fr_repeat(4,1fr)] md:gap-10">
+          <div className="col-span-2 md:col-span-1">
             <Logo />
             <p className="mt-3 text-[0.78rem] font-700 uppercase tracking-[0.14em] text-ink-faint">
               Nx Growth Partners

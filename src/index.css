@@ -211,6 +211,13 @@ html.lenis body {
   position: relative;
 }
 
+/* Deep links (#services, #work…) must clear the fixed nav — otherwise the
+   heading lands underneath it. Covers plain hash navigation, which the JS
+   smooth-scroll offset doesn't handle. */
+:where(section, footer)[id] {
+  scroll-margin-top: calc(var(--nav-h) + 12px);
+}
+
 /* ============================================================
    motion utilities + reduced-motion guard
    ============================================================ */
@@ -315,6 +322,14 @@ html.lenis body {
   backdrop-filter: saturate(140%) blur(14px);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid var(--color-line);
+}
+
+/* Mobile menu panel — must be fully opaque. The translucent nav-frost works
+   for a thin bar, but page content read straight through the open menu. */
+.nav-sheet {
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-line);
+  box-shadow: var(--shadow-soft);
 }
 
 .grid-faint {

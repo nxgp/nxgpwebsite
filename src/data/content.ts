@@ -369,7 +369,7 @@ export const cta = {
 }
 
 export const footer = {
-  blurb: 'An embedded technology partner across AI engineering, custom software and embedded delivery. Your team, extended — not replaced.',
+  blurb: 'An embedded technology partner across AI engineering, custom software and embedded delivery.',
   tagline: 'Build systems that scale.',
   copyright: '© 2026 Nx Growth Partners · nxgp.io',
   columns: [

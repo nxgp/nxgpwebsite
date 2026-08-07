@@ -76,7 +76,7 @@ export function Nav() {
           open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
         )}
       >
-        <div className="nav-frost flex flex-col gap-1 overflow-hidden px-[4vw] pb-5 pt-2">
+        <div className="nav-sheet flex flex-col gap-1 overflow-hidden px-[4vw] pb-5 pt-2">
           {nav.links.map((l) => (
             <a
               key={l.id}
