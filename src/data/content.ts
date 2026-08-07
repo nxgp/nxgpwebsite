@@ -28,8 +28,8 @@ export const nav = {
 
 export const hero = {
   pill: 'An embedded technology partner',
-  h1a: 'Your team, extended —',
-  h1b: 'not replaced.',
+  h1a: 'Your team, extended.',
+  h1b: 'From idea to production.',
   sub: 'Nx Growth Partners embeds experienced operators and engineers inside your business — to find the highest-impact opportunities, align technology to business outcomes, and build the systems that move you forward.',
   ctaPrimary: 'Book a call',
   ctaSecondary: 'See how we work',
