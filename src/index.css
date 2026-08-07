@@ -478,6 +478,28 @@ html.lenis body {
 }
 .sv-drip { animation: sv-drip 2.6s ease-in infinite; }
 
+/* ============================================================
+   Nx Assistant chat — typing indicator
+   ============================================================ */
+@keyframes chat-blink {
+  0%, 80%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+.chat-typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 2px 0;
+}
+.chat-typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-ink-faint);
+  animation: chat-blink 1.2s ease-in-out infinite;
+}
+.chat-typing i:nth-child(2) { animation-delay: 0.15s; }
+.chat-typing i:nth-child(3) { animation-delay: 0.3s; }
+
 /* horizontal swipe galleries (mobile) — native scroll-snap, no scrollbar */
 .swipe {
   scroll-snap-type: x mandatory;
