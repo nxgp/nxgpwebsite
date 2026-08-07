@@ -50,3 +50,6 @@ create index if not exists conversation_insights_status_idx on conversation_insi
 alter table assistant_memory enable row level security;
 alter table conversation_insights enable row level security;
 alter table learning_runs enable row level security;
+
+-- Global daily-cap query scans by time alone; keep it indexed.
+create index if not exists messages_created_idx on messages (created_at);

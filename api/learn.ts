@@ -151,10 +151,17 @@ function anonymize(s: string): string {
 }
 
 export default async function handler(req: Request): Promise<Response> {
-  if (req.method !== 'POST') return json({ error: 'method not allowed' }, 405)
-
-  const secret = process.env.LEARN_SECRET
-  if (!secret || req.headers.get('x-learn-secret') !== secret) {
+  // Two callers: manual runs (POST + x-learn-secret) and Vercel Cron, which
+  // can only send GET with `Authorization: Bearer $CRON_SECRET` (Vercel
+  // injects that header automatically when CRON_SECRET is set).
+  const learnSecret = process.env.LEARN_SECRET
+  const cronSecret = process.env.CRON_SECRET
+  const manualOk =
+    req.method === 'POST' && !!learnSecret && req.headers.get('x-learn-secret') === learnSecret
+  const cronOk =
+    req.method === 'GET' && !!cronSecret &&
+    req.headers.get('authorization') === `Bearer ${cronSecret}`
+  if (!manualOk && !cronOk) {
     return json({ error: 'unauthorized' }, 401)
   }
   const c = sb()
@@ -207,6 +214,18 @@ export default async function handler(req: Request): Promise<Response> {
       )
       .join('\n\n')
 
+    // Without this, every run re-learns the same popular facts and
+    // near-duplicates crowd out the memory injection cap over time.
+    const known: Array<{ prompt: string }> = await fetch(
+      `${c.url}/rest/v1/assistant_memory?select=prompt&active=eq.true&limit=100`,
+      { headers: sbHeaders(c) },
+    ).then((r) => (r.ok ? r.json() : []))
+    const knownBlock =
+      Array.isArray(known) && known.length > 0
+        ? `\n\nALREADY KNOWN (do NOT record insights that repeat these):\n` +
+          known.map((k) => `- ${k.prompt}`).join('\n')
+        : ''
+
     // 3. extract insights
     const ar = await fetch(`${ANTHROPIC_BASE_URL}/v1/messages`, {
       method: 'POST',
@@ -221,7 +240,7 @@ export default async function handler(req: Request): Promise<Response> {
         system: EXTRACT_PROMPT,
         tools: [EXTRACT_TOOL],
         tool_choice: { type: 'tool', name: 'record_insights' },
-        messages: [{ role: 'user', content: transcripts }],
+        messages: [{ role: 'user', content: transcripts + knownBlock }],
       }),
     })
     const aj = await ar.json()
