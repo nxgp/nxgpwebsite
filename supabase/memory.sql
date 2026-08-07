@@ -53,3 +53,17 @@ alter table learning_runs enable row level security;
 
 -- Global daily-cap query scans by time alone; keep it indexed.
 create index if not exists messages_created_idx on messages (created_at);
+
+-- Visitor feedback on assistant replies (thumbs up/down in the widget).
+-- The answer snippet is stored inline so learning can use it even after the
+-- raw transcript has been purged by retention.
+create table if not exists feedback (
+  id bigint generated always as identity primary key,
+  conversation_id text,
+  rating int not null check (rating in (-1, 1)),
+  question text,
+  answer_snippet text,
+  created_at timestamptz not null default now()
+);
+create index if not exists feedback_created_idx on feedback (created_at desc);
+alter table feedback enable row level security;

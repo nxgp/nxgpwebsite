@@ -189,6 +189,26 @@ export default async function handler(req: Request): Promise<Response> {
       )
     }
 
+    // Retention: purge raw transcripts older than RETENTION_DAYS (default
+    // 90; 0 disables). Runs every pass, even when there is nothing new to
+    // mine. Lead-linked conversations keep their metadata (leads reference
+    // them); their old message bodies are still purged.
+    const retentionDays = Number(process.env.RETENTION_DAYS ?? 90)
+    let purged = 0
+    if (retentionDays > 0) {
+      const cutoff = new Date(Date.now() - retentionDays * 86_400_000).toISOString()
+      const del = await fetch(
+        `${c.url}/rest/v1/messages?created_at=lt.${cutoff}&id=lte.${since}`,
+        { method: 'DELETE', headers: { ...sbHeaders(c), Prefer: 'count=exact' } },
+      )
+      purged = Number(del.headers.get('content-range')?.split('/')[1] ?? 0)
+      // conversations with no lead and no recent activity can go entirely
+      await fetch(
+        `${c.url}/rest/v1/conversations?last_active=lt.${cutoff}&lead_captured=eq.false`,
+        { method: 'DELETE', headers: sbHeaders(c) },
+      ).catch(() => {})
+    }
+
     const rows: Row[] = await fetch(
       `${c.url}/rest/v1/messages?select=id,conversation_id,role,content,created_at` +
         `&id=gt.${since}&order=id.asc&limit=${MAX_MESSAGES}`,
@@ -196,7 +216,7 @@ export default async function handler(req: Request): Promise<Response> {
     ).then((r) => r.json())
 
     if (!Array.isArray(rows) || rows.length === 0) {
-      return json({ ok: true, scanned: 0, insights: 0, note: 'no new messages' }, 200)
+      return json({ ok: true, scanned: 0, insights: 0, purged, note: 'no new messages' }, 200)
     }
     const maxId = Math.max(...rows.map((r: any) => r.id))
 
@@ -213,6 +233,24 @@ export default async function handler(req: Request): Promise<Response> {
         msgs.map((m) => `${m.role}: ${anonymize(m.content)}`).join('\n'),
       )
       .join('\n\n')
+
+    // Visitor ratings give mining a quality signal: thumbed-down answers are
+    // prime "gap" material; thumbed-up ones confirm positioning.
+    const fb: Array<{ rating: number; question?: string; answer_snippet?: string }> =
+      await fetch(
+        `${c.url}/rest/v1/feedback?select=rating,question,answer_snippet&order=id.desc&limit=30`,
+        { headers: sbHeaders(c) },
+      ).then((r) => (r.ok ? r.json() : []))
+    const fbBlock =
+      Array.isArray(fb) && fb.length > 0
+        ? `\n\nVISITOR RATINGS (thumbs on specific answers):\n` +
+          fb
+            .map(
+              (f) =>
+                `${f.rating > 0 ? '👍' : '👎'} Q: ${anonymize(f.question ?? '')} → A: ${anonymize(f.answer_snippet ?? '')}`,
+            )
+            .join('\n')
+        : ''
 
     // Without this, every run re-learns the same popular facts and
     // near-duplicates crowd out the memory injection cap over time.
@@ -240,7 +278,7 @@ export default async function handler(req: Request): Promise<Response> {
         system: EXTRACT_PROMPT,
         tools: [EXTRACT_TOOL],
         tool_choice: { type: 'tool', name: 'record_insights' },
-        messages: [{ role: 'user', content: transcripts + knownBlock }],
+        messages: [{ role: 'user', content: transcripts + fbBlock + knownBlock }],
       }),
     })
     const aj = await ar.json()
@@ -386,6 +424,7 @@ export default async function handler(req: Request): Promise<Response> {
         insights: insights.length,
         learned: promoted.length,
         held: held.length,
+        purged,
       },
       200,
     )

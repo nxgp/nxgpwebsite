@@ -46,7 +46,12 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-line pt-6 text-[0.86rem] font-600 text-ink-faint sm:flex-row sm:items-center">
-          <span>{footer.copyright}</span>
+          <span>
+            {footer.copyright} ·{' '}
+            <a href="/privacy" className="link-underline hover:text-ink">
+              Privacy
+            </a>
+          </span>
           <span>Embedded. Senior. Accountable.</span>
         </div>
       </div>
