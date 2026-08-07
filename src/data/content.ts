@@ -33,7 +33,7 @@ export const hero = {
   sub: 'Nx Growth Partners embeds experienced operators and engineers inside your business — to find the highest-impact opportunities, align technology to business outcomes, and build the systems that move you forward.',
   ctaPrimary: 'Book a call',
   ctaSecondary: 'See how we work',
-  note: 'AI engineering · custom software · embedded delivery — from idea to production, for private equity, enterprise and government.',
+  note: 'AI engineering · custom software · embedded delivery — for private equity, enterprise and government.',
 }
 
 export const proof = {
