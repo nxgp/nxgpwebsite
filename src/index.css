@@ -87,7 +87,7 @@
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* ---- section rhythm ---- */
-  --space-section: clamp(80px, 11vw, 140px);
+  --space-section: clamp(52px, 6.5vw, 88px);
 }
 
 :root {
@@ -354,6 +354,80 @@ html.lenis body {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* ============================================================
+   "The Shift" section — animated friction visuals.
+   Pure CSS keyframes (no JS): cheap, and the global
+   prefers-reduced-motion clamp above freezes them for free.
+   ============================================================ */
+
+/* dot hopping across handoff nodes, dwelling at each stop */
+@keyframes sv-travel {
+  0%, 9% { transform: translateX(0); opacity: 1; }
+  18%, 27% { transform: translateX(68px); }
+  36%, 45% { transform: translateX(136px); }
+  54%, 63% { transform: translateX(204px); }
+  74%, 92% { transform: translateX(272px); opacity: 1; }
+  97%, 100% { transform: translateX(272px); opacity: 0; }
+}
+.sv-travel {
+  animation: sv-travel 8s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+/* handoff nodes light up as the work arrives */
+@keyframes sv-node {
+  0%, 6% { opacity: 0.25; }
+  10%, 22% { opacity: 1; }
+  30%, 100% { opacity: 0.25; }
+}
+.sv-node { animation: sv-node 8s ease infinite; }
+
+/* swapping caption — "5 minutes" becomes "3 days" */
+@keyframes sv-swap {
+  0%, 42% { opacity: 1; }
+  50%, 92% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.sv-swap-a { animation: sv-swap 8s ease infinite; }
+.sv-swap-b { animation: sv-swap 8s ease infinite; animation-delay: -4s; }
+
+/* marching dashes — information dragged between systems by hand */
+@keyframes sv-dash {
+  to { stroke-dashoffset: -22; }
+}
+.sv-dash {
+  stroke-dasharray: 4 7;
+  animation: sv-dash 1.4s linear infinite;
+}
+
+/* pulse ring around the overloaded human in the middle */
+@keyframes sv-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  80%, 100% { transform: scale(1.9); opacity: 0; }
+}
+.sv-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sv-pulse 2.6s ease-out infinite;
+}
+
+/* value dots flowing through the pipe */
+@keyframes sv-flow {
+  0% { transform: translateX(0); opacity: 0; }
+  6% { opacity: 1; }
+  94% { opacity: 1; }
+  100% { transform: translateX(264px); opacity: 0; }
+}
+.sv-flow { animation: sv-flow 5.2s linear infinite; }
+
+/* ...and the ones that leak out of the crack */
+@keyframes sv-drip {
+  0%, 12% { transform: translateY(0); opacity: 0; }
+  22% { opacity: 1; }
+  82% { transform: translateY(38px); opacity: 0.9; }
+  100% { transform: translateY(44px); opacity: 0; }
+}
+.sv-drip { animation: sv-drip 2.6s ease-in infinite; }
 
 /* horizontal swipe galleries (mobile) — native scroll-snap, no scrollbar */
 .swipe {

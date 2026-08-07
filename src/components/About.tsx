@@ -49,7 +49,7 @@ export function About() {
         </div>
 
         {/* founding team */}
-        <div className="mt-14 grid gap-4 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
           {about.team.map((t) => (
             <div
               data-reveal
