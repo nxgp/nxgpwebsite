@@ -27,11 +27,19 @@ function scrub(s: string): string {
     .slice(0, 600)
 }
 
+// Per-isolate cache: without it every chat message pays a Supabase
+// round-trip before the first token can stream, and at scale the memory
+// table gets hammered for data that changes at most a few times a week.
+// 60s TTL keeps approvals near-instant while amortizing the cost to ~zero.
+let cache: { at: number; entries: MemoryEntry[] } | null = null
+const CACHE_TTL_MS = 60_000
+
 export async function loadMemory(
   supabaseUrl?: string,
   supabaseKey?: string,
 ): Promise<MemoryEntry[]> {
   if (!supabaseUrl || !supabaseKey) return []
+  if (cache && Date.now() - cache.at < CACHE_TTL_MS) return cache.entries
   try {
     const r = await fetch(
       `${supabaseUrl}/rest/v1/assistant_memory` +
@@ -44,11 +52,15 @@ export async function loadMemory(
         },
       },
     )
-    if (!r.ok) return []
+    if (!r.ok) return cache?.entries ?? []
     const rows = (await r.json()) as MemoryEntry[]
-    return Array.isArray(rows) ? rows : []
+    const entries = Array.isArray(rows) ? rows : []
+    cache = { at: Date.now(), entries }
+    return entries
   } catch {
-    return [] // learning is an enhancement — never break chat over it
+    // learning is an enhancement — never break chat over it; serve stale
+    // cache if we have one
+    return cache?.entries ?? []
   }
 }
 

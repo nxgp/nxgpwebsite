@@ -18,8 +18,12 @@ export const config = { runtime: 'edge' }
 const MODEL = process.env.LEARN_MODEL || 'claude-haiku-4-5-20251001'
 const ANTHROPIC_BASE_URL =
   process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com'
-const MAX_CONVERSATIONS = 40
-const MAX_MESSAGES = 400
+// One batch = everything fetched gets mined (no per-conversation cap — an
+// earlier draft capped conversations but still advanced the high-water mark
+// past the dropped ones, silently excluding them from learning forever).
+// 300 msgs x 800 chars ≈ 60k tokens: safely inside model context.
+const MAX_MESSAGES = 300
+const MAX_MSG_CHARS = 800
 
 type Row = { conversation_id: string; role: string; content: string; created_at: string }
 
@@ -90,7 +94,7 @@ function anonymize(s: string): string {
   return s
     .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email]')
     .replace(/\+?\d[\d\s().-]{8,}\d/g, '[phone]')
-    .slice(0, 1500)
+    .slice(0, MAX_MSG_CHARS)
 }
 
 export default async function handler(req: Request): Promise<Response> {
@@ -107,10 +111,23 @@ export default async function handler(req: Request): Promise<Response> {
   try {
     // 1. only mine messages newer than the last run
     const lastRun = await fetch(
-      `${c.url}/rest/v1/learning_runs?select=through_message_id&order=id.desc&limit=1`,
+      `${c.url}/rest/v1/learning_runs?select=through_message_id,ran_at&order=id.desc&limit=1`,
       { headers: sbHeaders(c) },
     ).then((r) => r.json())
     const since: number = lastRun?.[0]?.through_message_id ?? 0
+
+    // Overlap guard: two concurrent runs (cron + manual) would read the same
+    // high-water mark and double-mine the window into duplicate insights.
+    // A run takes ~10-30s, so refuse if another finished under a minute ago;
+    // ?force=1 overrides for intentional back-to-back batches.
+    const lastRanAt = lastRun?.[0]?.ran_at ? Date.parse(lastRun[0].ran_at) : 0
+    const force = new URL(req.url).searchParams.get('force') === '1'
+    if (!force && Date.now() - lastRanAt < 60_000) {
+      return json(
+        { error: 'a learning pass ran less than a minute ago; retry shortly or pass ?force=1' },
+        429,
+      )
+    }
 
     const rows: Row[] = await fetch(
       `${c.url}/rest/v1/messages?select=id,conversation_id,role,content,created_at` +
@@ -131,7 +148,6 @@ export default async function handler(req: Request): Promise<Response> {
       byConv.set(r.conversation_id, list)
     }
     const transcripts = [...byConv.entries()]
-      .slice(0, MAX_CONVERSATIONS)
       .map(([, msgs], i) =>
         `--- conversation ${i + 1} ---\n` +
         msgs.map((m) => `${m.role}: ${anonymize(m.content)}`).join('\n'),
@@ -161,9 +177,12 @@ export default async function handler(req: Request): Promise<Response> {
     const toolUse = (aj.content || []).find((b: any) => b.type === 'tool_use')
     const insights = (toolUse?.input?.insights ?? []) as Array<Record<string, string>>
 
-    // 4. store as pending — second anonymization pass before writing
+    // 4. store as pending — second anonymization pass before writing.
+    // If this insert fails we must NOT advance the high-water mark, or the
+    // batch's insights are silently lost forever; bail and let the next run
+    // re-mine the same window instead.
     if (insights.length > 0) {
-      await fetch(`${c.url}/rest/v1/conversation_insights`, {
+      const ins = await fetch(`${c.url}/rest/v1/conversation_insights`, {
         method: 'POST',
         headers: { ...sbHeaders(c), 'Content-Type': 'application/json' },
         body: JSON.stringify(
@@ -176,6 +195,9 @@ export default async function handler(req: Request): Promise<Response> {
           })),
         ),
       })
+      if (!ins.ok) {
+        return json({ error: 'failed to store insights; mark not advanced' }, 502)
+      }
     }
 
     await fetch(`${c.url}/rest/v1/learning_runs`, {

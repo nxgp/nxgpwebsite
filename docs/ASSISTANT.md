@@ -125,6 +125,17 @@ Only messages newer than the last run are scanned (`learning_runs` tracks the
 high-water mark), so it's cheap to run weekly. Add it to Vercel Cron if you
 want it automatic.
 
+Each run processes one batch (300 messages). After a traffic spike, repeat
+with `?force=1` until it reports `scanned: 0`:
+
+```bash
+curl -X POST "https://nxgp.io/api/learn?force=1" -H "x-learn-secret: $LEARN_SECRET"
+```
+
+Concurrent runs are refused (429) for 60s after the previous one — that stops
+an overlapping cron + manual run from mining the same window twice. Approvals
+go live within ~60s (the chat endpoint caches memory per isolate).
+
 ## Reviewing and approving
 
 ```sql
