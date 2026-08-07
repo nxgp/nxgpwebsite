@@ -22,6 +22,21 @@ function VentureCard({ v }: { v: Venture }) {
       <p className="mt-1 text-[0.82rem] font-700 uppercase tracking-[0.06em] text-ink-faint">{v.domain}</p>
       <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-soft">{v.blurb}</p>
 
+      {v.metrics && (
+        <div className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-5">
+          {v.metrics.map((m) => (
+            <div key={m.label}>
+              <span className="block font-display text-[1.35rem] font-800 leading-none tracking-[-0.02em]" style={{ color: v.accent }}>
+                {m.value}
+              </span>
+              <span className="mt-1 block text-[0.68rem] font-600 leading-snug text-ink-faint">
+                {m.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="mt-auto pt-6" data-card-visual>
         <VentureVisual venture={v} />
       </div>

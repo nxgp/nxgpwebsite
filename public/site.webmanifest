@@ -1,11 +1,11 @@
 {
   "name": "Nx Growth Partners",
-  "short_name": "Nx",
-  "description": "An embedded technology partner across go-to-market, AI engineering and product development.",
+  "short_name": "NxGP",
+  "description": "An embedded technology partner across AI engineering, custom software and embedded delivery — from idea to production.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F7F6F2",
-  "theme_color": "#16181C",
+  "background_color": "#FDFDFC",
+  "theme_color": "#0000F4",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
