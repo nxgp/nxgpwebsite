@@ -28,23 +28,25 @@ export const nav = {
 
 export const hero = {
   pill: 'An embedded technology partner',
-  h1a: 'Your team, extended —',
-  h1b: 'not replaced.',
+  h1a: 'Your team, extended.',
+  h1b: 'From idea to production.',
   sub: 'Nx Growth Partners embeds experienced operators and engineers inside your business — to find the highest-impact opportunities, align technology to business outcomes, and build the systems that move you forward.',
   ctaPrimary: 'Book a call',
   ctaSecondary: 'See how we work',
-  note: 'AI engineering · custom software · embedded delivery — from idea to production, for private equity, enterprise and government.',
+  note: 'AI engineering · custom software · embedded delivery — for private equity, enterprise and government.',
 }
 
+// Intrinsic pixel dimensions let the browser reserve the right aspect ratio
+// before each image loads — zero layout shift (CLS) from the logo strip.
 export const proof = {
   label: 'Trusted by',
   logos: [
-    { name: 'Western Digital', src: '/logos/western-digital.png', big: false },
-    { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true },
-    { name: 'ecoATM', src: '/logos/ecoatm.png', big: false },
-    { name: 'Kiotel', src: '/logos/kiotel.png', big: true },
-    { name: 'TIAA', src: '/logos/tiaa.png', big: false },
-  ] as { name: string; src: string; big: boolean }[],
+    { name: 'Western Digital', src: '/logos/western-digital.png', big: false, w: 2048, h: 565 },
+    { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true, w: 184, h: 178 },
+    { name: 'ecoATM', src: '/logos/ecoatm.png', big: false, w: 2033, h: 741 },
+    { name: 'Kiotel', src: '/logos/kiotel.png', big: true, w: 1563, h: 1563 },
+    { name: 'TIAA', src: '/logos/tiaa.png', big: false, w: 598, h: 151 },
+  ] as { name: string; src: string; big: boolean; w: number; h: number }[],
 }
 
 // CLIENT REVIEWS — real quotes and attributions from the company deck.
@@ -376,9 +378,38 @@ export const footer = {
   tagline: 'Build systems that scale.',
   copyright: '© 2026 Nx Growth Partners · nxgp.io',
   columns: [
-    { heading: 'Services', links: ['AI & Workflow Automation', 'Software & Product Delivery', 'Embedded Engineering'] },
-    { heading: 'Industries', links: ['Private Equity', 'Enterprise', 'Government'] },
-    { heading: 'Company', links: ['How we work', 'Work', 'About', 'Book a call'] },
-    { heading: 'Connect', links: ['hello@nxgp.io', 'LinkedIn', 'nxgp.io'] },
-  ],
+    {
+      heading: 'Services',
+      links: [
+        { label: 'AI & Workflow Automation', href: '#services' },
+        { label: 'Software & Product Delivery', href: '#services' },
+        { label: 'Embedded Engineering', href: '#services' },
+      ],
+    },
+    {
+      heading: 'Industries',
+      links: [
+        { label: 'Private Equity', href: '#industries' },
+        { label: 'Enterprise', href: '#industries' },
+        { label: 'Government', href: '#industries' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { label: 'How we work', href: '#how-we-work' },
+        { label: 'Work', href: '#work' },
+        { label: 'About', href: '#about' },
+        { label: 'Book a call', href: '#cta' },
+      ],
+    },
+    {
+      heading: 'Connect',
+      links: [
+        { label: 'hello@nxgp.io', href: 'mailto:hello@nxgp.io' },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/company/nx-growth-parnters' },
+        { label: 'nxgp.io', href: 'https://nxgp.io' },
+      ],
+    },
+  ] as { heading: string; links: { label: string; href: string }[] }[],
 }

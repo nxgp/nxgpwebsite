@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'motion/react'
 import { Button } from './ui/Button'
 import { Logo } from './ui/Logo'
 import { nav } from '../data/content'
@@ -18,12 +17,9 @@ export function Nav() {
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+    <header
       className={cn(
-        'fixed inset-x-0 top-0 z-[100] transition-[background,box-shadow] duration-300',
+        'nav-enter fixed inset-x-0 top-0 z-[100] transition-[background,box-shadow] duration-300',
         scrolled ? 'nav-frost' : 'bg-transparent',
       )}
     >
@@ -41,13 +37,17 @@ export function Nav() {
 
         <div className="hidden items-center gap-7 md:flex">
           {nav.links.map((l) => (
-            <button
+            <a
               key={l.id}
-              onClick={() => scrollToId(l.id)}
+              href={`#${l.id}`}
+              onClick={(e) => {
+                e.preventDefault()
+                scrollToId(l.id)
+              }}
               className="link-underline text-[0.93rem] font-600 text-ink-soft transition-colors hover:text-ink"
             >
               {l.label}
-            </button>
+            </a>
           ))}
         </div>
 
@@ -70,23 +70,28 @@ export function Nav() {
         </button>
       </nav>
 
-      <motion.div
-        initial={false}
-        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="overflow-hidden md:hidden"
+      <div
+        className={cn(
+          'grid transition-[grid-template-rows,opacity] duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] md:hidden',
+          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+        )}
       >
-        <div className="nav-frost flex flex-col gap-1 px-[4vw] pb-5 pt-2">
+        <div className="nav-frost flex flex-col gap-1 overflow-hidden px-[4vw] pb-5 pt-2">
           {nav.links.map((l) => (
-            <button key={l.id} onClick={() => { scrollToId(l.id); setOpen(false) }} className="rounded-inner px-2 py-3 text-left text-[1.05rem] font-600 text-ink">
+            <a
+              key={l.id}
+              href={`#${l.id}`}
+              onClick={(e) => { e.preventDefault(); scrollToId(l.id); setOpen(false) }}
+              className="rounded-inner px-2 py-3 text-left text-[1.05rem] font-600 text-ink"
+            >
               {l.label}
-            </button>
+            </a>
           ))}
           <Button variant="dark" magnetic={false} className="mt-2 w-full" onClick={() => { scrollToId('cta'); setOpen(false) }}>
             {nav.cta}
           </Button>
         </div>
-      </motion.div>
-    </motion.header>
+      </div>
+    </header>
   )
 }

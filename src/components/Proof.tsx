@@ -21,7 +21,10 @@ export function Proof() {
               key={l.name}
               src={l.src}
               alt={l.name}
+              width={l.w}
+              height={l.h}
               loading="lazy"
+              decoding="async"
               className={
                 'w-auto object-contain opacity-50 grayscale transition-all duration-300 hover:opacity-90 hover:grayscale-0 ' +
                 (l.big ? 'h-12 max-w-[80px] sm:h-14' : 'h-7 max-w-[130px] sm:h-8')

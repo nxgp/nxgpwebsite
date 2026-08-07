@@ -1,0 +1,53 @@
+# Nx Growth Partners
+
+> An embedded technology partner across AI engineering, custom software and embedded delivery. Senior operators and engineers work inside your business and ship production software in weekly increments tied to business outcomes — from idea to production. Founded 2018 · 40+ team members · 50+ projects delivered.
+
+Slogan: Your team, extended. From idea to production.
+Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx-growth-parnters
+
+## Services
+
+- **AI & Workflow Automation**: AI agents and copilots, enterprise knowledge and RAG, workflow automation, human-in-the-loop design, evaluation and monitoring.
+- **Software & Product Delivery**: internal tools and portals, SaaS platforms, web and mobile applications, APIs and system integrations, data platforms and cloud.
+- **Embedded Engineering**: a senior-led team that plugs into your roadmap — product strategy and architecture, frontend/backend/AI/data, QA and DevOps, cloud delivery and support.
+
+## Engagement models
+
+- **Nx Blueprint** (2–4 weeks): discovery and planning — a prioritized roadmap, estimated investment, and a sequenced execution plan.
+- **Nx Project Delivery** (8–16+ weeks): end-to-end design and development of a defined software, automation, data, or AI initiative.
+- **Nx Managed Support** (3–12+ months): a senior-led team embedded in your organization, delivering against a prioritized roadmap.
+- **Nx Embedded Engineering** (ongoing, quarterly): operation, monitoring, and continuous improvement of deployed systems.
+
+## Client results
+
+- **Western Digital** (computer hardware): organization-wide AI platform unifying agents, knowledge sources and workflows — $5M SaaS contract spend eliminated, 3x more capabilities delivered, 50% faster delivery of AI functionality.
+- **Harbor Industrial** (maritime transportation): maintenance operations platform with logbooks, asset tracking, analytics and an AI copilot — 40% less time on reporting, 25% faster issue resolution, 15% higher fleet availability.
+- **Kiotel** (hospitality technology): platform re-architecture and guest-experience expansion — 35% faster release cycles, 2x features shipped per quarter, 30% lower property support costs.
+
+## Who we serve
+
+Private equity (portfolio value creation), enterprise (revenue, IT, product and data leaders), and government (capabilities and teaming).
+
+## How we work
+
+One operating loop — Discover, Prioritize, Deliver, Optimize — run by an embedded senior team, shipping production releases every week, accountable to business outcomes rather than tickets.
+
+## Frequently asked questions
+
+**How is this different from staff aug or a systems integrator?**
+We're embedded and accountable to the outcome — not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.
+
+**How do you handle security, data and compliance?**
+We work inside your environment and to your controls — and for regulated work we run self-hosted, keeping data in your boundary. Detailed posture shared on request.
+
+**How do we contract and get started?**
+We start with the Nx Blueprint — a 2–4 week discovery that maps the highest-impact opportunities into a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.
+
+**Are you big enough to handle our scale?**
+Our leverage is senior people and one operating loop, not headcount. The embedded model and weekly cadence scale with the work, backed by named proof of what the team has shipped.
+
+**Do we have to engage all three pillars?**
+No — engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call.
+
+---
+Last updated: 2026-08-07

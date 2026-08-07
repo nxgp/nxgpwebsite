@@ -17,6 +17,7 @@ import { About } from './components/About'
 import { FAQ } from './components/FAQ'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
+import { Seo } from './components/Seo'
 
 export default function App() {
   useSmoothScroll()
@@ -35,9 +36,12 @@ export default function App() {
 
   return (
     <>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
       <TonalBackground />
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
         <Proof />
         <Shift />
@@ -53,6 +57,7 @@ export default function App() {
         <CTA />
       </main>
       <Footer />
+      <Seo />
     </>
   )
 }

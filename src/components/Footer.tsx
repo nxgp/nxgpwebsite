@@ -26,12 +26,15 @@ export function Footer() {
               </p>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {col.links.map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <a
-                      href="#"
+                      href={l.href}
+                      {...(l.href.startsWith('http')
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
                       className="link-underline text-[0.92rem] font-600 text-ink-soft transition-colors hover:text-ink"
                     >
-                      {l}
+                      {l.label}
                     </a>
                   </li>
                 ))}

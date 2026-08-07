@@ -295,6 +295,21 @@ html.lenis body {
   transform: scaleX(1);
 }
 
+/* nav entrance — once, on load (CSS replaces the old motion/react header) */
+@keyframes nav-enter {
+  from {
+    transform: translateY(-24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.nav-enter {
+  animation: nav-enter 0.7s var(--ease-out-expo) 0.1s both;
+}
+
 .nav-frost {
   background: color-mix(in srgb, var(--color-bg) 72%, transparent);
   backdrop-filter: saturate(140%) blur(14px);
@@ -343,6 +358,25 @@ html.lenis body {
   width: 10px;
   height: 10px;
   border-radius: 999px;
+}
+
+/* skip-to-content — visually hidden until keyboard focus */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 300;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.2s var(--ease-out-expo);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 /* visible keyboard focus — accessibility floor */
