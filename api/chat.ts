@@ -26,6 +26,10 @@ const MAX_TURNS = 30 // messages per conversation accepted from the client
 const MAX_MSG_CHARS = 2000
 const MAX_TOKENS = 700
 const IP_DAILY_LIMIT = 300 // messages per IP per day (Supabase-backed)
+// Global cap across ALL IPs — a distributed scraper can rotate addresses past
+// the per-IP limit; this bounds worst-case daily Anthropic spend. Override
+// with ASSISTANT_DAILY_CAP.
+const GLOBAL_DAILY_LIMIT = Number(process.env.ASSISTANT_DAILY_CAP || 2000)
 
 type ChatMessage = { role: 'user' | 'assistant'; content: string }
 type Lead = {
@@ -88,24 +92,27 @@ async function sbInsert(table: string, rows: unknown): Promise<void> {
   }
 }
 
-async function ipOverDailyLimit(ip: string): Promise<boolean> {
+async function overDailyLimits(ip: string): Promise<boolean> {
   const c = sb()
   if (!c) return false
   try {
     const since = new Date(Date.now() - 86_400_000).toISOString()
-    const r = await fetch(
-      `${c.url}/rest/v1/messages?select=id&ip=eq.${encodeURIComponent(ip)}&created_at=gte.${since}`,
-      {
-        headers: {
-          apikey: c.key,
-          Authorization: `Bearer ${c.key}`,
-          Prefer: 'count=exact',
-          Range: '0-0',
+    const count = async (filter: string) => {
+      const r = await fetch(
+        `${c.url}/rest/v1/messages?select=id${filter}&created_at=gte.${since}`,
+        {
+          headers: {
+            apikey: c.key,
+            Authorization: `Bearer ${c.key}`,
+            Prefer: 'count=exact',
+            Range: '0-0',
+          },
         },
-      },
-    )
-    const count = Number(r.headers.get('content-range')?.split('/')[1] ?? 0)
-    return count > IP_DAILY_LIMIT
+      )
+      return Number(r.headers.get('content-range')?.split('/')[1] ?? 0)
+    }
+    if ((await count(`&ip=eq.${encodeURIComponent(ip)}`)) > IP_DAILY_LIMIT) return true
+    return (await count('')) > GLOBAL_DAILY_LIMIT
   } catch {
     return false
   }
@@ -130,6 +137,27 @@ async function notifySlack(lead: Lead, conversationId: string): Promise<boolean>
     return r.ok
   } catch {
     return false
+  }
+}
+
+/** Alert the team when chat starts failing — visitors only see a polite
+ *  fallback, so without this an expired key or provider outage would go
+ *  unnoticed until someone complains. Max one alert per 5 min per isolate. */
+let lastErrorAlert = 0
+async function alertError(detail: string): Promise<void> {
+  const url = process.env.SLACK_WEBHOOK_URL
+  if (!url || Date.now() - lastErrorAlert < 300_000) return
+  lastErrorAlert = Date.now()
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: `:rotating_light: *Nx Assistant error* — visitors are getting the fallback message.\n\`\`\`${detail.slice(0, 300)}\`\`\``,
+      }),
+    })
+  } catch {
+    /* best-effort */
   }
 }
 
@@ -259,7 +287,7 @@ export default async function handler(req: Request): Promise<Response> {
   const ip =
     req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown'
   if (!localLimit(ip)) return json({ error: 'rate limited' }, 429, req)
-  if (await ipOverDailyLimit(ip)) return json({ error: 'rate limited' }, 429, req)
+  if (await overDailyLimits(ip)) return json({ error: 'rate limited' }, 429, req)
 
   let body: { conversationId?: string; messages?: ChatMessage[] }
   try {
@@ -380,7 +408,9 @@ export default async function handler(req: Request): Promise<Response> {
           message:
             'The assistant hit a snag. Please try again, or email hello@nxgp.io.',
         })
-        console.error('chat error:', e instanceof Error ? e.message : e)
+        const detail = e instanceof Error ? e.message : String(e)
+        console.error('chat error:', detail)
+        await alertError(detail)
       } finally {
         controller.close()
       }

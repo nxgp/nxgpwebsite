@@ -1,17 +1,31 @@
 /**
- * Nx Assistant — learning pass.
+ * Nx Assistant — automated learning pass.
  *
  * Reads recent conversations, extracts ANONYMIZED patterns (questions the
- * assistant handled badly, recurring objections, framings that worked), and
- * writes them to `conversation_insights` as *pending*. A human approves them
- * into `assistant_memory`; only then do they reach a live prompt.
+ * assistant handled badly, recurring objections, framings that worked), then
+ * runs a second AI pass that VERIFIES each insight against the assistant's
+ * actual knowledge base:
  *
- * Nothing here is auto-promoted, and no visitor identity is ever stored:
- * that is what keeps one visitor's session from leaking into another's.
+ *   - grounded, low-stakes insights auto-promote straight into
+ *     `assistant_memory` (live within ~60s) — no human in the loop
+ *   - insights asserting facts NOT in the knowledge base, or touching
+ *     compliance/legal/pricing, are HELD as `pending` instead of going live
+ *   - a Slack digest reports both lists after every run
+ *
+ * Why the verifier exists: in testing the extractor invented "we maintain
+ * SOC 2 Type II certification" — a claim nobody supplied. Auto-promoting
+ * unverified facts would let the assistant assert false compliance claims
+ * to prospects. The verifier keeps learning fully automated while blocking
+ * exactly that class of failure.
+ *
+ * No visitor identity is ever stored: transcripts are scrubbed before the
+ * model sees them, and insights are scrubbed again on write.
  *
  * POST /api/learn   header: x-learn-secret: $LEARN_SECRET
- * Run it from cron (e.g. Vercel Cron, weekly) or by hand.
+ * Run it from cron (e.g. Vercel Cron, daily/weekly) or by hand.
  */
+
+import { SYSTEM_PROMPT } from './_knowledge'
 
 export const config = { runtime: 'edge' }
 
@@ -83,6 +97,45 @@ ABSOLUTE RULES:
 
 Return at most 8 insights.`
 
+const VERIFY_TOOL = {
+  name: 'verify_insights',
+  description: 'Verdict for each candidate insight, in the same order they were given.',
+  input_schema: {
+    type: 'object' as const,
+    properties: {
+      verdicts: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            grounded: {
+              type: 'boolean',
+              description:
+                'true ONLY if every factual claim in the suggested response is supported by the knowledge base or the transcripts',
+            },
+            high_stakes: {
+              type: 'boolean',
+              description:
+                'true if the response asserts anything about certifications, compliance (SOC 2, HIPAA...), legal terms, security guarantees, pricing, or named clients',
+            },
+            reason: { type: 'string', description: 'one short sentence' },
+          },
+          required: ['grounded', 'high_stakes'],
+        },
+      },
+    },
+    required: ['verdicts'],
+  },
+}
+
+const VERIFY_PROMPT = `You are a strict fact-checker for an AI sales assistant's learning pipeline. You are given (1) the assistant's authoritative knowledge base and (2) candidate insights mined from conversations.
+
+For each candidate, judge:
+- grounded: is EVERY factual claim in its suggested response supported by the knowledge base or plainly evident from ordinary business reasoning? Claims of certifications, integrations, clients, metrics or capabilities that do not appear in the knowledge base are NOT grounded — even if they sound plausible. When in doubt, grounded=false.
+- high_stakes: does it assert anything about certifications, regulatory compliance, legal terms, security guarantees, pricing, or named clients?
+
+Judge every candidate, in order.`
+
 function sb(): { url: string; key: string } | null {
   const url = process.env.SUPABASE_URL
   const key = process.env.SUPABASE_SECRET_KEY
@@ -98,10 +151,17 @@ function anonymize(s: string): string {
 }
 
 export default async function handler(req: Request): Promise<Response> {
-  if (req.method !== 'POST') return json({ error: 'method not allowed' }, 405)
-
-  const secret = process.env.LEARN_SECRET
-  if (!secret || req.headers.get('x-learn-secret') !== secret) {
+  // Two callers: manual runs (POST + x-learn-secret) and Vercel Cron, which
+  // can only send GET with `Authorization: Bearer $CRON_SECRET` (Vercel
+  // injects that header automatically when CRON_SECRET is set).
+  const learnSecret = process.env.LEARN_SECRET
+  const cronSecret = process.env.CRON_SECRET
+  const manualOk =
+    req.method === 'POST' && !!learnSecret && req.headers.get('x-learn-secret') === learnSecret
+  const cronOk =
+    req.method === 'GET' && !!cronSecret &&
+    req.headers.get('authorization') === `Bearer ${cronSecret}`
+  if (!manualOk && !cronOk) {
     return json({ error: 'unauthorized' }, 401)
   }
   const c = sb()
@@ -154,6 +214,18 @@ export default async function handler(req: Request): Promise<Response> {
       )
       .join('\n\n')
 
+    // Without this, every run re-learns the same popular facts and
+    // near-duplicates crowd out the memory injection cap over time.
+    const known: Array<{ prompt: string }> = await fetch(
+      `${c.url}/rest/v1/assistant_memory?select=prompt&active=eq.true&limit=100`,
+      { headers: sbHeaders(c) },
+    ).then((r) => (r.ok ? r.json() : []))
+    const knownBlock =
+      Array.isArray(known) && known.length > 0
+        ? `\n\nALREADY KNOWN (do NOT record insights that repeat these):\n` +
+          known.map((k) => `- ${k.prompt}`).join('\n')
+        : ''
+
     // 3. extract insights
     const ar = await fetch(`${ANTHROPIC_BASE_URL}/v1/messages`, {
       method: 'POST',
@@ -168,7 +240,7 @@ export default async function handler(req: Request): Promise<Response> {
         system: EXTRACT_PROMPT,
         tools: [EXTRACT_TOOL],
         tool_choice: { type: 'tool', name: 'record_insights' },
-        messages: [{ role: 'user', content: transcripts }],
+        messages: [{ role: 'user', content: transcripts + knownBlock }],
       }),
     })
     const aj = await ar.json()
@@ -177,26 +249,123 @@ export default async function handler(req: Request): Promise<Response> {
     const toolUse = (aj.content || []).find((b: any) => b.type === 'tool_use')
     const insights = (toolUse?.input?.insights ?? []) as Array<Record<string, string>>
 
-    // 4. store as pending — second anonymization pass before writing.
-    // If this insert fails we must NOT advance the high-water mark, or the
-    // batch's insights are silently lost forever; bail and let the next run
-    // re-mine the same window instead.
+    // 4. verify each insight against the knowledge base before anything
+    // goes live — the automated replacement for a human approval step.
+    let verdicts: Array<{ grounded: boolean; high_stakes: boolean; reason?: string }> = []
+    if (insights.length > 0) {
+      const vr = await fetch(`${ANTHROPIC_BASE_URL}/v1/messages`, {
+        method: 'POST',
+        headers: {
+          'x-api-key': process.env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 1500,
+          system: VERIFY_PROMPT,
+          tools: [VERIFY_TOOL],
+          tool_choice: { type: 'tool', name: 'verify_insights' },
+          messages: [
+            {
+              role: 'user',
+              content:
+                `KNOWLEDGE BASE:\n${SYSTEM_PROMPT}\n\nCANDIDATE INSIGHTS:\n` +
+                insights
+                  .map((i, n) => `${n + 1}. [${i.kind}] ${i.suggested_prompt ?? i.observation}\n   response: ${i.suggested_response ?? '(none)'}`)
+                  .join('\n'),
+            },
+          ],
+        }),
+      })
+      const vj = await vr.json()
+      if (!vr.ok) return json({ error: 'verifier', detail: vj?.error?.message }, 502)
+      const vUse = (vj.content || []).find((b: any) => b.type === 'tool_use')
+      verdicts = vUse?.input?.verdicts ?? []
+    }
+
+    // an insight goes live only if the verifier grounded it AND it is not
+    // high-stakes; everything else is held (visible in Slack + the table)
+    const promotable = (n: number) => {
+      const v = verdicts[n]
+      const i = insights[n]
+      return !!v && v.grounded && !v.high_stakes && !!i.suggested_response
+    }
+
+    // 5. store insights with their outcome. If this insert fails we must NOT
+    // advance the high-water mark or the batch is silently lost.
+    let stored: Array<{ id: number }> = []
     if (insights.length > 0) {
       const ins = await fetch(`${c.url}/rest/v1/conversation_insights`, {
         method: 'POST',
-        headers: { ...sbHeaders(c), 'Content-Type': 'application/json' },
+        headers: {
+          ...sbHeaders(c),
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation',
+        },
         body: JSON.stringify(
-          insights.map((i) => ({
+          insights.map((i, n) => ({
             kind: i.kind,
             observation: anonymize(i.observation ?? ''),
             suggested_prompt: i.suggested_prompt ? anonymize(i.suggested_prompt) : null,
             suggested_response: i.suggested_response ? anonymize(i.suggested_response) : null,
-            status: 'pending',
+            status: promotable(n) ? 'approved' : 'pending',
           })),
         ),
       })
       if (!ins.ok) {
         return json({ error: 'failed to store insights; mark not advanced' }, 502)
+      }
+      stored = await ins.json()
+    }
+
+    // 6. auto-promote the verified ones into live memory
+    const promoted = insights
+      .map((i, n) => ({ i, n }))
+      .filter(({ n }) => promotable(n))
+    if (promoted.length > 0) {
+      const mem = await fetch(`${c.url}/rest/v1/assistant_memory`, {
+        method: 'POST',
+        headers: { ...sbHeaders(c), 'Content-Type': 'application/json' },
+        body: JSON.stringify(
+          promoted.map(({ i, n }) => ({
+            kind: i.kind === 'gap' ? 'faq' : i.kind,
+            prompt: anonymize(i.suggested_prompt ?? i.observation ?? ''),
+            response: anonymize(i.suggested_response ?? ''),
+            priority: 0,
+            active: true,
+            source_insight_id: stored[n]?.id ?? null,
+            approved_by: 'auto-verifier',
+          })),
+        ),
+      })
+      if (!mem.ok) {
+        return json({ error: 'failed to write memory; mark not advanced' }, 502)
+      }
+    }
+
+    // 7. Slack digest — observability instead of an approval chore
+    const held = insights.filter((_, n) => !promotable(n))
+    if (process.env.SLACK_WEBHOOK_URL && insights.length > 0) {
+      const line = (i: Record<string, string>, n: number) =>
+        `• [${i.kind}] ${(i.suggested_prompt ?? i.observation ?? '').slice(0, 140)}` +
+        (verdicts[n] && !promotable(n) ? ` — _${verdicts[n]?.reason ?? (verdicts[n]?.high_stakes ? 'high-stakes' : 'not grounded')}_` : '')
+      const text =
+        `:brain: *Assistant learning run* — scanned ${byConv.size} conversations\n` +
+        (promoted.length
+          ? `*Learned (now live):*\n${promoted.map(({ i }, k) => line(i, promoted[k].n)).join('\n')}\n`
+          : '') +
+        (held.length
+          ? `*Held for review (not live — check conversation_insights):*\n${insights.map((i, n) => (!promotable(n) ? line(i, n) : null)).filter(Boolean).join('\n')}`
+          : '')
+      try {
+        await fetch(process.env.SLACK_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text }),
+        })
+      } catch {
+        /* digest is best-effort */
       }
     }
 
@@ -210,7 +379,16 @@ export default async function handler(req: Request): Promise<Response> {
       }),
     })
 
-    return json({ ok: true, scanned: byConv.size, insights: insights.length }, 200)
+    return json(
+      {
+        ok: true,
+        scanned: byConv.size,
+        insights: insights.length,
+        learned: promoted.length,
+        held: held.length,
+      },
+      200,
+    )
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : 'failed' }, 500)
   }
