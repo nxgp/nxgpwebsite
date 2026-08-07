@@ -73,3 +73,91 @@ where conversation_id = 'PASTE-ID' order by created_at;
 Haiku 4.5 + prompt caching ≈ fractions of a cent per turn. A busy month of
 marketing-site traffic lands in the $5–30 range. Set a spend limit in the
 Anthropic console as a hard backstop.
+
+---
+
+# Learning layer — how the assistant gets smarter
+
+The assistant improves from real conversations **without ever feeding raw
+transcripts back into a live prompt**.
+
+## Why not just replay past conversations
+
+Injecting previous chats into the prompt would let one visitor's session
+surface another visitor's company, contact details or project specifics —
+unacceptable for a firm selling into healthcare, enterprise and government.
+So the loop mines *anonymized patterns*, a human approves them, and only
+approved rows ever reach a prompt.
+
+```
+conversations ──► /api/learn ──► conversation_insights (pending, anonymized)
+                                        │
+                                   human review
+                                        ▼
+                                 assistant_memory (active)
+                                        │
+                                        ▼
+                                    /api/chat prompt
+```
+
+Three defences against leaking a visitor's identity:
+1. Transcripts are stripped of emails/phones **before** the model sees them.
+2. The extraction prompt forbids recording names, emails or company names.
+3. Insights are stripped again on write, and `renderMemory()` scrubs once
+   more before injection.
+
+Nothing is auto-promoted. In testing, the extractor proposed a response
+claiming *"we maintain SOC 2 Type II certification"* — a fact nobody had
+given it. The approval gate is what stops a hallucinated compliance claim
+from being told to a hospital procurement team. **Read every insight before
+approving it.**
+
+## Running a learning pass
+
+Set `LEARN_SECRET` in Vercel, then:
+
+```bash
+curl -X POST https://nxgp.io/api/learn -H "x-learn-secret: $LEARN_SECRET"
+# → {"ok":true,"scanned":12,"insights":4}
+```
+
+Only messages newer than the last run are scanned (`learning_runs` tracks the
+high-water mark), so it's cheap to run weekly. Add it to Vercel Cron if you
+want it automatic.
+
+Each run processes one batch (300 messages). After a traffic spike, repeat
+with `?force=1` until it reports `scanned: 0`:
+
+```bash
+curl -X POST "https://nxgp.io/api/learn?force=1" -H "x-learn-secret: $LEARN_SECRET"
+```
+
+Concurrent runs are refused (429) for 60s after the previous one — that stops
+an overlapping cron + manual run from mining the same window twice. Approvals
+go live within ~60s (the chat endpoint caches memory per isolate).
+
+## Reviewing and approving
+
+```sql
+-- what's waiting
+select id, kind, observation, suggested_prompt, suggested_response
+from conversation_insights where status = 'pending' order by created_at desc;
+
+-- approve one into live memory (EDIT the text first if needed)
+insert into assistant_memory (kind, prompt, response, priority, active, source_insight_id, approved_by)
+values ('faq', 'Do you work with regulated healthcare data?',
+        'Yes — for regulated work we run self-hosted so data stays in your boundary.',
+        10, true, 42, 'ravi');
+
+update conversation_insights set status = 'approved' where id = 42;
+
+-- reject
+update conversation_insights set status = 'rejected' where id = 43;
+
+-- retire a memory entry without deleting it
+update assistant_memory set active = false where id = 7;
+```
+
+Approved entries load newest-and-highest-priority first (40 entries / 6k char
+cap) and sit in their own prompt-cache block, so adding memory never forces a
+full cache rebuild of the base prompt.
