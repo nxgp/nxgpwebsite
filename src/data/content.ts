@@ -376,9 +376,38 @@ export const footer = {
   tagline: 'Build systems that scale.',
   copyright: '© 2026 Nx Growth Partners · nxgp.io',
   columns: [
-    { heading: 'Services', links: ['AI & Workflow Automation', 'Software & Product Delivery', 'Embedded Engineering'] },
-    { heading: 'Industries', links: ['Private Equity', 'Enterprise', 'Government'] },
-    { heading: 'Company', links: ['How we work', 'Work', 'About', 'Book a call'] },
-    { heading: 'Connect', links: ['hello@nxgp.io', 'LinkedIn', 'nxgp.io'] },
-  ],
+    {
+      heading: 'Services',
+      links: [
+        { label: 'AI & Workflow Automation', href: '#services' },
+        { label: 'Software & Product Delivery', href: '#services' },
+        { label: 'Embedded Engineering', href: '#services' },
+      ],
+    },
+    {
+      heading: 'Industries',
+      links: [
+        { label: 'Private Equity', href: '#industries' },
+        { label: 'Enterprise', href: '#industries' },
+        { label: 'Government', href: '#industries' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { label: 'How we work', href: '#how-we-work' },
+        { label: 'Work', href: '#work' },
+        { label: 'About', href: '#about' },
+        { label: 'Book a call', href: '#cta' },
+      ],
+    },
+    {
+      heading: 'Connect',
+      links: [
+        { label: 'hello@nxgp.io', href: 'mailto:hello@nxgp.io' },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/company/nx-growth-parnters' },
+        { label: 'nxgp.io', href: 'https://nxgp.io' },
+      ],
+    },
+  ] as { heading: string; links: { label: string; href: string }[] }[],
 }
