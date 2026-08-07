@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Send, X } from 'lucide-react'
+import { Maximize2, Minimize2, Send, X } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { NxMark } from '../ui/Logo'
+import { Markdown } from './markdown'
 
 type Msg = { role: 'user' | 'assistant'; content: string }
 
@@ -27,34 +28,11 @@ function load(): { id: string; messages: Msg[] } {
   return { id: crypto.randomUUID(), messages: [] }
 }
 
-/** Linkify bare URLs so the Calendly link is clickable. */
-function Rich({ text }: { text: string }) {
-  const parts = text.split(/(https?:\/\/[^\s)]+)/g)
-  return (
-    <>
-      {parts.map((p, i) =>
-        /^https?:\/\//.test(p) ? (
-          <a
-            key={i}
-            href={p}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-600 text-accent underline underline-offset-2"
-          >
-            {p.replace(/^https?:\/\//, '')}
-          </a>
-        ) : (
-          <span key={i}>{p}</span>
-        ),
-      )}
-    </>
-  )
-}
-
 export default function ChatPanel({ onClose }: { onClose: () => void }) {
   const [session, setSession] = useState<{ id: string; messages: Msg[] } | null>(null)
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -144,10 +122,23 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <div
+      // data-lenis-prevent: this site runs a global Lenis smooth-scroll that
+      // hijacks wheel/touch events on the whole page. Without this attribute
+      // Lenis intercepts scrolling meant for the message list and scrolls
+      // the page behind the panel instead — the panel looks frozen.
+      data-lenis-prevent
       className={cn(
         'fixed z-[210] flex flex-col overflow-hidden bg-surface shadow-lg',
-        'inset-x-0 bottom-0 h-[82dvh] rounded-t-card border-t border-line',
-        'sm:inset-x-auto sm:bottom-24 sm:right-5 sm:h-[600px] sm:max-h-[calc(100dvh-120px)] sm:w-[400px] sm:rounded-card sm:border',
+        'inset-x-0 bottom-0 rounded-t-card border-t border-line',
+        'transition-[height,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)]',
+        expanded ? 'h-[94dvh]' : 'h-[82dvh]',
+        'sm:inset-x-auto sm:bottom-24 sm:right-5 sm:rounded-card sm:border',
+        // NB: no commas inside arbitrary values — Tailwind emits them
+        // unescaped and the browser discards the whole rule as an invalid
+        // selector. Use separate width/max-width utilities instead of min().
+        expanded
+          ? 'sm:h-[780px] sm:max-h-[85dvh] sm:w-[560px] sm:max-w-[92vw]'
+          : 'sm:h-[600px] sm:max-h-[calc(100dvh-120px)] sm:w-[400px]',
       )}
       role="dialog"
       aria-label="Chat with the Nx Assistant"
@@ -162,9 +153,16 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
           </p>
         </div>
         <button
+          onClick={() => setExpanded((v) => !v)}
+          aria-label={expanded ? 'Shrink chat' : 'Expand chat'}
+          className="ml-auto hidden size-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink sm:flex"
+        >
+          {expanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+        </button>
+        <button
           onClick={onClose}
           aria-label="Close chat"
-          className="ml-auto flex size-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink"
+          className="flex size-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink sm:ml-0"
         >
           <X className="size-4" />
         </button>
@@ -172,11 +170,17 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
 
       {/* messages */}
       <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-        <Bubble role="assistant">{GREETING}</Bubble>
+        <Bubble role="assistant">
+          <Markdown text={GREETING} />
+        </Bubble>
         {session.messages.map((m, i) => (
           <Bubble key={i} role={m.role}>
             {m.content ? (
-              <Rich text={m.content} />
+              m.role === 'assistant' ? (
+                <Markdown text={m.content} />
+              ) : (
+                m.content
+              )
             ) : (
               <span className="chat-typing" aria-label="Assistant is typing">
                 <i />
@@ -235,9 +239,9 @@ function Bubble({ role, children }: { role: 'user' | 'assistant'; children: Reac
     <div className={cn('flex', role === 'user' ? 'justify-end' : 'justify-start')}>
       <div
         className={cn(
-          'max-w-[85%] whitespace-pre-wrap rounded-inner px-3.5 py-2.5 text-[0.94rem] leading-relaxed',
+          'max-w-[85%] rounded-inner px-3.5 py-2.5 text-[0.94rem] leading-relaxed',
           role === 'user'
-            ? 'bg-accent text-white'
+            ? 'whitespace-pre-wrap bg-accent text-white'
             : 'border border-line bg-bg text-ink',
         )}
       >
