@@ -26,8 +26,8 @@ Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx
 - **Kiotel — company knowledge engine**: plug-and-play GraphRAG over docs, wikis and tickets; every answer cited.
 - **Harbor Industrial — maintenance operations platform**: structured logbooks, asset tracking, analytics and an AI copilot. 40% less reporting time, 25% faster issue resolution, 15% higher fleet availability.
 - **Convey — reliability & SRE agent** (regulated utilities): finds root cause across large applications and opens the fix PR. Root-cause analysis from days to under an hour.
-- **Website concierge AI** (running live on nxgp.io — try it, bottom right): embeddable, self-learning assistant that answers from your knowledge and captures leads to Slack.
-- **Bird Eye — reputation & pipeline autopilot**: agentic review management across multi-location businesses that drafts on-brand replies and turns customers into pipeline, paired with a CRM deployed per client with custom fields and stages.
+- **Elevano — website concierge AI**: embeddable, self-learning assistant that answers from company knowledge and hands qualified leads to the team in Slack. The same engine runs on nxgp.io.
+- **Vantage — Bird Eye, reputation & pipeline autopilot**: agentic review management across multi-location businesses that drafts on-brand replies and turns customers into pipeline, paired with a CRM deployed per client with custom fields and stages.
 
 ## Client results
 

@@ -307,18 +307,18 @@ export const portfolio = {
     },
     {
       id: 'beacon',
-      client: 'This website',
+      client: 'Elevano',
       built: 'Website concierge AI',
-      role: 'Try it \u2014 bottom right',
+      role: 'Lead capture & support',
       outcome: 'Visitors become qualified leads while you sleep.',
       blurb:
-        'The assistant in the corner of this page \u2014 it answers from your knowledge, hands leads to your team in Slack, and learns from every conversation with verified memory.',
-      proof: ['Try it \u2014 bottom right', 'Self-learning', 'One-tag embed'],
+        'An embeddable assistant that answers from the company\u2019s own knowledge, hands qualified leads straight to the team in Slack, and learns from every conversation with verified memory.',
+      proof: ['Self-learning', 'One-tag embed', 'Same engine runs on this site'],
     },
     {
       id: 'keystone',
-      client: 'Bird Eye',
-      built: 'Reputation & pipeline autopilot',
+      client: 'Vantage',
+      built: 'Bird Eye \u00b7 reputation autopilot',
       role: 'Multi-location revenue ops',
       outcome: 'Reviews answer themselves \u2014 and turn into leads.',
       blurb:

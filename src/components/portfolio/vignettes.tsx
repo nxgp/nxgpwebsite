@@ -260,7 +260,7 @@ export function CortexViz() {
 
 export function BeaconViz() {
   return (
-    <Window title="yoursite.com · 2:14 AM" badge={<Pill className="bg-bg text-ink-soft">visitor online</Pill>}>
+    <Window title="elevano.com · 2:14 AM" badge={<Pill className="bg-bg text-ink-soft">visitor online</Pill>}>
       <div className="flex h-full flex-col gap-1.5" style={wash}>
         {/* the conversation */}
         <div className="pv-in max-w-[80%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.73rem] font-500 text-white" style={D(0.2)}>
@@ -413,7 +413,7 @@ export function OmniViz() {
 
 export function BirdEyeViz() {
   return (
-    <Window title="Bird Eye · reputation & pipeline" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
+    <Window title="Bird Eye · Vantage locations" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
       <div className="flex h-full flex-col gap-2.5" style={wash}>
         <div className="grid grid-cols-3 gap-2.5">
           <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.3)}>
