@@ -5,7 +5,7 @@ import { cn } from '../../lib/cn'
  * Portfolio vignettes — one animated "outcome moment" per product, each in a
  * DIFFERENT visual form mapped to what the product actually is:
  *
- *   Western Digital · agents  → node-flow canvas (it builds agent pipelines)
+ *   Agent Hub · agents        → agent backbone + the fleet running in prod
  *   Mentera · Tera            → chat + tool-calls across every clinic workflow
  *   Kiotel · knowledge        → sources converging into a cited answer
  *   Western Digital · WD Chat → question in → generated dashboard out
@@ -46,20 +46,22 @@ function Window({
           dark ? 'border-white/10' : 'border-line bg-bg/50',
         )}
       >
-        <div className="win-dots flex gap-1.5">
+        <div className="win-dots flex shrink-0 gap-1.5">
           <span style={{ background: '#FF5F57' }} />
           <span style={{ background: '#FEBC2E' }} />
           <span style={{ background: '#28C840' }} />
         </div>
         <span
           className={cn(
-            'text-[0.62rem] font-700 uppercase tracking-[0.09em]',
+            // truncate + min-w-0 so a long title never becomes a min-content
+            // floor that widens the whole grid track on narrow screens
+            'min-w-0 truncate text-[0.62rem] font-700 uppercase tracking-[0.09em]',
             dark ? 'text-white/50' : 'text-ink-faint',
           )}
         >
           {title}
         </span>
-        {badge && <span className="ml-auto">{badge}</span>}
+        {badge && <span className="ml-auto shrink-0">{badge}</span>}
       </div>
       <div className="relative flex-1 overflow-hidden p-3.5">{children}</div>
     </div>
@@ -96,63 +98,97 @@ function Pill({
 
 const D = (s: number) => ({ '--d': `${s}s` }) as React.CSSProperties
 
-/* ---------- 01 · Forge — node-flow canvas ---------- */
+/* ---------- 01 · Agent Hub — the anatomy of a production agent + the fleet
+   Top: what every agent actually does — sense, reason, act with tools, and
+   escalate to a human when policy says so (the step that separates a demo
+   from production). Bottom: the fleet already running, with a new agent
+   going live. Outcome: many agents in production, no ML team. */
 
-function FlowNode({
-  x,
-  y,
-  w = 132,
-  label,
-  sub,
-  accent = false,
-  delay,
-}: {
-  x: number
-  y: number
-  w?: number
-  label: string
-  sub?: string
-  accent?: boolean
-  delay: number
-}) {
-  return (
-    <div
-      className={cn(
-        'pv-pop absolute rounded-[10px] border bg-surface px-2.5 py-1.5 shadow-sm',
-        accent ? 'border-accent' : 'border-line',
-      )}
-      style={{ left: x, top: y, width: w, ...D(delay) }}
-    >
-      <p className={cn('text-[0.68rem] font-700 leading-tight', accent && 'text-accent-deep')}>{label}</p>
-      {sub && <p className="text-[0.58rem] font-600 text-ink-faint">{sub}</p>}
-    </div>
-  )
-}
+const chain = [
+  { label: 'Trigger', sub: 'invoice lands', at: 0.4 },
+  { label: 'Reason', sub: 'policy + context', at: 1.0 },
+  { label: 'Act', sub: 'ERP · email', at: 1.6 },
+  { label: 'Escalate', sub: '> $5k to a human', at: 2.2, guard: true },
+]
+
+const fleet = [
+  { name: 'invoice-triage', runs: '1,347', at: 3.0 },
+  { name: 'ticket-router', runs: '892', at: 3.2 },
+  { name: 'claims-intake', runs: '', at: 3.4, deploying: true },
+]
 
 export function ForgeViz() {
   return (
-    <Window title="Agent Hub · agent builder" badge={<Pill className="bg-accent-wash text-accent-deep">runtime</Pill>}>
-      <div className="relative h-full w-full rounded-[12px]" style={dotGrid}>
-        {/* connectors draw first-to-last */}
-        <svg className="absolute inset-0 h-full w-full" aria-hidden>
-          <path d="M150 52 C 190 52 190 96 226 108" fill="none" stroke="var(--color-peri)" strokeWidth="1.5" className="pv-draw" style={{ ...D(1.1), '--len': '120' } as React.CSSProperties} />
-          <path d="M356 108 C 400 108 398 60 430 56" fill="none" stroke="var(--color-peri)" strokeWidth="1.5" className="pv-draw" style={{ ...D(2.0), '--len': '120' } as React.CSSProperties} />
-          <path d="M356 122 C 400 128 398 168 430 170" fill="none" stroke="var(--color-peri)" strokeWidth="1.5" className="pv-draw" style={{ ...D(2.2), '--len': '120' } as React.CSSProperties} />
-        </svg>
-        <FlowNode x={16} y={34} label="Trigger" sub="new invoice arrives" delay={0.5} />
-        <FlowNode x={226} y={88} w={130} label="invoice-triage" sub="agent · claude" accent delay={1.5} />
-        <FlowNode x={430} y={36} label="Extract & code" sub="line items → GL" delay={2.5} />
-        <FlowNode x={430} y={150} label="Post to ERP" sub="approval < $5k auto" delay={2.7} />
+    <Window title="Agent Hub · agent builder" badge={<Pill className="bg-accent-wash text-accent-deep">governed runtime</Pill>}>
+      <div className="flex h-full flex-col gap-2.5" style={dotGrid}>
+        <p className="text-[0.54rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+          Every agent, same backbone
+        </p>
 
-        {/* deploy strip */}
-        <div className="pv-in absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-[10px] border border-line bg-surface px-3 py-2" style={D(3.4)}>
-          <span className="text-[0.62rem] font-700 uppercase tracking-[0.08em] text-ink-faint">Deploy</span>
-          <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-bg">
-            <span className="pv-bar block h-full rounded-full bg-accent" style={D(3.6)} />
-          </span>
-          <Pill className="pv-pop bg-[#E7F8EC] text-[#1D8A46]" style={D(4.6)}>
-            <i className="size-1.5 rounded-full bg-[#28C840]" /> live · no ML team
-          </Pill>
+        {/* the flow every production agent follows */}
+        <div className="flex items-stretch gap-1">
+          {chain.map((c, i) => (
+            <div key={c.label} className="flex flex-1 items-center gap-1">
+              <div
+                className={cn(
+                  'pv-pop min-w-0 flex-1 rounded-[9px] border bg-surface px-2 py-1.5 shadow-sm',
+                  c.guard ? 'border-peri' : 'border-line',
+                )}
+                style={D(c.at)}
+              >
+                <p className={cn('truncate text-[0.66rem] font-800', c.guard ? 'text-peri' : 'text-ink')}>
+                  {c.label}
+                </p>
+                <p className="truncate text-[0.55rem] font-600 text-ink-faint">{c.sub}</p>
+              </div>
+              {i < chain.length - 1 && (
+                <span className="pv-in shrink-0 text-[0.7rem] font-700 text-peri" style={D(c.at + 0.3)}>
+                  →
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <p className="pv-in text-[0.58rem] font-600 text-ink-faint" style={D(2.6)}>
+          Guardrails, retries and audit trail come with the runtime — not bolted on later.
+        </p>
+
+        {/* the fleet already in production */}
+        <div className="mt-0.5 flex flex-1 flex-col gap-1.5">
+          <p className="text-[0.54rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+            Running in production
+          </p>
+          {fleet.map((f) => (
+            <div key={f.name} className="pv-in flex items-center gap-2 rounded-[8px] border border-line bg-surface px-2.5 py-1.5" style={D(f.at)}>
+              <span className="font-mono text-[0.64rem] font-700 text-ink">{f.name}</span>
+              {f.deploying ? (
+                <>
+                  <span className="ml-auto h-1 w-16 overflow-hidden rounded-full bg-bg">
+                    <span className="pv-bar block h-full rounded-full bg-accent" style={D(f.at + 0.3)} />
+                  </span>
+                  <Pill className="pv-pop shrink-0 bg-[#E7F8EC] text-[#1D8A46]" style={D(f.at + 1.2)}>
+                    <i className="size-1.5 rounded-full bg-[#28C840]" /> live
+                  </Pill>
+                </>
+              ) : (
+                <>
+                  <span className="ml-auto text-[0.6rem] font-700 tabular-nums text-accent">
+                    {f.runs}
+                  </span>
+                  <span className="text-[0.55rem] font-600 text-ink-faint">runs today</span>
+                  <Pill className="shrink-0 bg-[#E7F8EC] text-[#1D8A46]">
+                    <i className="size-1.5 rounded-full bg-[#28C840]" /> live
+                  </Pill>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="pv-in flex items-center justify-between rounded-inner bg-ink px-3 py-2 text-white" style={D(4.6)}>
+          <span className="text-[0.7rem] font-700">3 agents in production</span>
+          <span className="text-[0.7rem] font-700 text-au-mint">shipped without an ML team</span>
         </div>
       </div>
     </Window>
