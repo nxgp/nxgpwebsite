@@ -277,12 +277,12 @@ export const portfolio = {
     {
       id: 'omni',
       client: 'Western Digital',
-      built: 'WD Chat \u00b7 enterprise workspace',
-      role: 'Company copilot',
-      outcome: 'One instruction, actions everywhere.',
+      built: 'WD Chat \u00b7 analytics workspace',
+      role: 'Enterprise copilot',
+      outcome: 'Ask a question, get the dashboard.',
       blurb:
-        'A ChatGPT-class workspace grounded in company data and wired into 50+ apps \u2014 so answers become actions across calendar, docs, CRM and the rest of the stack.',
-      proof: ['50+ app integrations', 'Grounded in company data'],
+        'A ChatGPT-class workspace wired into the company\u2019s warehouse, CRM and finance systems \u2014 ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.',
+      proof: ['50+ app integrations', 'Dashboards & reports on demand'],
     },
     {
       id: 'harbor',
@@ -307,9 +307,9 @@ export const portfolio = {
     },
     {
       id: 'beacon',
-      client: 'Nx Growth Partners',
+      client: 'This website',
       built: 'Website concierge AI',
-      role: 'Live on this site',
+      role: 'Try it \u2014 bottom right',
       outcome: 'Visitors become qualified leads while you sleep.',
       blurb:
         'The assistant in the corner of this page \u2014 it answers from your knowledge, hands leads to your team in Slack, and learns from every conversation with verified memory.',
@@ -317,12 +317,12 @@ export const portfolio = {
     },
     {
       id: 'keystone',
-      client: 'Nx Growth Partners',
-      built: 'Bird Eye & deployable CRM',
-      role: 'Revenue operations',
-      outcome: 'Reputation and pipeline on autopilot.',
+      client: 'Bird Eye',
+      built: 'Reputation & pipeline autopilot',
+      role: 'Multi-location revenue ops',
+      outcome: 'Reviews answer themselves \u2014 and turn into leads.',
       blurb:
-        'Two products from our own lab: agentic review management that drafts on-brand replies and turns customers into pipeline, plus a CRM deployed per client with the exact fields and stages their operation needs.',
+        'Watches every location, drafts on-brand replies, and converts happy customers into pipeline \u2014 paired with a CRM deployed per client with the exact fields and stages their operation needs.',
       proof: ['Agentic review ops', 'CRM deploys in days'],
     },
   ] as Product[],

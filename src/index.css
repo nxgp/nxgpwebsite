@@ -587,6 +587,15 @@ html.lenis body {
 @keyframes pv-glow {
   to { border-color: var(--color-peri); background: #f1f1ff; color: var(--color-ink); }
 }
+.pv-rise {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  animation: pv-rise 0.7s var(--ease-out-expo) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes pv-rise {
+  to { transform: scaleY(1); }
+}
 .pv-bar {
   transform: scaleX(0);
   transform-origin: left;

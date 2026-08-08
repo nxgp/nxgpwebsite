@@ -1,4 +1,4 @@
-import { Check, Calendar, FileText, Database, Mail, BarChart3, Star, Zap } from 'lucide-react'
+import { Check, FileText, Database, BarChart3, Star, Zap } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
 /**
@@ -8,7 +8,7 @@ import { cn } from '../../lib/cn'
  *   Western Digital · agents  → node-flow canvas (it builds agent pipelines)
  *   Mentera · Tera            → clinic day schedule (it runs a clinic's day)
  *   Kiotel · knowledge        → sources converging into a cited answer
- *   Western Digital · WD Chat → radial app hub (one instruction, many apps)
+ *   Western Digital · WD Chat → question in → generated dashboard out
  *   Harbor Industrial         → fleet logbook + asset health + copilot
  *   Convey · SRE              → live terminal with a code diff
  *   NX · website assistant    → chat (the ONLY chat scene — it IS the chat)
@@ -253,79 +253,156 @@ export function CortexViz() {
   )
 }
 
-/* ---------- 04 · Beacon — the chat product (the only chat scene) ---------- */
+/* ---------- 07 · Website concierge — chat becomes a lead ----------
+   The one chat scene. Reads top-to-bottom as a single causal story:
+   conversation → visitor hands over contact → lead lands in the team's
+   Slack → the assistant learns from it. No floating panels. */
 
 export function BeaconViz() {
   return (
     <Window title="yoursite.com · 2:14 AM" badge={<Pill className="bg-bg text-ink-soft">visitor online</Pill>}>
-      <div className="relative flex h-full flex-col gap-2" style={wash}>
-        <div className="pv-in max-w-[78%] self-end rounded-[12px] bg-accent px-3 py-2 text-[0.76rem] font-500 text-white" style={D(0.2)}>
-          Can it plug into our support stack?
+      <div className="flex h-full flex-col gap-1.5" style={wash}>
+        {/* the conversation */}
+        <div className="pv-in max-w-[80%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.73rem] font-500 text-white" style={D(0.2)}>
+          Do you integrate with our EHR?
         </div>
-        <div className="pv-in max-w-[82%] rounded-[12px] border border-line bg-surface px-3 py-2 text-[0.76rem] text-ink" style={D(1)}>
-          Yes — and I can show you. Want to grab 30 minutes?{' '}
-          <span className="font-700 text-accent underline underline-offset-2">Book a call ↗</span>
+        <div className="pv-in max-w-[86%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-1.5 text-[0.73rem] leading-snug text-ink" style={D(1)}>
+          Yes — 50+ EHR integrations, two-way sync. Want me to put you in touch with the team?
+        </div>
+        <div className="pv-in max-w-[80%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.73rem] font-500 text-white" style={D(1.9)}>
+          Sure — dana@carepath.io
         </div>
 
-        <div className="pv-in absolute bottom-9 right-0 w-[225px] rounded-inner bg-ink p-3 text-white shadow-lg" style={D(2.4)}>
-          <p className="text-[0.6rem] font-700 uppercase tracking-[0.09em] text-au-mint"># leads · just now</p>
-          <p className="mt-1 text-[0.76rem] font-700">New lead — Dana K.</p>
-          <p className="text-[0.68rem] text-white/65">needs an AI copilot · booked for Tue</p>
+        {/* the handoff moment — makes the causality explicit */}
+        <div className="pv-in my-0.5 flex items-center gap-2" style={D(2.6)}>
+          <span className="h-px flex-1 bg-line" />
+          <Pill className="bg-accent-wash text-accent-deep">
+            <Check className="size-3" /> captured · sent to your team
+          </Pill>
+          <span className="h-px flex-1 bg-line" />
         </div>
-        <Pill className="pv-pop absolute bottom-1 right-0 border border-line bg-surface text-ink-soft" style={D(3.6)}>
-          <Zap className="size-3 text-accent" /> learned +1 answer
-        </Pill>
+
+        {/* where it lands, 3 seconds later */}
+        <div className="pv-in rounded-inner bg-ink px-3.5 py-2.5 text-white" style={D(3.1)}>
+          <p className="text-[0.58rem] font-700 uppercase tracking-[0.09em] text-au-mint">
+            # leads · just now
+          </p>
+          <p className="mt-1 text-[0.78rem] font-700">Dana K. · CarePath Health</p>
+          <p className="text-[0.68rem] leading-snug text-white/65">
+            Needs an EHR-integrated copilot · booked Tue 2:30
+          </p>
+        </div>
+
+        {/* and it got smarter from the exchange */}
+        <div className="pv-in mt-auto flex items-center gap-2" style={D(4.1)}>
+          <Zap className="size-3 shrink-0 text-accent" />
+          <span className="text-[0.66rem] font-600 text-ink-faint">
+            Assistant learned this answer — next visitor gets it instantly
+          </span>
+        </div>
       </div>
     </Window>
   )
 }
 
-/* ---------- 05 · Omni — radial app hub ---------- */
+/* ---------- 04 · WD Chat — question in, dashboard out ---------- */
 
-const hubApps = [
-  { icon: Calendar, x: 30, y: 18, at: 1.8 },
-  { icon: FileText, x: 250, y: 8, at: 2.1 },
-  { icon: Database, x: 470, y: 18, at: 2.4 },
-  { icon: Mail, x: 96, y: 168, at: 2.7 },
-  { icon: BarChart3, x: 404, y: 168, at: 3.0 },
+// heights in px; `over` = beat target (accent) vs under (periwinkle)
+const bars = [
+  { h: 38, label: 'NA', over: false, at: 2.5 },
+  { h: 62, label: 'EMEA', over: true, at: 2.65 },
+  { h: 46, label: 'APAC', over: false, at: 2.8 },
+  { h: 76, label: 'LATAM', over: true, at: 2.95 },
 ]
+const TARGET_TOP = 92 - 56 // dashed target line sits at 56px of the 92px plot
+
+const systems = ['warehouse', 'CRM', 'finance']
 
 export function OmniViz() {
   return (
-    <Window title="WD Chat · company copilot" badge={<Pill className="bg-accent-wash text-accent-deep">50+ apps</Pill>}>
-      <div className="relative h-full w-full" style={dotGrid}>
-        {/* spokes */}
-        <svg className="absolute inset-0 h-full w-full" aria-hidden>
-          {hubApps.map((a, i) => (
-            <line
-              key={i}
-              x1={a.x + 22}
-              y1={a.y + 22}
-              x2="50%"
-              y2="108"
-              stroke="var(--color-peri)"
-              strokeWidth="1.2"
-              className="pv-draw"
-              style={{ ...D(a.at - 0.25), '--len': '260' } as React.CSSProperties}
-            />
-          ))}
-        </svg>
-        {hubApps.map((a, i) => (
-          <span key={i} className="pv-pop absolute flex size-11 items-center justify-center rounded-[12px] border border-line bg-surface shadow-sm" style={{ left: a.x, top: a.y, ...D(a.at) }}>
-            <a.icon className="size-4.5 text-accent" />
-            <Check className="pv-pop absolute -right-1.5 -top-1.5 size-4 rounded-full bg-[#28C840] p-0.5 text-white" style={D(a.at + 0.5)} />
-          </span>
-        ))}
-        {/* command center */}
-        <div className="pv-in absolute inset-x-8 top-[86px] mx-auto max-w-[380px] rounded-pill border border-accent/40 bg-surface px-4 py-2.5 text-center shadow-soft" style={D(0.3)}>
-          <span className="text-[0.76rem] font-600 text-ink">
-            “Move the QBR to Friday and brief the team”
-          </span>
+    <Window title="WD Chat · analytics workspace" badge={<Pill className="bg-accent-wash text-accent-deep">50+ apps</Pill>}>
+      <div className="flex h-full flex-col gap-2.5" style={wash}>
+        {/* the question */}
+        <div className="pv-in flex items-center gap-2 self-end rounded-[12px] bg-accent px-3 py-2 text-[0.76rem] font-500 text-white" style={D(0.2)}>
+          Q3 pipeline by region vs target
         </div>
-        <div className="pv-pop absolute inset-x-0 bottom-2 mx-auto w-fit" style={D(3.7)}>
-          <Pill className="bg-ink text-white">
-            <Check className="size-3 text-au-mint" /> Done — 5 apps updated from one instruction
-          </Pill>
+
+        {/* grounding: which enterprise systems it read */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-[0.6rem] font-700 uppercase tracking-[0.08em] text-ink-faint">
+            reading
+          </span>
+          {systems.map((sys, i) => (
+            <Pill key={sys} className="pv-glow border border-line bg-surface text-ink-faint" style={D(0.9 + i * 0.2)}>
+              <Database className="size-2.5" /> {sys}
+            </Pill>
+          ))}
+        </div>
+
+        {/* the generated dashboard */}
+        <div className="pv-in flex-1 rounded-inner border border-line bg-surface p-3" style={D(1.7)}>
+          <div className="flex items-start justify-between">
+            <p className="text-[0.66rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
+              Q3 pipeline · by region
+            </p>
+            <Pill className="pv-pop bg-accent-wash text-accent-deep" style={D(3.6)}>
+              <Check className="size-3" /> live data
+            </Pill>
+          </div>
+
+          <div className="mt-2 flex items-end gap-3">
+            {/* bar chart the model just built */}
+            <div className="relative h-[92px] flex-1 border-b border-line">
+              {/* target line — gives the bars something to mean */}
+              <span
+                className="pv-in absolute inset-x-0 border-t border-dashed border-ink-faint/50"
+                style={{ top: TARGET_TOP, ...D(2.3) }}
+              >
+                <span className="absolute -top-[7px] right-0 bg-surface pl-1 text-[0.5rem] font-700 uppercase tracking-[0.06em] text-ink-faint">
+                  target
+                </span>
+              </span>
+              <div className="absolute inset-0 flex items-end justify-around">
+                {bars.map((b) => (
+                  <span key={b.label} className="flex w-9 flex-col items-center">
+                    <span
+                      className={cn(
+                        'pv-rise w-5 rounded-t-[3px]',
+                        b.over ? 'bg-accent' : 'bg-peri/55',
+                      )}
+                      style={{ height: b.h, ...D(b.at) }}
+                    />
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* KPI readouts */}
+            <div className="flex w-[112px] shrink-0 flex-col gap-1.5">
+              {[
+                { v: '$18.4M', l: 'weighted', at: 3.1 },
+                { v: '112%', l: 'of target', at: 3.3 },
+              ].map((k) => (
+                <div key={k.l} className="pv-in rounded-[8px] border border-line bg-bg/60 px-2 py-1.5" style={D(k.at)}>
+                  <p className="font-display text-[0.95rem] font-800 leading-none text-ink">{k.v}</p>
+                  <p className="text-[0.54rem] font-600 text-ink-faint">{k.l}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-1 flex justify-around pr-[124px]">
+            {bars.map((b) => (
+              <span key={b.label} className="w-9 text-center text-[0.54rem] font-700 text-ink-faint">
+                {b.label}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="pv-in flex items-center gap-2 rounded-inner bg-ink px-3 py-2 text-white" style={D(4)}>
+          <BarChart3 className="size-3.5 shrink-0 text-au-mint" />
+          <span className="text-[0.72rem] font-700">Dashboard built from the question</span>
+          <Pill className="ml-auto bg-white/10 text-white/80">export · share</Pill>
         </div>
       </div>
     </Window>
