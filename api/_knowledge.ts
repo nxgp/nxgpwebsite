@@ -86,7 +86,7 @@ ${engagementList}
 ${industryList}
 
 # What we've built, and who we built it for
-These are real, deployed platforms. Each was built inside a client engagement and can be deployed for a new client too. Note that two were built for Western Digital, and two are NX's own products.
+Real systems NxGP designed, built and shipped, running in production. Use these as evidence of range and depth when it's relevant to what the visitor described. Do NOT pitch them as off-the-shelf products to resell — every engagement starts from the client's own problem, and what gets built is scoped to it.
 ${products}
 
 # What clients say

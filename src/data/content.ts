@@ -236,13 +236,14 @@ export type Product = {
   dark?: boolean
 }
 
-// THE PORTFOLIO — what NX built, named by who we built it for. Client-first
-// framing: the proof is the engagement, and every platform here can be
-// deployed for the next client. Every proof chip is an approved claim.
+// THE PORTFOLIO — what NX built, named by who we built it for. This section
+// is a showcase of delivered work, NOT a product catalogue: it should never
+// read as "these are off-the-shelf things we resell". Every proof chip is an
+// approved claim.
 export const portfolio = {
   kicker: "What we've built",
   h2: "The proof isn't a deck. It's what we've shipped.",
-  sub: 'Eight production platforms, built inside real client engagements \u2014 running today, and ready to deploy for you.',
+  sub: 'A selection of the systems we\u2019ve designed, built and shipped \u2014 running in production for the teams we work with.',
   products: [
     {
       id: 'forge',
@@ -313,7 +314,7 @@ export const portfolio = {
       outcome: 'Visitors become qualified leads while you sleep.',
       blurb:
         'An embeddable assistant that answers from the company\u2019s own knowledge, hands qualified leads straight to the team in Slack, and learns from every conversation with verified memory.',
-      proof: ['Self-learning', 'One-tag embed', 'Same engine runs on this site'],
+      proof: ['Self-learning', 'Leads straight to Slack'],
     },
     {
       id: 'keystone',
@@ -322,8 +323,8 @@ export const portfolio = {
       role: 'Multi-location revenue ops',
       outcome: 'Reviews answer themselves \u2014 and turn into leads.',
       blurb:
-        'Watches every location, drafts on-brand replies, and converts happy customers into pipeline \u2014 paired with a CRM deployed per client with the exact fields and stages their operation needs.',
-      proof: ['Agentic review ops', 'CRM deploys in days'],
+        'Watches every location, drafts on-brand replies, and converts happy customers into pipeline \u2014 paired with a CRM built around the fields, views and stages their operation actually runs on.',
+      proof: ['Agentic review ops', 'Custom-built CRM'],
     },
   ] as Product[],
 }
