@@ -1,4 +1,4 @@
-import { services, faq, reviews, about, engagement } from '../data/content'
+import { services, faq, reviews, about, engagement, portfolio } from '../data/content'
 
 const SITE = 'https://nxgp.io'
 
@@ -109,6 +109,28 @@ const graph = {
       about: { '@id': `${SITE}/#organization` },
       primaryImageOfPage: `${SITE}/og.png`,
       inLanguage: 'en',
+    },
+    {
+      // The portfolio as a structured ItemList — lets answer engines cite
+      // individual pieces of work ("what has NxGP built for healthcare?")
+      // instead of scraping the tab UI.
+      '@type': 'ItemList',
+      '@id': `${SITE}/#portfolio`,
+      name: 'Selected work',
+      itemListOrder: 'https://schema.org/ItemListUnordered',
+      numberOfItems: portfolio.products.length,
+      itemListElement: portfolio.products.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'CreativeWork',
+          name: `${p.client} — ${p.built}`,
+          description: `${p.outcome} ${p.blurb}`,
+          about: p.role,
+          creator: { '@id': `${SITE}/#organization` },
+          ...(p.builtFor ? { sourceOrganization: { '@type': 'Organization', name: p.builtFor } } : {}),
+        },
+      })),
     },
     {
       '@type': 'FAQPage',
