@@ -587,6 +587,15 @@ html.lenis body {
 @keyframes pv-glow {
   to { border-color: var(--color-peri); background: #f1f1ff; color: var(--color-ink); }
 }
+.pv-bar {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: pv-bar 0.9s var(--ease-out-expo) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes pv-bar {
+  to { transform: scaleX(1); }
+}
 /* stage crossfade on product switch */
 .pv-stage-in {
   animation: pv-in 0.45s var(--ease-out-expo) both;

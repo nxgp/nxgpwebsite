@@ -1,13 +1,23 @@
-import { Check, Calendar, FileText, Database, Bot, Sparkles, Star } from 'lucide-react'
+import { Check, Calendar, FileText, Database, Mail, BarChart3, Star, Zap } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
 /**
- * Portfolio vignettes — one animated "outcome moment" per product.
+ * Portfolio vignettes — one animated "outcome moment" per product, each in a
+ * DIFFERENT visual form mapped to what the product actually is:
  *
- * Shared idiom (matches the hero console): window chrome with traffic dots,
- * hairline rows, pill badges. All motion is single-run CSS keyframes with
- * per-element delays (--d); the stage remounts each scene, so it replays on
- * every visit. Under reduced motion each scene rests at its completed state.
+ *   Forge    → node-flow canvas (it builds agent pipelines)
+ *   Tera     → clinic day schedule (it runs a clinic's day)
+ *   Cortex   → sources converging into an answer (it grounds knowledge)
+ *   Beacon   → website chat (it IS the chat product — the only chat scene)
+ *   Omni     → radial app hub (one instruction fans out to every app)
+ *   Bird Eye → metrics dashboard (it watches reputation)
+ *   Keystone → kanban board (it is a CRM)
+ *   Sentinel → live terminal (it watches production)
+ *
+ * Shared window chrome keeps them one family; interiors are deliberately
+ * distinct. All motion is single-run CSS keyframes with per-element delays
+ * (--d); scenes replay on stage remount and rest at their completed state
+ * (reduced-motion lands there instantly).
  */
 
 /* ---------- shared chrome ---------- */
@@ -57,6 +67,10 @@ function Window({
 }
 
 const wash = { background: 'linear-gradient(135deg, #F4F4FF 0%, #FDFDFC 62%)' }
+const dotGrid = {
+  background:
+    'radial-gradient(circle, #D9D9E8 1px, transparent 1px) 0 0 / 22px 22px, linear-gradient(135deg, #F7F7FF 0%, #FDFDFC 70%)',
+}
 
 function Pill({
   className,
@@ -82,148 +96,166 @@ function Pill({
 
 const D = (s: number) => ({ '--d': `${s}s` }) as React.CSSProperties
 
-/* ---------- 01 · NX Agentic Platform ---------- */
+/* ---------- 01 · Forge — node-flow canvas ---------- */
 
-export function AgenticViz() {
+function FlowNode({
+  x,
+  y,
+  w = 132,
+  label,
+  sub,
+  accent = false,
+  delay,
+}: {
+  x: number
+  y: number
+  w?: number
+  label: string
+  sub?: string
+  accent?: boolean
+  delay: number
+}) {
   return (
-    <Window
-      title="Agent registry"
-      badge={<Pill className="bg-accent-wash text-accent-deep">prod</Pill>}
+    <div
+      className={cn(
+        'pv-pop absolute rounded-[10px] border bg-surface px-2.5 py-1.5 shadow-sm',
+        accent ? 'border-accent' : 'border-line',
+      )}
+      style={{ left: x, top: y, width: w, ...D(delay) }}
     >
-      <div className="flex h-full flex-col gap-2.5" style={wash}>
-        <div className="pv-in flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2.5" style={D(0.1)}>
-          <span className="flex size-8 items-center justify-center rounded-[10px] bg-accent-wash text-accent-deep">
-            <Bot className="size-4" />
-          </span>
-          <span className="min-w-0">
-            <span className="block truncate text-[0.8rem] font-700">invoice-triage-agent</span>
-            <span className="block truncate text-[0.66rem] font-600 text-ink-faint">
-              built by the ops team · no ML team involved
-            </span>
-          </span>
-          <span className="relative ml-auto h-5 w-[74px]">
-            <Pill className="pv-out absolute right-0 bg-bg text-ink-soft" style={D(1.4)}>
-              draft
-            </Pill>
-            <Pill className="pv-pop absolute right-0 bg-[#E7F8EC] text-[#1D8A46]" style={D(1.5)}>
-              <i className="size-1.5 rounded-full bg-[#28C840]" /> running
-            </Pill>
-          </span>
-        </div>
+      <p className={cn('text-[0.68rem] font-700 leading-tight', accent && 'text-accent-deep')}>{label}</p>
+      {sub && <p className="text-[0.58rem] font-600 text-ink-faint">{sub}</p>}
+    </div>
+  )
+}
 
-        <div className="pv-in flex items-center justify-between rounded-inner border border-line bg-surface px-3 py-2.5" style={D(2.1)}>
-          <span className="text-[0.62rem] font-700 uppercase tracking-[0.09em] text-ink-faint">
-            Requests served
-          </span>
-          <span className="relative h-6 w-16 text-right font-display text-[1.15rem] font-800 tracking-[-0.01em] text-accent">
-            <span className="pv-out absolute right-0" style={D(3.2)}>1,206</span>
-            <span className="pv-in absolute right-0" style={D(3.25)}>1,347</span>
-          </span>
-        </div>
+export function ForgeViz() {
+  return (
+    <Window title="Forge · agent builder" badge={<Pill className="bg-accent-wash text-accent-deep">runtime</Pill>}>
+      <div className="relative h-full w-full rounded-[12px]" style={dotGrid}>
+        {/* connectors draw first-to-last */}
+        <svg className="absolute inset-0 h-full w-full" aria-hidden>
+          <path d="M150 52 C 190 52 190 96 226 108" fill="none" stroke="var(--color-peri)" strokeWidth="1.5" className="pv-draw" style={{ ...D(1.1), '--len': '120' } as React.CSSProperties} />
+          <path d="M356 108 C 400 108 398 60 430 56" fill="none" stroke="var(--color-peri)" strokeWidth="1.5" className="pv-draw" style={{ ...D(2.0), '--len': '120' } as React.CSSProperties} />
+          <path d="M356 122 C 400 128 398 168 430 170" fill="none" stroke="var(--color-peri)" strokeWidth="1.5" className="pv-draw" style={{ ...D(2.2), '--len': '120' } as React.CSSProperties} />
+        </svg>
+        <FlowNode x={16} y={34} label="Trigger" sub="new invoice arrives" delay={0.5} />
+        <FlowNode x={226} y={88} w={130} label="invoice-triage" sub="agent · claude" accent delay={1.5} />
+        <FlowNode x={430} y={36} label="Extract & code" sub="line items → GL" delay={2.5} />
+        <FlowNode x={430} y={150} label="Post to ERP" sub="approval < $5k auto" delay={2.7} />
 
-        <div className="pv-in flex items-center gap-3 rounded-inner border border-dashed border-line px-3 py-2" style={D(4)}>
-          <span className="flex size-7 items-center justify-center rounded-[9px] bg-bg text-ink-faint">
-            <Sparkles className="size-3.5" />
+        {/* deploy strip */}
+        <div className="pv-in absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-[10px] border border-line bg-surface px-3 py-2" style={D(3.4)}>
+          <span className="text-[0.62rem] font-700 uppercase tracking-[0.08em] text-ink-faint">Deploy</span>
+          <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-bg">
+            <span className="pv-bar block h-full rounded-full bg-accent" style={D(3.6)} />
           </span>
-          <span className="text-[0.74rem] font-600 text-ink-soft">churn-radar-agent</span>
-          <Pill className="ml-auto bg-bg text-ink-faint">queued</Pill>
+          <Pill className="pv-pop bg-[#E7F8EC] text-[#1D8A46]" style={D(4.6)}>
+            <i className="size-1.5 rounded-full bg-[#28C840]" /> live · no ML team
+          </Pill>
         </div>
-
-        <p className="pv-in mt-auto text-center text-[0.68rem] font-600 text-ink-faint" style={D(4.8)}>
-          2 agents in production · 0 engineers on call
-        </p>
       </div>
     </Window>
   )
 }
 
-/* ---------- 02 · Tera ---------- */
+/* ---------- 02 · Tera — clinic day schedule ---------- */
 
-const teraTasks = [
-  { label: 'Patient intake sent', at: 0.3 },
-  { label: 'Consent form signed', at: 1.4 },
-  { label: 'No-show rebooked · Tue 2:40', at: 2.5 },
+const slots = [
+  { time: '9:00', label: 'A. Rivera · new patient', note: 'intake sent', at: 0.6 },
+  { time: '10:30', label: 'M. Chen · follow-up', note: 'consent signed', at: 1.6 },
+  { time: '2:40', label: 'D. Okafor · rebooked', note: 'no-show refilled', at: 2.8, fill: true },
 ]
 
 export function TeraViz() {
   return (
     <Window
-      title="Today at the clinic"
+      title="Tera · front desk"
       badge={
         <Pill className="bg-accent-wash text-accent-deep">
-          <i className="size-1.5 animate-pulse rounded-full bg-accent" /> handled by Tera
+          <i className="size-1.5 animate-pulse rounded-full bg-accent" /> operating
         </Pill>
       }
     >
-      <div className="flex h-full flex-col gap-2.5" style={wash}>
-        {teraTasks.map((t) => (
-          <div key={t.label} className="pv-in flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2.5" style={D(t.at)}>
-            <span className="flex size-7 items-center justify-center rounded-[9px] bg-accent-wash text-accent-deep">
-              <FileText className="size-3.5" />
+      <div className="flex h-full flex-col gap-2" style={wash}>
+        {slots.map((s) => (
+          <div key={s.time} className={cn('pv-in flex items-center gap-3', s.fill && 'pv-pop')} style={D(s.at)}>
+            <span className="w-10 shrink-0 text-right text-[0.64rem] font-700 tabular-nums text-ink-faint">
+              {s.time}
             </span>
-            <span className="text-[0.78rem] font-600">{t.label}</span>
-            <span className="pv-pop ml-auto flex size-5 items-center justify-center rounded-full bg-[#E7F8EC] text-[#1D8A46]" style={D(t.at + 0.55)}>
-              <Check className="size-3" />
-            </span>
+            <div
+              className={cn(
+                'flex flex-1 items-center gap-2 rounded-[10px] border-l-[3px] bg-surface px-3 py-2.5 shadow-sm',
+                s.fill ? 'border-accent' : 'border-peri',
+              )}
+            >
+              <span className="text-[0.76rem] font-700">{s.label}</span>
+              <Pill className="pv-pop ml-auto bg-[#E7F8EC] text-[#1D8A46]" style={D(s.at + 0.7)}>
+                <Check className="size-3" /> {s.note}
+              </Pill>
+            </div>
           </div>
         ))}
-        <div className="pv-in mt-auto flex items-center justify-center gap-2 rounded-inner bg-ink px-3 py-2 text-white" style={D(3.8)}>
-          <span className="text-[0.72rem] font-700">12 tasks handled today</span>
-          <span className="text-[0.72rem] font-600 text-au-mint">· 0 staff touches</span>
+        <div className="pv-in mt-auto flex items-center justify-between rounded-inner bg-ink px-3.5 py-2.5 text-white" style={D(4)}>
+          <span className="text-[0.72rem] font-700">Today: 14 patients · 31 tasks</span>
+          <span className="text-[0.72rem] font-700 text-au-mint">0 staff touches</span>
         </div>
       </div>
     </Window>
   )
 }
 
-/* ---------- 03 · Graph Brain ---------- */
+/* ---------- 03 · Cortex — sources converge into an answer ---------- */
 
-const sources = [
-  { label: 'policy-v4.pdf', at: 1.3 },
-  { label: 'wiki · billing', at: 1.7 },
-  { label: 'ticket #4821', at: 2.1 },
+const srcs = [
+  { y: 26, label: 'refund-policy.pdf', at: 0.4 },
+  { y: 96, label: 'wiki · billing', at: 0.8 },
+  { y: 166, label: 'ticket #4821', at: 1.2 },
 ]
 
-export function GraphBrainViz() {
+export function CortexViz() {
   return (
-    <Window title="Company knowledge" badge={<Pill className="bg-bg text-ink-soft">connected</Pill>}>
-      <div className="flex h-full flex-col gap-3" style={wash}>
-        <div className="pv-in rounded-pill border border-line bg-surface px-3.5 py-2 text-[0.78rem] font-600 text-ink" style={D(0.1)}>
-          <span className="text-ink-faint">⌕ </span>
-          <span className="pv-type" style={D(0.35)}>What’s our enterprise refund policy?</span>
-        </div>
-
-        <div className="flex gap-2">
-          {sources.map((s) => (
-            <span key={s.label} className="pv-glow rounded-pill border border-line bg-surface px-2.5 py-1 text-[0.66rem] font-600 text-ink-faint" style={D(s.at)}>
-              {s.label}
-            </span>
-          ))}
-        </div>
-
-        <div className="pv-in rounded-inner border border-line bg-surface p-3" style={D(2.7)}>
-          <p className="text-[0.76rem] leading-relaxed text-ink">
-            Enterprise plans include a 30-day refund window; billing issues a pro-rated credit
-            within 5 business days.
-          </p>
-          <div className="mt-2 flex items-center gap-2">
-            <Pill className="pv-pop bg-accent-wash text-accent-deep" style={D(3.5)}>
-              <Check className="size-3" /> grounded · 3 sources
-            </Pill>
+    <Window title="Cortex · knowledge engine" badge={<Pill className="bg-bg text-ink-soft">3 sources connected</Pill>}>
+      <div className="relative h-full w-full" style={wash}>
+        {srcs.map((s0) => (
+          <div key={s0.label} className="pv-in absolute left-2 flex items-center gap-1.5 rounded-pill border border-line bg-surface px-2.5 py-1.5" style={{ top: s0.y, ...D(s0.at) }}>
+            <FileText className="size-3 text-peri" />
+            <span className="text-[0.64rem] font-600 text-ink-soft">{s0.label}</span>
           </div>
+        ))}
+        <svg className="absolute inset-0 h-full w-full" aria-hidden>
+          {[40, 110, 180].map((y, i) => (
+            <path
+              key={y}
+              d={`M150 ${y} C 220 ${y} 240 108 292 112`}
+              fill="none"
+              stroke="var(--color-peri)"
+              strokeWidth="1.5"
+              className="pv-draw"
+              style={{ ...D(1.7 + i * 0.25), '--len': '180' } as React.CSSProperties}
+            />
+          ))}
+        </svg>
+        <div className="pv-pop absolute right-2 top-[54px] w-[240px] rounded-inner border border-accent/40 bg-surface p-3 shadow-soft" style={D(2.8)}>
+          <p className="text-[0.62rem] font-700 uppercase tracking-[0.08em] text-ink-faint">Answer</p>
+          <p className="mt-1 text-[0.74rem] leading-relaxed text-ink">
+            Enterprise plans: 30-day refund window, pro-rated credit within 5 business days.
+          </p>
+          <Pill className="pv-pop mt-2 bg-accent-wash text-accent-deep" style={D(3.6)}>
+            <Check className="size-3" /> grounded · 3 sources cited
+          </Pill>
         </div>
-
-        <p className="pv-in mt-auto text-center text-[0.68rem] font-600 text-ink-faint" style={D(4.2)}>
-          Your docs, wikis and tickets — one brain, every answer cited
+        <p className="pv-in absolute inset-x-0 bottom-1 text-center text-[0.66rem] font-600 text-ink-faint" style={D(4.2)}>
+          Docs, wikis, tickets — one brain, every answer cited
         </p>
       </div>
     </Window>
   )
 }
 
-/* ---------- 04 · NX Chat Assistant ---------- */
+/* ---------- 04 · Beacon — the chat product (the only chat scene) ---------- */
 
-export function AssistantViz() {
+export function BeaconViz() {
   return (
     <Window title="yoursite.com · 2:14 AM" badge={<Pill className="bg-bg text-ink-soft">visitor online</Pill>}>
       <div className="relative flex h-full flex-col gap-2" style={wash}>
@@ -235,148 +267,170 @@ export function AssistantViz() {
           <span className="font-700 text-accent underline underline-offset-2">Book a call ↗</span>
         </div>
 
-        {/* the outcome: lead lands in the team's Slack while everyone sleeps */}
-        <div className="pv-in absolute bottom-9 right-0 w-[220px] rounded-inner bg-ink p-3 text-white shadow-lg" style={D(2.4)}>
+        <div className="pv-in absolute bottom-9 right-0 w-[225px] rounded-inner bg-ink p-3 text-white shadow-lg" style={D(2.4)}>
           <p className="text-[0.6rem] font-700 uppercase tracking-[0.09em] text-au-mint"># leads · just now</p>
           <p className="mt-1 text-[0.76rem] font-700">New lead — Dana K.</p>
           <p className="text-[0.68rem] text-white/65">needs an AI copilot · booked for Tue</p>
         </div>
         <Pill className="pv-pop absolute bottom-1 right-0 border border-line bg-surface text-ink-soft" style={D(3.6)}>
-          <Sparkles className="size-3 text-accent" /> learned +1 answer
+          <Zap className="size-3 text-accent" /> learned +1 answer
         </Pill>
       </div>
     </Window>
   )
 }
 
-/* ---------- 05 · Enterprise Chat ---------- */
+/* ---------- 05 · Omni — radial app hub ---------- */
 
-const apps = [
-  { icon: Calendar, label: 'Calendar', at: 2 },
-  { icon: FileText, label: 'Docs', at: 2.5 },
-  { icon: Database, label: 'CRM', at: 3 },
+const hubApps = [
+  { icon: Calendar, x: 30, y: 18, at: 1.8 },
+  { icon: FileText, x: 250, y: 8, at: 2.1 },
+  { icon: Database, x: 470, y: 18, at: 2.4 },
+  { icon: Mail, x: 96, y: 168, at: 2.7 },
+  { icon: BarChart3, x: 404, y: 168, at: 3.0 },
 ]
 
-export function EntChatViz() {
+export function OmniViz() {
   return (
-    <Window title="Company chat" badge={<Pill className="bg-accent-wash text-accent-deep">50+ apps</Pill>}>
-      <div className="flex h-full flex-col gap-2.5" style={wash}>
-        <div className="pv-in max-w-[85%] self-end rounded-[12px] bg-bg px-3 py-2 text-[0.76rem] font-600 text-ink" style={D(0.2)}>
-          Move the QBR to Friday and brief the team
+    <Window title="Omni · company copilot" badge={<Pill className="bg-accent-wash text-accent-deep">50+ apps</Pill>}>
+      <div className="relative h-full w-full" style={dotGrid}>
+        {/* spokes */}
+        <svg className="absolute inset-0 h-full w-full" aria-hidden>
+          {hubApps.map((a, i) => (
+            <line
+              key={i}
+              x1={a.x + 22}
+              y1={a.y + 22}
+              x2="50%"
+              y2="108"
+              stroke="var(--color-peri)"
+              strokeWidth="1.2"
+              className="pv-draw"
+              style={{ ...D(a.at - 0.25), '--len': '260' } as React.CSSProperties}
+            />
+          ))}
+        </svg>
+        {hubApps.map((a, i) => (
+          <span key={i} className="pv-pop absolute flex size-11 items-center justify-center rounded-[12px] border border-line bg-surface shadow-sm" style={{ left: a.x, top: a.y, ...D(a.at) }}>
+            <a.icon className="size-4.5 text-accent" />
+            <Check className="pv-pop absolute -right-1.5 -top-1.5 size-4 rounded-full bg-[#28C840] p-0.5 text-white" style={D(a.at + 0.5)} />
+          </span>
+        ))}
+        {/* command center */}
+        <div className="pv-in absolute inset-x-8 top-[86px] mx-auto max-w-[380px] rounded-pill border border-accent/40 bg-surface px-4 py-2.5 text-center shadow-soft" style={D(0.3)}>
+          <span className="text-[0.76rem] font-600 text-ink">
+            “Move the QBR to Friday and brief the team”
+          </span>
         </div>
-        <div className="pv-in max-w-[88%] rounded-[12px] border border-line bg-surface px-3 py-2.5" style={D(1)}>
-          <p className="text-[0.76rem] text-ink">
-            On it — rescheduling, updating the brief, and logging it to the account.
-          </p>
-          <div className="mt-2 flex gap-1.5">
-            {apps.map((a) => (
-              <span key={a.label} className="pv-in inline-flex items-center gap-1 rounded-pill border border-line bg-bg px-2 py-0.5 text-[0.64rem] font-600 text-ink-soft" style={D(a.at)}>
-                <a.icon className="size-3 text-accent" /> {a.label}
-                <Check className="pv-pop size-3 text-[#1D8A46]" style={D(a.at + 0.4)} />
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="pv-in mt-auto flex items-center justify-center gap-2 rounded-inner bg-ink px-3 py-2 text-white" style={D(3.9)}>
-          <Check className="size-3.5 text-au-mint" />
-          <span className="text-[0.72rem] font-700">Done — 3 apps updated from one chat</span>
+        <div className="pv-pop absolute inset-x-0 bottom-2 mx-auto w-fit" style={D(3.7)}>
+          <Pill className="bg-ink text-white">
+            <Check className="size-3 text-au-mint" /> Done — 5 apps updated from one instruction
+          </Pill>
         </div>
       </div>
     </Window>
   )
 }
 
-/* ---------- 06 · NX Bird Eye ---------- */
+/* ---------- 06 · Bird Eye — reputation dashboard ---------- */
 
 export function BirdEyeViz() {
   return (
-    <Window title="Reviews · all locations" badge={<Pill className="bg-bg text-ink-soft">watching</Pill>}>
+    <Window title="Bird Eye · all locations" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
       <div className="flex h-full flex-col gap-2.5" style={wash}>
-        <div className="pv-in rounded-inner border border-line bg-surface px-3 py-2.5" style={D(0.2)}>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[0.72rem] font-700">New review</span>
-            <span className="ml-1 flex gap-0.5">
-              {[0, 1, 2, 3].map((i) => (
-                <Star key={i} className="pv-pop size-3 fill-[#D9A514] text-[#D9A514]" style={D(0.6 + i * 0.15)} />
-              ))}
-              <Star className="size-3 text-line" />
-            </span>
+        <div className="grid grid-cols-3 gap-2.5">
+          <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.3)}>
+            <p className="text-[0.58rem] font-700 uppercase tracking-[0.07em] text-ink-faint">Rating</p>
+            <p className="font-display text-[1.3rem] font-800 leading-tight text-ink">
+              4.6<span className="text-[0.8rem] text-[#D9A514]"> ★</span>
+            </p>
+            <svg viewBox="0 0 72 20" className="mt-0.5 h-4 w-full" aria-hidden>
+              <path d="M2 17 C 20 16 30 12 42 10 S 62 5 70 3" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" className="pv-draw" style={{ ...D(0.8), '--len': '90' } as React.CSSProperties} />
+            </svg>
           </div>
-          <p className="mt-1 text-[0.7rem] italic text-ink-soft">
-            “Great service — wait time could improve…”
-          </p>
+          <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.5)}>
+            <p className="text-[0.58rem] font-700 uppercase tracking-[0.07em] text-ink-faint">This week</p>
+            <p className="font-display text-[1.3rem] font-800 leading-tight text-ink">32</p>
+            <p className="text-[0.6rem] font-600 text-ink-faint">reviews handled</p>
+          </div>
+          <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.7)}>
+            <p className="text-[0.58rem] font-700 uppercase tracking-[0.07em] text-ink-faint">Pipeline</p>
+            <p className="font-display text-[1.3rem] font-800 leading-tight text-accent">+7</p>
+            <p className="text-[0.6rem] font-600 text-ink-faint">leads from reviews</p>
+          </div>
         </div>
 
-        <div className="pv-in rounded-inner border border-line bg-surface px-3 py-2.5" style={D(1.7)}>
-          <p className="text-[0.6rem] font-700 uppercase tracking-[0.09em] text-accent-deep">
-            Reply · drafting
-          </p>
-          <div className="pv-shimmer mt-1.5 h-2 w-[85%] rounded" />
-          <div className="pv-shimmer mt-1 h-2 w-[62%] rounded" />
-          <Pill className="pv-pop mt-2 bg-[#E7F8EC] text-[#1D8A46]" style={D(3.2)}>
-            <Check className="size-3" /> posted on-brand
+        <div className="pv-in flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2.5" style={D(1.5)}>
+          <span className="flex gap-0.5">
+            {[0, 1, 2, 3].map((i) => (
+              <Star key={i} className="pv-pop size-3 fill-[#D9A514] text-[#D9A514]" style={D(1.8 + i * 0.12)} />
+            ))}
+            <Star className="size-3 text-line" />
+          </span>
+          <span className="truncate text-[0.7rem] italic text-ink-soft">“Great service — wait time could improve…”</span>
+          <Pill className="pv-pop ml-auto shrink-0 bg-[#E7F8EC] text-[#1D8A46]" style={D(3)}>
+            <Check className="size-3" /> replied on-brand
           </Pill>
         </div>
 
-        <div className="pv-in mt-auto flex items-end justify-between" style={D(3.9)}>
-          <Pill className="bg-accent-wash text-accent-deep">3 reviews → 2 leads this week</Pill>
-          <svg viewBox="0 0 90 28" className="h-7 w-[90px]" aria-hidden>
-            <path
-              d="M2 24 C18 22 26 18 40 16 S 70 10 88 4"
-              fill="none"
-              stroke="var(--color-accent)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              className="pv-draw"
-              style={{ ...D(4.1), '--len': '120' } as React.CSSProperties}
-            />
-          </svg>
+        <div className="mt-auto space-y-1.5">
+          {[
+            { l: 'Downtown', w: '92%', at: 3.6 },
+            { l: 'Riverside', w: '78%', at: 3.8 },
+            { l: 'Airport', w: '64%', at: 4.0 },
+          ].map((r) => (
+            <div key={r.l} className="pv-in flex items-center gap-2" style={D(r.at)}>
+              <span className="w-16 text-[0.62rem] font-600 text-ink-faint">{r.l}</span>
+              <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-bg">
+                <span className="pv-bar block h-full rounded-full bg-peri" style={{ ...D(r.at + 0.15), width: r.w }} />
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </Window>
   )
 }
 
-/* ---------- 07 · NX CRM ---------- */
+/* ---------- 07 · Keystone — kanban CRM ---------- */
 
-const fields = [
-  { label: 'Fleet size', value: '240 trucks', at: 0.9 },
-  { label: 'License #', value: 'TX-88410', at: 1.5 },
-  { label: 'Renewal', value: 'Mar 2027', at: 2.1 },
-]
-
-export function CrmViz() {
+function GhostCard({ delay }: { delay: number }) {
   return (
-    <Window title="Accounts · Meridian Logistics" badge={<Pill className="bg-accent-wash text-accent-deep">custom fields</Pill>}>
-      <div className="flex h-full flex-col gap-2.5" style={wash}>
-        <div className="pv-in rounded-inner border border-line bg-surface p-3" style={D(0.2)}>
-          {fields.map((f) => (
-            <div key={f.label} className="pv-in flex items-center justify-between border-b border-line py-1.5 text-[0.74rem] last:border-0" style={D(f.at)}>
-              <span className="font-600 text-ink-faint">{f.label}</span>
-              <span className="font-700 text-ink">{f.value}</span>
-            </div>
-          ))}
-        </div>
+    <div className="pv-in rounded-[10px] border border-line bg-surface p-2" style={D(delay)}>
+      <div className="h-1.5 w-3/4 rounded bg-bg" />
+      <div className="mt-1 h-1.5 w-1/2 rounded bg-bg" />
+    </div>
+  )
+}
 
-        <div className="mt-auto">
-          <p className="mb-1.5 text-[0.6rem] font-700 uppercase tracking-[0.09em] text-ink-faint">
-            Pipeline
-          </p>
-          <div className="relative grid grid-cols-3 gap-2">
-            {['Qualified', 'Proposal', 'Closed'].map((c) => (
-              <div key={c} className="rounded-inner border border-dashed border-line px-2 py-3 text-center text-[0.62rem] font-700 uppercase tracking-[0.06em] text-ink-faint">
-                {c}
-              </div>
-            ))}
-            <Pill
-              className="pv-slide absolute left-2 top-[26px] bg-accent text-white shadow-sm"
-              style={{ ...D(3), '--tx': 'calc(100% + 26px)' } as React.CSSProperties}
-            >
-              Meridian ●
-            </Pill>
+export function KeystoneViz() {
+  return (
+    <Window title="Keystone · pipeline" badge={<Pill className="bg-accent-wash text-accent-deep">custom fields</Pill>}>
+      <div className="relative grid h-full grid-cols-3 gap-2.5" style={wash}>
+        {['Qualified', 'Proposal', 'Closed'].map((c, ci) => (
+          <div key={c} className="flex flex-col gap-2 rounded-[12px] border border-dashed border-line bg-bg/40 p-2">
+            <p className="text-[0.58rem] font-800 uppercase tracking-[0.08em] text-ink-faint">{c}</p>
+            {ci === 0 && <div className="h-[104px]" />}
+            {ci === 1 && <GhostCard delay={0.5} />}
+            {ci === 2 && <GhostCard delay={0.7} />}
           </div>
+        ))}
+        {/* the live deal card — drags itself from Qualified to Proposal */}
+        <div
+          className="pv-slide absolute left-2 top-8 w-[calc(33.33%-14px)] rounded-[10px] border border-accent/50 bg-surface p-2.5 shadow-soft"
+          style={{ ...D(2.2), '--tx': 'calc(100% + 16px)' } as React.CSSProperties}
+        >
+          <p className="pv-in text-[0.7rem] font-700" style={D(0.4)}>Meridian Logistics</p>
+          <div className="mt-1.5 flex flex-wrap gap-1">
+            <Pill className="pv-in bg-accent-wash text-accent-deep" style={D(0.9)}>Fleet: 240</Pill>
+            <Pill className="pv-in bg-accent-wash text-accent-deep" style={D(1.2)}>TX-88410</Pill>
+            <Pill className="pv-in bg-accent-wash text-accent-deep" style={D(1.5)}>Renews 3/27</Pill>
+          </div>
+          <Pill className="pv-pop mt-1.5 bg-[#E7F8EC] text-[#1D8A46]" style={D(3.2)}>
+            <Check className="size-3" /> stage advanced
+          </Pill>
         </div>
-        <p className="pv-in text-center text-[0.68rem] font-600 text-ink-faint" style={D(4)}>
+        <p className="pv-in absolute inset-x-0 bottom-1 text-center text-[0.66rem] font-600 text-ink-faint" style={D(4)}>
           Their fields, their pipeline — live in days
         </p>
       </div>
@@ -384,18 +438,18 @@ export function CrmViz() {
   )
 }
 
-/* ---------- 08 · SRE Agent ---------- */
+/* ---------- 08 · Sentinel — live terminal ---------- */
 
 const logs = [
   { t: '08:41:02', line: 'gateway ok · 200 · 34ms', at: 0.3 },
   { t: '08:41:04', line: 'billing-svc ok · 200 · 51ms', at: 0.8 },
 ]
 
-export function SreViz() {
+export function SentinelViz() {
   return (
     <Window
       dark
-      title="Prod logs · live"
+      title="Sentinel · prod logs"
       badge={
         <Pill className="bg-white/10 text-white/70">
           <i className="size-1.5 animate-pulse rounded-full bg-[#28C840]" /> watching
@@ -411,20 +465,24 @@ export function SreViz() {
         <p className="pv-in pv-flash rounded px-1 text-[#FF7B7B]" style={D(1.4)}>
           <span className="text-white/35">08:41:07</span> billing-svc ERR · timeout · retries exhausted
         </p>
-        <p className="pv-in text-[#9FA4C8]" style={D(1.9)}>
-          <span className="text-white/35">08:41:08</span> gateway ok · 200 · 36ms
-        </p>
 
-        <div className="mt-3 flex flex-col items-start gap-2 font-sans">
-          <Pill className="pv-in border border-peri/40 bg-peri/15 text-[#B9BCFF]" style={D(2.7)}>
-            root cause found · stale connection pool
-          </Pill>
-          <Pill className="pv-pop bg-[#123B23] text-[#4ADE80]" style={D(3.7)}>
-            <Check className="size-3" /> PR #214 opened · fix ready for review
-          </Pill>
+        <Pill className="pv-in mt-1 w-fit border border-peri/40 bg-peri/15 text-[#B9BCFF]" style={D(2.3)}>
+          root cause · stale connection pool
+        </Pill>
+
+        {/* the fix, as a diff */}
+        <div className="pv-in mt-1 w-fit min-w-[240px] rounded-[10px] border border-white/10 bg-white/5 p-2" style={D(3.1)}>
+          <p className="text-[0.58rem] font-sans font-700 uppercase tracking-[0.08em] text-white/40">
+            fix · pool.ts
+          </p>
+          <p className="mt-1 text-[#FF8A8A]">- maxIdleTime: Infinity</p>
+          <p className="text-[#6EE7A0]">+ maxIdleTime: 30_000</p>
         </div>
+        <Pill className="pv-pop w-fit bg-[#123B23] text-[#4ADE80]" style={D(4)}>
+          <Check className="size-3" /> PR #214 opened · fix ready for review
+        </Pill>
 
-        <p className="pv-in mt-auto text-center font-sans text-[0.66rem] font-600 text-white/40" style={D(4.5)}>
+        <p className="pv-in mt-auto text-center font-sans text-[0.66rem] font-600 text-white/40" style={D(4.7)}>
           Root cause in minutes, not days — customers never noticed
         </p>
       </div>
@@ -433,12 +491,12 @@ export function SreViz() {
 }
 
 export const VIGNETTES: Record<string, () => React.ReactNode> = {
-  agentic: AgenticViz,
+  forge: ForgeViz,
   tera: TeraViz,
-  graphbrain: GraphBrainViz,
-  assistant: AssistantViz,
-  entchat: EntChatViz,
+  cortex: CortexViz,
+  beacon: BeaconViz,
+  omni: OmniViz,
   birdeye: BirdEyeViz,
-  crm: CrmViz,
-  sre: SreViz,
+  keystone: KeystoneViz,
+  sentinel: SentinelViz,
 }

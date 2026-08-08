@@ -150,10 +150,15 @@ export function Portfolio() {
                 <Viz />
               </div>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <p className="max-w-[34rem] text-[0.92rem] leading-relaxed text-ink-soft">
-                  <span className="font-700 text-ink">{product.outcome}</span>{' '}
-                  {product.blurb}
-                </p>
+                <div className="max-w-[34rem]">
+                  <p className="text-[0.68rem] font-800 uppercase tracking-[0.09em] text-accent-deep">
+                    {product.name} · {product.role} — origin: {product.origin}
+                  </p>
+                  <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-soft">
+                    <span className="font-700 text-ink">{product.outcome}</span>{' '}
+                    {product.blurb}
+                  </p>
+                </div>
                 <div className="flex shrink-0 flex-wrap gap-1.5 sm:max-w-[220px] sm:justify-end">
                   {product.proof.map((c) => (
                     <span

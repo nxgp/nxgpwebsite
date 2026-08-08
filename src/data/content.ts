@@ -228,91 +228,101 @@ export const industries = {
 export type Product = {
   id: string
   name: string
-  tag: string
+  role: string
+  origin: string
   outcome: string
   blurb: string
   proof: string[]
   dark?: boolean
 }
 
-// THE PORTFOLIO — eight production platforms NX has built and deployed.
-// Every proof chip is an approved claim; nothing here is aspirational.
+// THE PORTFOLIO — eight named products NX has built and deployed, each
+// carrying the client story it was born in. Every proof chip is an
+// approved claim; nothing here is aspirational.
 export const portfolio = {
   kicker: "What we've built",
   h2: "The proof isn't a deck. It's what we've shipped.",
-  sub: 'Eight production platforms — built for real clients, running today, and ready to deploy for you. Watch what each one does.',
+  sub: 'Eight production platforms \u2014 born inside real client engagements, running today, and ready to deploy for you.',
   products: [
     {
-      id: 'agentic',
-      name: 'NX Agentic Platform',
-      tag: 'Agent runtime',
+      id: 'forge',
+      name: 'Forge',
+      role: 'Agent factory & runtime',
+      origin: 'Western Digital',
       outcome: 'Ship production AI agents without an ML team.',
       blurb:
-        'Creation and runtime for AI agents — registry, deployment and monitoring in one platform, proven inside Western Digital\u2019s enterprise AI rollout.',
-      proof: ['Proven at Western Digital', '$5M SaaS spend eliminated', '3\u00d7 more capabilities'],
+        'Design an agent, wire its actions, deploy it to a governed runtime \u2014 the platform born inside Western Digital\u2019s enterprise AI rollout.',
+      proof: ['$5M SaaS spend eliminated', '3\u00d7 more capabilities'],
     },
     {
       id: 'tera',
       name: 'Tera',
-      tag: 'Healthcare AI',
+      role: 'Clinical AI operator',
+      origin: 'Mentera',
       outcome: 'A clinic\u2019s day that runs itself.',
       blurb:
-        'The AI assistant inside Mentera \u2014 intake, consents, scheduling and follow-ups handled end to end, across 50+ EHR integrations, at a regulated bar.',
-      proof: ['Running inside Mentera', '50+ EHR integrations'],
+        'Intake, consents, scheduling and follow-ups handled end to end across 50+ EHR integrations \u2014 running live inside Mentera at a regulated bar.',
+      proof: ['50+ EHR integrations', 'Every clinic workflow'],
     },
     {
-      id: 'graphbrain',
-      name: 'Graph Brain',
-      tag: 'Company knowledge',
+      id: 'cortex',
+      name: 'Cortex',
+      role: 'Company knowledge engine',
+      origin: 'Kiotel',
       outcome: 'Answers grounded in your own knowledge.',
       blurb:
-        'A plug-and-play knowledge brain: connect docs, wikis and tickets, and every answer arrives grounded \u2014 with its sources attached.',
-      proof: ['Deployed for Kiotel', 'Plug-and-play GraphRAG'],
+        'Plug-and-play GraphRAG: connect docs, wikis and tickets, and every answer arrives with its sources attached \u2014 first deployed for Kiotel.',
+      proof: ['Plug-and-play GraphRAG', 'Sources on every answer'],
     },
     {
-      id: 'assistant',
-      name: 'NX Chat Assistant',
-      tag: 'Website AI',
+      id: 'beacon',
+      name: 'Beacon',
+      role: 'Website concierge AI',
+      origin: 'nxgp.io \u2014 this site',
       outcome: 'Visitors become qualified leads while you sleep.',
       blurb:
-        'An embeddable website assistant that answers from your knowledge, hands leads to your team in Slack, and learns from every conversation \u2014 with verified memory.',
-      proof: ['Live on this site', 'Self-learning', 'One-tag embed'],
+        'The assistant in the corner of this page: answers from your knowledge, hands leads to your team in Slack, and learns from every conversation with verified memory.',
+      proof: ['Try it \u2014 bottom right', 'Self-learning', 'One-tag embed'],
     },
     {
-      id: 'entchat',
-      name: 'Enterprise Chat',
-      tag: 'AI workspace',
-      outcome: 'One chat that acts across every tool you use.',
+      id: 'omni',
+      name: 'Omni',
+      role: 'One chat, every app',
+      origin: 'Western Digital \u00b7 WD Chat',
+      outcome: 'One instruction, actions everywhere.',
       blurb:
-        'A ChatGPT-class workspace for the enterprise \u2014 grounded in company data and wired into 50+ apps, so answers turn into actions.',
-      proof: ['Born at Western Digital', '50+ app integrations'],
+        'A ChatGPT-class workspace grounded in company data and wired into 50+ apps \u2014 answers become actions across calendar, docs, CRM and more.',
+      proof: ['Born as WD Chat', '50+ app integrations'],
     },
     {
       id: 'birdeye',
-      name: 'NX Bird Eye',
-      tag: 'Reputation \u2192 pipeline',
+      name: 'Bird Eye',
+      role: 'Reputation autopilot',
+      origin: 'NX product lab',
       outcome: 'Reviews answer themselves \u2014 and turn into leads.',
       blurb:
-        'Agentic review management: drafts on-brand replies, watches your ratings, and converts happy customers into pipeline.',
+        'Agentic review management: watches every location, drafts on-brand replies, and converts happy customers into pipeline.',
       proof: ['Agentic review ops', 'Lead generation built in'],
     },
     {
-      id: 'crm',
-      name: 'NX CRM',
-      tag: 'Deployable CRM',
+      id: 'keystone',
+      name: 'Keystone',
+      role: 'Shape-to-fit CRM',
+      origin: 'Per-client deployments',
       outcome: 'A CRM shaped to your business in days.',
       blurb:
         'Deployed per client with the custom fields, views and pipelines their operation actually needs \u2014 no platform tax, no year-long rollout.',
       proof: ['Custom fields per client', 'Deploys in days'],
     },
     {
-      id: 'sre',
-      name: 'SRE Agent',
-      tag: 'Reliability AI',
+      id: 'sentinel',
+      name: 'Sentinel',
+      role: 'Production guardian',
+      origin: 'Regulated utility ops',
       outcome: 'Incidents fixed before customers notice.',
       blurb:
-        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 proven in regulated utility operations.',
-      proof: ['Proven at a regulated utility', 'Root cause: days \u2192 under an hour'],
+        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 the reliability engine behind our Convey work for regulated utilities.',
+      proof: ['Root cause: days \u2192 under an hour'],
       dark: true,
     },
   ] as Product[],
