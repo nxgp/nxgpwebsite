@@ -99,7 +99,7 @@ export function Portfolio() {
                         is ? 'text-ink' : 'text-ink-soft group-hover:text-ink',
                       )}
                     >
-                      {p.name}
+                      {p.client}
                     </span>
                   </span>
                   <span
@@ -108,7 +108,7 @@ export function Portfolio() {
                       is ? 'text-ink-soft' : 'text-ink-faint',
                     )}
                   >
-                    {p.outcome}
+                    {p.built}
                   </span>
                   {/* auto-advance progress on the active row */}
                   {is && !pinned && (
@@ -138,7 +138,8 @@ export function Portfolio() {
                     : 'border-line bg-surface text-ink-soft',
                 )}
               >
-                {p.name}
+                {p.client}
+                <span className="ml-1.5 font-500 opacity-70">{p.role}</span>
               </button>
             ))}
           </div>
@@ -152,7 +153,7 @@ export function Portfolio() {
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="max-w-[34rem]">
                   <p className="text-[0.68rem] font-800 uppercase tracking-[0.09em] text-accent-deep">
-                    {product.name} · {product.role} — origin: {product.origin}
+                    Built for {product.client} · {product.role}
                   </p>
                   <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-soft">
                     <span className="font-700 text-ink">{product.outcome}</span>{' '}

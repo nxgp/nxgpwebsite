@@ -18,16 +18,16 @@ Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx
 - **Nx Managed Support** (3–12+ months): a senior-led team embedded in your organization, delivering against a prioritized roadmap.
 - **Nx Embedded Engineering** (ongoing, quarterly): operation, monitoring, and continuous improvement of deployed systems.
 
-## Pre-built products (deployable for new clients)
+## What we've built, and who we built it for
 
-- **Forge** — agent factory & runtime: design, deploy and monitor production AI agents. Born at Western Digital ($5M SaaS spend eliminated, 3x more capabilities).
-- **Tera** — clinical AI operator running clinic workflows end to end inside Mentera; 50+ EHR integrations.
-- **Cortex** — company knowledge engine (plug-and-play GraphRAG); answers grounded with cited sources. First deployed for Kiotel.
-- **Beacon** — website concierge AI: embeddable, self-learning, captures leads to Slack. Live on nxgp.io.
-- **Omni** — one chat, every app: ChatGPT-class enterprise workspace wired into 50+ apps. Born as WD Chat at Western Digital.
-- **Bird Eye** — reputation autopilot: agentic review management and lead generation.
-- **Keystone** — shape-to-fit CRM: deployed per client with custom fields, views and pipelines, in days.
-- **Sentinel** — production guardian: log intelligence that finds root cause and opens fix PRs; proven in regulated utility operations.
+- **Western Digital — agent platform & runtime**: organization-wide platform to design, deploy and govern production AI agents. $5M SaaS spend eliminated, 3x more capabilities, 50% faster AI delivery.
+- **Western Digital — WD Chat, enterprise workspace**: ChatGPT-class copilot grounded in company data and wired into 50+ apps.
+- **Mentera — Tera, clinical AI operator**: intake, consents, scheduling and follow-ups end to end; 50+ EHR integrations, built to a regulated bar.
+- **Kiotel — company knowledge engine**: plug-and-play GraphRAG over docs, wikis and tickets; every answer cited.
+- **Harbor Industrial — maintenance operations platform**: structured logbooks, asset tracking, analytics and an AI copilot. 40% less reporting time, 25% faster issue resolution, 15% higher fleet availability.
+- **Convey — reliability & SRE agent** (regulated utilities): finds root cause across large applications and opens the fix PR. Root-cause analysis from days to under an hour.
+- **Nx Growth Partners — website concierge AI**: embeddable, self-learning assistant that captures leads to Slack. Live on nxgp.io.
+- **Nx Growth Partners — Bird Eye & deployable CRM**: agentic review management that turns customers into pipeline, plus a CRM deployed per client with custom fields and stages.
 
 ## Client results
 

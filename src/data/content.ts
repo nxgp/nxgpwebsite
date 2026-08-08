@@ -227,103 +227,103 @@ export const industries = {
 
 export type Product = {
   id: string
-  name: string
+  client: string
+  built: string
   role: string
-  origin: string
   outcome: string
   blurb: string
   proof: string[]
   dark?: boolean
 }
 
-// THE PORTFOLIO — eight named products NX has built and deployed, each
-// carrying the client story it was born in. Every proof chip is an
-// approved claim; nothing here is aspirational.
+// THE PORTFOLIO — what NX built, named by who we built it for. Client-first
+// framing: the proof is the engagement, and every platform here can be
+// deployed for the next client. Every proof chip is an approved claim.
 export const portfolio = {
   kicker: "What we've built",
   h2: "The proof isn't a deck. It's what we've shipped.",
-  sub: 'Eight production platforms \u2014 born inside real client engagements, running today, and ready to deploy for you.',
+  sub: 'Eight production platforms, built inside real client engagements \u2014 running today, and ready to deploy for you.',
   products: [
     {
       id: 'forge',
-      name: 'Forge',
-      role: 'Agent factory & runtime',
-      origin: 'Western Digital',
+      client: 'Western Digital',
+      built: 'Agent platform & runtime',
+      role: 'Enterprise AI at scale',
       outcome: 'Ship production AI agents without an ML team.',
       blurb:
-        'Design an agent, wire its actions, deploy it to a governed runtime \u2014 the platform born inside Western Digital\u2019s enterprise AI rollout.',
-      proof: ['$5M SaaS spend eliminated', '3\u00d7 more capabilities'],
+        'An organization-wide platform to design agents, wire their actions, and deploy them to a governed runtime \u2014 unifying agents, knowledge and workflows in one secure experience.',
+      proof: ['$5M SaaS spend eliminated', '3\u00d7 more capabilities', '50% faster AI delivery'],
     },
     {
       id: 'tera',
-      name: 'Tera',
-      role: 'Clinical AI operator',
-      origin: 'Mentera',
+      client: 'Mentera',
+      built: 'Tera \u00b7 clinical AI operator',
+      role: 'Healthcare AI',
       outcome: 'A clinic\u2019s day that runs itself.',
       blurb:
-        'Intake, consents, scheduling and follow-ups handled end to end across 50+ EHR integrations \u2014 running live inside Mentera at a regulated bar.',
+        'Intake, consents, scheduling and follow-ups handled end to end across 50+ EHR integrations \u2014 built to a regulated bar, with AI woven through every clinic workflow.',
       proof: ['50+ EHR integrations', 'Every clinic workflow'],
     },
     {
       id: 'cortex',
-      name: 'Cortex',
-      role: 'Company knowledge engine',
-      origin: 'Kiotel',
+      client: 'Kiotel',
+      built: 'Company knowledge engine',
+      role: 'Knowledge & GraphRAG',
       outcome: 'Answers grounded in your own knowledge.',
       blurb:
-        'Plug-and-play GraphRAG: connect docs, wikis and tickets, and every answer arrives with its sources attached \u2014 first deployed for Kiotel.',
+        'A plug-and-play knowledge brain over docs, wikis and tickets \u2014 every answer arrives with its sources attached, so teams can trust what it tells them.',
       proof: ['Plug-and-play GraphRAG', 'Sources on every answer'],
     },
     {
+      id: 'omni',
+      client: 'Western Digital',
+      built: 'WD Chat \u00b7 enterprise workspace',
+      role: 'Company copilot',
+      outcome: 'One instruction, actions everywhere.',
+      blurb:
+        'A ChatGPT-class workspace grounded in company data and wired into 50+ apps \u2014 so answers become actions across calendar, docs, CRM and the rest of the stack.',
+      proof: ['50+ app integrations', 'Grounded in company data'],
+    },
+    {
+      id: 'harbor',
+      client: 'Harbor Industrial',
+      built: 'Maintenance operations platform',
+      role: 'Maritime operations',
+      outcome: 'Fleet operations that report themselves.',
+      blurb:
+        'Structured logbooks, asset tracking and analytics with an AI copilot on top \u2014 giving crews accurate, consistent data and faster decisions across the fleet.',
+      proof: ['40% less time on reporting', '25% faster issue resolution', '15% higher fleet availability'],
+    },
+    {
+      id: 'convey',
+      client: 'Convey',
+      built: 'Reliability & SRE agent',
+      role: 'Regulated utilities',
+      outcome: 'Incidents fixed before customers notice.',
+      blurb:
+        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 and remembers the codebase so the team doesn\u2019t have to.',
+      proof: ['Root cause: days \u2192 under an hour'],
+      dark: true,
+    },
+    {
       id: 'beacon',
-      name: 'Beacon',
-      role: 'Website concierge AI',
-      origin: 'nxgp.io \u2014 this site',
+      client: 'Nx Growth Partners',
+      built: 'Website concierge AI',
+      role: 'Live on this site',
       outcome: 'Visitors become qualified leads while you sleep.',
       blurb:
-        'The assistant in the corner of this page: answers from your knowledge, hands leads to your team in Slack, and learns from every conversation with verified memory.',
+        'The assistant in the corner of this page \u2014 it answers from your knowledge, hands leads to your team in Slack, and learns from every conversation with verified memory.',
       proof: ['Try it \u2014 bottom right', 'Self-learning', 'One-tag embed'],
     },
     {
-      id: 'omni',
-      name: 'Omni',
-      role: 'One chat, every app',
-      origin: 'Western Digital \u00b7 WD Chat',
-      outcome: 'One instruction, actions everywhere.',
-      blurb:
-        'A ChatGPT-class workspace grounded in company data and wired into 50+ apps \u2014 answers become actions across calendar, docs, CRM and more.',
-      proof: ['Born as WD Chat', '50+ app integrations'],
-    },
-    {
-      id: 'birdeye',
-      name: 'Bird Eye',
-      role: 'Reputation autopilot',
-      origin: 'NX product lab',
-      outcome: 'Reviews answer themselves \u2014 and turn into leads.',
-      blurb:
-        'Agentic review management: watches every location, drafts on-brand replies, and converts happy customers into pipeline.',
-      proof: ['Agentic review ops', 'Lead generation built in'],
-    },
-    {
       id: 'keystone',
-      name: 'Keystone',
-      role: 'Shape-to-fit CRM',
-      origin: 'Per-client deployments',
-      outcome: 'A CRM shaped to your business in days.',
+      client: 'Nx Growth Partners',
+      built: 'Bird Eye & deployable CRM',
+      role: 'Revenue operations',
+      outcome: 'Reputation and pipeline on autopilot.',
       blurb:
-        'Deployed per client with the custom fields, views and pipelines their operation actually needs \u2014 no platform tax, no year-long rollout.',
-      proof: ['Custom fields per client', 'Deploys in days'],
-    },
-    {
-      id: 'sentinel',
-      name: 'Sentinel',
-      role: 'Production guardian',
-      origin: 'Regulated utility ops',
-      outcome: 'Incidents fixed before customers notice.',
-      blurb:
-        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 the reliability engine behind our Convey work for regulated utilities.',
-      proof: ['Root cause: days \u2192 under an hour'],
-      dark: true,
+        'Two products from our own lab: agentic review management that drafts on-brand replies and turns customers into pipeline, plus a CRM deployed per client with the exact fields and stages their operation needs.',
+      proof: ['Agentic review ops', 'CRM deploys in days'],
     },
   ] as Product[],
 }

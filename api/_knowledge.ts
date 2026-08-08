@@ -17,12 +17,11 @@ export const CALENDLY_URL =
   process.env.CALENDLY_URL || 'https://calendly.com/ravi-nxgp'
 
 const products = portfolio.products
-  .map((p) => `- ${p.name} (${p.tag}): ${p.outcome} ${p.blurb} Proof: ${p.proof.join('; ')}.`)
+  .map(
+    (p) =>
+      `- For ${p.client} — ${p.built} (${p.role}): ${p.outcome} ${p.blurb} Proof: ${p.proof.join('; ')}.`,
+  )
   .join('\n')
-
-// Client results not carried by a product entry but still approved to share.
-const extraResults =
-  '- Harbor Industrial (maritime transportation): maintenance operations platform with logbooks, asset tracking, analytics and an AI copilot \u2014 40% less time on reporting, 25% faster issue resolution, 15% higher fleet availability.'
 
 const serviceList = services.pillars
   .map((p) => `- ${p.title}: ${p.body} Capabilities: ${p.caps.join(', ')}.`)
@@ -86,11 +85,9 @@ ${engagementList}
 # Who NxGP serves
 ${industryList}
 
-# Pre-built products (real, deployed \u2014 these can be deployed for new clients too)
+# What we've built, and who we built it for
+These are real, deployed platforms. Each was built inside a client engagement and can be deployed for a new client too. Note that two were built for Western Digital, and two are NX's own products.
 ${products}
-
-# Additional client results
-${extraResults}
 
 # What clients say
 ${quotes}

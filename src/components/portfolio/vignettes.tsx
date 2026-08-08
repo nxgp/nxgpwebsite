@@ -5,14 +5,14 @@ import { cn } from '../../lib/cn'
  * Portfolio vignettes — one animated "outcome moment" per product, each in a
  * DIFFERENT visual form mapped to what the product actually is:
  *
- *   Forge    → node-flow canvas (it builds agent pipelines)
- *   Tera     → clinic day schedule (it runs a clinic's day)
- *   Cortex   → sources converging into an answer (it grounds knowledge)
- *   Beacon   → website chat (it IS the chat product — the only chat scene)
- *   Omni     → radial app hub (one instruction fans out to every app)
- *   Bird Eye → metrics dashboard (it watches reputation)
- *   Keystone → kanban board (it is a CRM)
- *   Sentinel → live terminal (it watches production)
+ *   Western Digital · agents  → node-flow canvas (it builds agent pipelines)
+ *   Mentera · Tera            → clinic day schedule (it runs a clinic's day)
+ *   Kiotel · knowledge        → sources converging into a cited answer
+ *   Western Digital · WD Chat → radial app hub (one instruction, many apps)
+ *   Harbor Industrial         → fleet logbook + asset health + copilot
+ *   Convey · SRE              → live terminal with a code diff
+ *   NX · website assistant    → chat (the ONLY chat scene — it IS the chat)
+ *   NX · Bird Eye + CRM       → reputation dashboard
  *
  * Shared window chrome keeps them one family; interiors are deliberately
  * distinct. All motion is single-run CSS keyframes with per-element delays
@@ -131,7 +131,7 @@ function FlowNode({
 
 export function ForgeViz() {
   return (
-    <Window title="Forge · agent builder" badge={<Pill className="bg-accent-wash text-accent-deep">runtime</Pill>}>
+    <Window title="Agent builder · Western Digital" badge={<Pill className="bg-accent-wash text-accent-deep">runtime</Pill>}>
       <div className="relative h-full w-full rounded-[12px]" style={dotGrid}>
         {/* connectors draw first-to-last */}
         <svg className="absolute inset-0 h-full w-full" aria-hidden>
@@ -170,7 +170,7 @@ const slots = [
 export function TeraViz() {
   return (
     <Window
-      title="Tera · front desk"
+      title="Tera · clinic front desk"
       badge={
         <Pill className="bg-accent-wash text-accent-deep">
           <i className="size-1.5 animate-pulse rounded-full bg-accent" /> operating
@@ -215,7 +215,7 @@ const srcs = [
 
 export function CortexViz() {
   return (
-    <Window title="Cortex · knowledge engine" badge={<Pill className="bg-bg text-ink-soft">3 sources connected</Pill>}>
+    <Window title="Knowledge engine · Kiotel" badge={<Pill className="bg-bg text-ink-soft">3 sources connected</Pill>}>
       <div className="relative h-full w-full" style={wash}>
         {srcs.map((s0) => (
           <div key={s0.label} className="pv-in absolute left-2 flex items-center gap-1.5 rounded-pill border border-line bg-surface px-2.5 py-1.5" style={{ top: s0.y, ...D(s0.at) }}>
@@ -292,7 +292,7 @@ const hubApps = [
 
 export function OmniViz() {
   return (
-    <Window title="Omni · company copilot" badge={<Pill className="bg-accent-wash text-accent-deep">50+ apps</Pill>}>
+    <Window title="WD Chat · company copilot" badge={<Pill className="bg-accent-wash text-accent-deep">50+ apps</Pill>}>
       <div className="relative h-full w-full" style={dotGrid}>
         {/* spokes */}
         <svg className="absolute inset-0 h-full w-full" aria-hidden>
@@ -336,7 +336,7 @@ export function OmniViz() {
 
 export function BirdEyeViz() {
   return (
-    <Window title="Bird Eye · all locations" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
+    <Window title="Bird Eye · reputation & pipeline" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
       <div className="flex h-full flex-col gap-2.5" style={wash}>
         <div className="grid grid-cols-3 gap-2.5">
           <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.3)}>
@@ -405,7 +405,7 @@ function GhostCard({ delay }: { delay: number }) {
 
 export function KeystoneViz() {
   return (
-    <Window title="Keystone · pipeline" badge={<Pill className="bg-accent-wash text-accent-deep">custom fields</Pill>}>
+    <Window title="CRM · pipeline" badge={<Pill className="bg-accent-wash text-accent-deep">custom fields</Pill>}>
       <div className="relative grid h-full grid-cols-3 gap-2.5" style={wash}>
         {['Qualified', 'Proposal', 'Closed'].map((c, ci) => (
           <div key={c} className="flex flex-col gap-2 rounded-[12px] border border-dashed border-line bg-bg/40 p-2">
@@ -449,7 +449,7 @@ export function SentinelViz() {
   return (
     <Window
       dark
-      title="Sentinel · prod logs"
+      title="Convey · prod logs"
       badge={
         <Pill className="bg-white/10 text-white/70">
           <i className="size-1.5 animate-pulse rounded-full bg-[#28C840]" /> watching
@@ -490,13 +490,75 @@ export function SentinelViz() {
   )
 }
 
+/* ---------- 05 · Harbor Industrial — fleet logbook & asset health ---------- */
+
+const vessels = [
+  { id: 'HRB-04', task: 'Engine hours logged', status: 'ok', at: 0.5 },
+  { id: 'HRB-11', task: 'Hydraulic check due', status: 'due', at: 1.2 },
+  { id: 'HRB-22', task: 'Crane inspection', status: 'ok', at: 1.9 },
+]
+
+export function HarborViz() {
+  return (
+    <Window
+      title="Fleet logbook · Harbor Industrial"
+      badge={<Pill className="bg-bg text-ink-soft">18 assets tracked</Pill>}
+    >
+      <div className="flex h-full flex-col gap-2.5" style={wash}>
+        {/* structured logbook rows — the thing that replaced paper */}
+        {vessels.map((v) => (
+          <div key={v.id} className="pv-in flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2" style={D(v.at)}>
+            <span className="rounded-[6px] bg-navy px-1.5 py-0.5 font-mono text-[0.6rem] font-700 text-white">
+              {v.id}
+            </span>
+            <span className="text-[0.74rem] font-600 text-ink">{v.task}</span>
+            {v.status === 'ok' ? (
+              <Pill className="pv-pop ml-auto bg-[#E7F8EC] text-[#1D8A46]" style={D(v.at + 0.5)}>
+                <Check className="size-3" /> logged
+              </Pill>
+            ) : (
+              <Pill className="pv-pop ml-auto bg-[#FFF3E4] text-[#B4671B]" style={D(v.at + 0.5)}>
+                scheduled
+              </Pill>
+            )}
+          </div>
+        ))}
+
+        {/* the copilot answering from the logbook */}
+        <div className="pv-in mt-auto rounded-inner border border-accent/30 bg-accent-wash/40 px-3 py-2.5" style={D(2.9)}>
+          <p className="text-[0.6rem] font-800 uppercase tracking-[0.08em] text-accent-deep">
+            Harbor copilot
+          </p>
+          <p className="mt-1 text-[0.74rem] leading-snug text-ink">
+            “Which assets are overdue this week?” →{' '}
+            <span className="font-700">HRB-11 hydraulics, scheduled Thu.</span>
+          </p>
+        </div>
+
+        <div className="pv-in grid grid-cols-3 gap-2" style={D(3.8)}>
+          {[
+            { v: '40%', l: 'less reporting time' },
+            { v: '25%', l: 'faster resolution' },
+            { v: '15%', l: 'higher availability' },
+          ].map((m) => (
+            <div key={m.l} className="rounded-[10px] border border-line bg-surface px-2 py-1.5 text-center">
+              <p className="font-display text-[1.05rem] font-800 leading-none text-accent">{m.v}</p>
+              <p className="mt-0.5 text-[0.56rem] font-600 leading-tight text-ink-faint">{m.l}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Window>
+  )
+}
+
 export const VIGNETTES: Record<string, () => React.ReactNode> = {
   forge: ForgeViz,
   tera: TeraViz,
   cortex: CortexViz,
-  beacon: BeaconViz,
   omni: OmniViz,
-  birdeye: BirdEyeViz,
-  keystone: KeystoneViz,
-  sentinel: SentinelViz,
+  harbor: HarborViz,
+  convey: SentinelViz,
+  beacon: BeaconViz,
+  keystone: BirdEyeViz,
 }
