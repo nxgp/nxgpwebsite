@@ -6,7 +6,7 @@ import { cn } from '../../lib/cn'
  * DIFFERENT visual form mapped to what the product actually is:
  *
  *   Western Digital · agents  → node-flow canvas (it builds agent pipelines)
- *   Mentera · Tera            → clinic day schedule (it runs a clinic's day)
+ *   Mentera · Tera            → chat + tool-calls across every clinic workflow
  *   Kiotel · knowledge        → sources converging into a cited answer
  *   Western Digital · WD Chat → question in → generated dashboard out
  *   Harbor Industrial         → fleet logbook + asset health + copilot
@@ -159,46 +159,81 @@ export function ForgeViz() {
   )
 }
 
-/* ---------- 02 · Tera — clinic day schedule ---------- */
+/* ---------- 02 · Tera — chat-driven automation across the whole clinic ----
+   Tera is a chat application AND the platform underneath it: staff ask in
+   plain language, Tera executes across every clinic workflow. The rail shows
+   the breadth (front desk → analytics); the thread shows it taking real
+   actions with tools, lighting each domain up as it goes. */
 
-const slots = [
-  { time: '9:00', label: 'A. Rivera · new patient', note: 'intake sent', at: 0.6 },
-  { time: '10:30', label: 'M. Chen · follow-up', note: 'consent signed', at: 1.6 },
-  { time: '2:40', label: 'D. Okafor · rebooked', note: 'no-show refilled', at: 2.8, fill: true },
+const domains = [
+  { label: 'Front desk', at: 1.5 },
+  { label: 'Scheduling', at: 2.6 },
+  { label: 'Comms', at: 2.0 },
+  { label: 'Pre-charting', at: 1.5 },
+  { label: 'Back office', at: 3.1 },
+  { label: 'Analytics', at: 3.6 },
+]
+
+const actions = [
+  { tag: 'Pre-charting', text: '6 charts drafted from last-visit notes', at: 1.5 },
+  { tag: 'Comms', text: '4 patients texted — personalised, 1 replied', at: 2.0 },
+  { tag: 'Scheduling', text: 'No-show slot refilled from the waitlist', at: 2.6 },
+  { tag: 'Back office', text: '2 prior auths submitted to payer', at: 3.1 },
 ]
 
 export function TeraViz() {
   return (
     <Window
-      title="Tera · clinic front desk"
+      title="Tera · clinic AI"
       badge={
         <Pill className="bg-accent-wash text-accent-deep">
-          <i className="size-1.5 animate-pulse rounded-full bg-accent" /> operating
+          <i className="size-1.5 animate-pulse rounded-full bg-accent" /> taking actions
         </Pill>
       }
     >
-      <div className="flex h-full flex-col gap-2" style={wash}>
-        {slots.map((s) => (
-          <div key={s.time} className={cn('pv-in flex items-center gap-3', s.fill && 'pv-pop')} style={D(s.at)}>
-            <span className="w-10 shrink-0 text-right text-[0.64rem] font-700 tabular-nums text-ink-faint">
-              {s.time}
-            </span>
-            <div
-              className={cn(
-                'flex flex-1 items-center gap-2 rounded-[10px] border-l-[3px] bg-surface px-3 py-2.5 shadow-sm',
-                s.fill ? 'border-accent' : 'border-peri',
-              )}
+      <div className="flex h-full gap-3" style={wash}>
+        {/* the platform surface: every workflow it covers */}
+        <div className="flex w-[104px] shrink-0 flex-col gap-1">
+          <p className="pb-0.5 text-[0.54rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
+            Clinic workflows
+          </p>
+          {domains.map((d) => (
+            <span
+              key={d.label}
+              className="pv-glow rounded-[7px] border border-line bg-surface/70 px-2 py-1 text-[0.6rem] font-600 text-ink-faint"
+              style={D(d.at)}
             >
-              <span className="text-[0.76rem] font-700">{s.label}</span>
-              <Pill className="pv-pop ml-auto bg-[#E7F8EC] text-[#1D8A46]" style={D(s.at + 0.7)}>
-                <Check className="size-3" /> {s.note}
-              </Pill>
-            </div>
+              {d.label}
+            </span>
+          ))}
+        </div>
+
+        {/* the chat that drives them */}
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <div className="pv-in max-w-[88%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.72rem] font-500 text-white" style={D(0.2)}>
+            Prep my afternoon clinic
           </div>
-        ))}
-        <div className="pv-in mt-auto flex items-center justify-between rounded-inner bg-ink px-3.5 py-2.5 text-white" style={D(4)}>
-          <span className="text-[0.72rem] font-700">Today: 14 patients · 31 tasks</span>
-          <span className="text-[0.72rem] font-700 text-au-mint">0 staff touches</span>
+          <div className="pv-in max-w-[92%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-1.5 text-[0.72rem] text-ink" style={D(0.9)}>
+            On it — working through the afternoon list now.
+          </div>
+
+          {/* tool calls executing, one per workflow */}
+          <div className="mt-0.5 flex flex-col gap-1">
+            {actions.map((a) => (
+              <div key={a.tag} className="pv-in flex items-center gap-2 rounded-[8px] border border-line bg-surface px-2 py-1.5" style={D(a.at)}>
+                <Check className="size-3 shrink-0 text-[#1D8A46]" />
+                <span className="truncate text-[0.68rem] font-600 text-ink">{a.text}</span>
+                <span className="ml-auto shrink-0 rounded-[5px] bg-accent-wash px-1.5 py-0.5 text-[0.52rem] font-700 uppercase tracking-[0.05em] text-accent-deep">
+                  {a.tag}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="pv-in mt-auto flex items-center justify-between rounded-inner bg-ink px-3 py-2 text-white" style={D(4.1)}>
+            <span className="text-[0.7rem] font-700">Afternoon ready · 14 patients</span>
+            <span className="text-[0.7rem] font-700 text-au-mint">0 staff touches</span>
+          </div>
         </div>
       </div>
     </Window>

@@ -258,12 +258,12 @@ export const portfolio = {
     {
       id: 'tera',
       client: 'Mentera',
-      built: 'Tera \u00b7 clinical AI operator',
+      built: 'Tera \u00b7 clinical AI platform',
       role: 'Healthcare AI',
       outcome: 'A clinic\u2019s day that runs itself.',
       blurb:
-        'Intake, consents, scheduling and follow-ups handled end to end across 50+ EHR integrations \u2014 built to a regulated bar, with AI woven through every clinic workflow.',
-      proof: ['50+ EHR integrations', 'Every clinic workflow'],
+        'A chat-first AI platform for the whole clinic \u2014 front desk, scheduling, personalised outreach, pre-charting, back office and analytics. Staff ask in plain language; Tera takes the actions, end to end, across 50+ EHR integrations at a regulated bar.',
+      proof: ['50+ EHR integrations', 'Front desk \u2192 back office', 'Acts with tools'],
     },
     {
       id: 'cortex',
