@@ -131,7 +131,7 @@ function FlowNode({
 
 export function ForgeViz() {
   return (
-    <Window title="Agent builder · Western Digital" badge={<Pill className="bg-accent-wash text-accent-deep">runtime</Pill>}>
+    <Window title="Agent Hub · agent builder" badge={<Pill className="bg-accent-wash text-accent-deep">runtime</Pill>}>
       <div className="relative h-full w-full rounded-[12px]" style={dotGrid}>
         {/* connectors draw first-to-last */}
         <svg className="absolute inset-0 h-full w-full" aria-hidden>

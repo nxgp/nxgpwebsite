@@ -153,7 +153,7 @@ export function Portfolio() {
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="max-w-[34rem]">
                   <p className="text-[0.68rem] font-800 uppercase tracking-[0.09em] text-accent-deep">
-                    Built for {product.client} · {product.role}
+                    Built for {product.builtFor ?? product.client} · {product.role}
                   </p>
                   <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-soft">
                     <span className="font-700 text-ink">{product.outcome}</span>{' '}

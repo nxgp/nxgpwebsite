@@ -227,7 +227,13 @@ export const industries = {
 
 export type Product = {
   id: string
+  /** Headline in the index — a client name, or a platform name where that
+   *  reads better. */
   client: string
+  /** Who it was actually built for, when that differs from the headline.
+   *  The stage attributes proof to this, so metrics never drift from the
+   *  engagement that earned them. */
+  builtFor?: string
   built: string
   role: string
   outcome: string
@@ -247,7 +253,8 @@ export const portfolio = {
   products: [
     {
       id: 'forge',
-      client: 'Western Digital',
+      client: 'Agent Hub',
+      builtFor: 'Western Digital',
       built: 'Agent platform & runtime',
       role: 'Enterprise AI at scale',
       outcome: 'Ship production AI agents without an ML team.',

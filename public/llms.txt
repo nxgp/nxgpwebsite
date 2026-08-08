@@ -22,7 +22,7 @@ Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx
 
 Real systems designed, built and shipped by NxGP, running in production. Evidence of range \u2014 not an off-the-shelf product catalogue.
 
-- **Western Digital — agent platform & runtime**: organization-wide platform to design, deploy and govern production AI agents. $5M SaaS spend eliminated, 3x more capabilities, 50% faster AI delivery.
+- **Agent Hub — agent platform & runtime, built for Western Digital**: organization-wide platform to design, deploy and govern production AI agents. $5M SaaS spend eliminated, 3x more capabilities, 50% faster AI delivery.
 - **Western Digital — WD Chat, analytics workspace**: ChatGPT-class copilot wired into warehouse, CRM and finance systems; ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.
 - **Mentera — Tera, clinical AI operator**: intake, consents, scheduling and follow-ups end to end; 50+ EHR integrations, built to a regulated bar.
 - **Kiotel — company knowledge engine**: plug-and-play GraphRAG over docs, wikis and tickets; every answer cited.
