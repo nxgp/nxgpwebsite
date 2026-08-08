@@ -12,7 +12,7 @@ import { cn } from '../../lib/cn'
  *   Harbor Industrial         → fleet logbook + asset health + copilot
  *   Convey · SRE              → live terminal with a code diff
  *   NX · website assistant    → chat (the ONLY chat scene — it IS the chat)
- *   NX · Bird Eye + CRM       → reputation dashboard
+ *   Vantage · reputation      → multi-location reputation dashboard
  *
  * Shared window chrome keeps them one family; interiors are deliberately
  * distinct. All motion is single-run CSS keyframes with per-element delays
@@ -444,11 +444,11 @@ export function OmniViz() {
   )
 }
 
-/* ---------- 06 · Bird Eye — reputation dashboard ---------- */
+/* ---------- 08 · Vantage — multi-location reputation dashboard ---------- */
 
-export function BirdEyeViz() {
+export function ReputationViz() {
   return (
-    <Window title="Bird Eye · Vantage locations" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
+    <Window title="Reputation console · Vantage" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
       <div className="flex h-full flex-col gap-2.5" style={wash}>
         <div className="grid grid-cols-3 gap-2.5">
           <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.3)}>
@@ -672,5 +672,5 @@ export const VIGNETTES: Record<string, () => React.ReactNode> = {
   harbor: HarborViz,
   convey: SentinelViz,
   beacon: BeaconViz,
-  keystone: BirdEyeViz,
+  keystone: ReputationViz,
 }

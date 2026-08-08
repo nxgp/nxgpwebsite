@@ -319,7 +319,7 @@ export const portfolio = {
     {
       id: 'keystone',
       client: 'Vantage',
-      built: 'Bird Eye \u00b7 reputation autopilot',
+      built: 'Reputation & pipeline platform',
       role: 'Multi-location revenue ops',
       outcome: 'Reviews answer themselves \u2014 and turn into leads.',
       blurb:
