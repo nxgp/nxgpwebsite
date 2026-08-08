@@ -22,7 +22,7 @@ import { cn } from '../../lib/cn'
 
 /* ---------- shared chrome ---------- */
 
-function Window({
+export function Window({
   title,
   badge,
   dark = false,
@@ -220,64 +220,62 @@ const actions = [
   { tag: 'Back office', text: '2 prior auths submitted to payer', at: 3.1 },
 ]
 
-export function TeraViz() {
+/** Tera as an iPad app — status bar and hardware come from the tablet frame;
+ *  workflows wrap as a strip above a full-width chat (portrait composition). */
+export function TeraInner() {
   return (
-    <Window
-      title="Tera · clinic AI"
-      badge={
+    <div className="flex h-full flex-col gap-2 p-2.5" style={wash}>
+      {/* app header */}
+      <div className="flex items-center justify-between">
+        <p className="text-[0.62rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+          Tera · clinic AI
+        </p>
         <Pill className="bg-accent-wash text-accent-deep">
           <i className="size-1.5 animate-pulse rounded-full bg-accent" /> taking actions
         </Pill>
-      }
-    >
-      {/* phones: workflows as a wrapping strip above a full-width chat —
-          the side rail squeezed the thread until every action truncated */}
-      <div className="flex h-full flex-col gap-2 sm:flex-row sm:gap-3" style={wash}>
-        {/* the platform surface: every workflow it covers */}
-        <div className="flex shrink-0 flex-wrap gap-1 sm:w-[104px] sm:flex-col sm:flex-nowrap">
-          <p className="w-full pb-0.5 text-[0.54rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
-            Clinic workflows
-          </p>
-          {domains.map((d) => (
-            <span
-              key={d.label}
-              className="pv-glow rounded-[7px] border border-line bg-surface/70 px-2 py-1 text-[0.6rem] font-600 text-ink-faint"
-              style={D(d.at)}
-            >
-              {d.label}
-            </span>
+      </div>
+
+      {/* the platform surface: every workflow it covers */}
+      <div className="flex shrink-0 flex-wrap gap-1">
+        {domains.map((d) => (
+          <span
+            key={d.label}
+            className="pv-glow rounded-[7px] border border-line bg-surface/70 px-2 py-1 text-[0.6rem] font-600 text-ink-faint"
+            style={D(d.at)}
+          >
+            {d.label}
+          </span>
+        ))}
+      </div>
+
+      {/* the chat that drives them */}
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        <div className="pv-in max-w-[88%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.72rem] font-500 text-white" style={D(0.2)}>
+          Prep my afternoon clinic
+        </div>
+        <div className="pv-in max-w-[92%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-1.5 text-[0.72rem] text-ink" style={D(0.9)}>
+          On it — working through the afternoon list now.
+        </div>
+
+        {/* tool calls executing, one per workflow */}
+        <div className="mt-0.5 flex flex-col gap-1">
+          {actions.map((a) => (
+            <div key={a.tag} className="pv-in flex items-center gap-2 rounded-[8px] border border-line bg-surface px-2 py-1.5" style={D(a.at)}>
+              <Check className="size-3 shrink-0 text-[#1D8A46]" />
+              <span className="truncate text-[0.68rem] font-600 text-ink">{a.text}</span>
+              <span className="ml-auto shrink-0 rounded-[5px] bg-accent-wash px-1.5 py-0.5 text-[0.52rem] font-700 uppercase tracking-[0.05em] text-accent-deep">
+                {a.tag}
+              </span>
+            </div>
           ))}
         </div>
 
-        {/* the chat that drives them */}
-        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <div className="pv-in max-w-[88%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.72rem] font-500 text-white" style={D(0.2)}>
-            Prep my afternoon clinic
-          </div>
-          <div className="pv-in max-w-[92%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-1.5 text-[0.72rem] text-ink" style={D(0.9)}>
-            On it — working through the afternoon list now.
-          </div>
-
-          {/* tool calls executing, one per workflow */}
-          <div className="mt-0.5 flex flex-col gap-1">
-            {actions.map((a) => (
-              <div key={a.tag} className="pv-in flex items-center gap-2 rounded-[8px] border border-line bg-surface px-2 py-1.5" style={D(a.at)}>
-                <Check className="size-3 shrink-0 text-[#1D8A46]" />
-                <span className="truncate text-[0.68rem] font-600 text-ink">{a.text}</span>
-                <span className="ml-auto shrink-0 rounded-[5px] bg-accent-wash px-1.5 py-0.5 text-[0.52rem] font-700 uppercase tracking-[0.05em] text-accent-deep">
-                  {a.tag}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="pv-in mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-inner bg-ink px-3 py-2 text-white" style={D(4.1)}>
-            <span className="text-[0.66rem] font-700 sm:text-[0.7rem]">Afternoon ready · 14 patients</span>
-            <span className="text-[0.66rem] font-700 text-au-mint sm:text-[0.7rem]">0 staff touches</span>
-          </div>
+        <div className="pv-in mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-inner bg-ink px-3 py-2 text-white" style={D(4.1)}>
+          <span className="text-[0.66rem] font-700">Afternoon ready · 14 patients</span>
+          <span className="text-[0.66rem] font-700 text-au-mint">0 staff touches</span>
         </div>
       </div>
-    </Window>
+    </div>
   )
 }
 
@@ -336,54 +334,80 @@ export function CortexViz() {
 }
 
 /* ---------- 07 · Website concierge — chat becomes a lead ----------
-   The one chat scene. Reads top-to-bottom as a single causal story:
-   conversation → visitor hands over contact → lead lands in the team's
-   Slack → the assistant learns from it. No floating panels. */
+   Told across two phones, like a hardware showcase: the visitor's phone
+   holds the conversation at 2:14 AM; the team's phone shows where the lead
+   lands in Slack. Together they read left → right as cause → effect. */
 
-export function BeaconViz() {
+/** The visitor's phone: the conversation that turns into a lead. */
+export function BeaconChatInner() {
   return (
-    <Window title="elevano.com · 2:14 AM" badge={<Pill className="bg-bg text-ink-soft">visitor online</Pill>}>
-      <div className="flex h-full flex-col gap-1.5" style={wash}>
-        {/* the conversation */}
-        <div className="pv-in max-w-[80%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.73rem] font-500 text-white" style={D(0.2)}>
-          Do you integrate with our EHR?
-        </div>
-        <div className="pv-in max-w-[86%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-1.5 text-[0.73rem] leading-snug text-ink" style={D(1)}>
-          Yes — 50+ EHR integrations, two-way sync. Want me to put you in touch with the team?
-        </div>
-        <div className="pv-in max-w-[80%] self-end rounded-[12px] rounded-br-[4px] bg-accent px-3 py-1.5 text-[0.73rem] font-500 text-white" style={D(1.9)}>
-          Sure — dana@carepath.io
-        </div>
-
-        {/* the handoff moment — makes the causality explicit */}
-        <div className="pv-in my-0.5 flex items-center gap-2" style={D(2.6)}>
-          <span className="h-px flex-1 bg-line" />
-          <Pill className="bg-accent-wash text-accent-deep">
-            <Check className="size-3" /> captured · sent to your team
-          </Pill>
-          <span className="h-px flex-1 bg-line" />
-        </div>
-
-        {/* where it lands, 3 seconds later */}
-        <div className="pv-in rounded-inner bg-ink px-3.5 py-2.5 text-white" style={D(3.1)}>
-          <p className="text-[0.58rem] font-700 uppercase tracking-[0.09em] text-au-mint">
-            # leads · just now
-          </p>
-          <p className="mt-1 text-[0.78rem] font-700">Dana K. · CarePath Health</p>
-          <p className="text-[0.68rem] leading-snug text-white/65">
-            Needs an EHR-integrated copilot · booked Tue 2:30
-          </p>
-        </div>
-
-        {/* and it got smarter from the exchange */}
-        <div className="pv-in mt-auto flex items-center gap-2" style={D(4.1)}>
-          <Zap className="size-3 shrink-0 text-accent" />
-          <span className="text-[0.66rem] font-600 text-ink-faint">
-            Assistant learned this answer — next visitor gets it instantly
-          </span>
-        </div>
+    <div className="flex h-full flex-col gap-1.5 px-2 pb-2 pt-1" style={wash}>
+      <div className="flex items-center justify-between px-0.5">
+        <p className="text-[0.55rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
+          elevano.com · 2:14 AM
+        </p>
+        <i className="size-1.5 animate-pulse rounded-full bg-[#28C840]" aria-hidden />
       </div>
-    </Window>
+      <div className="pv-in max-w-[88%] self-end rounded-[10px] rounded-br-[3px] bg-accent px-2 py-1 text-[0.6rem] font-500 leading-snug text-white" style={D(0.2)}>
+        Do you integrate with our EHR?
+      </div>
+      <div className="pv-in max-w-[92%] rounded-[10px] rounded-bl-[3px] border border-line bg-surface px-2 py-1 text-[0.6rem] leading-snug text-ink" style={D(1)}>
+        Yes — 50+ EHR integrations, two-way sync. Want me to intro the team?
+      </div>
+      <div className="pv-in max-w-[88%] self-end rounded-[10px] rounded-br-[3px] bg-accent px-2 py-1 text-[0.6rem] font-500 leading-snug text-white" style={D(1.9)}>
+        Sure — dana@carepath.io
+      </div>
+      <div className="pv-in flex items-center gap-1.5" style={D(2.7)}>
+        <span className="h-px flex-1 bg-line" />
+        <Pill className="bg-accent-wash px-1.5 text-[0.5rem] text-accent-deep">
+          <Check className="size-2.5" /> captured
+        </Pill>
+        <span className="h-px flex-1 bg-line" />
+      </div>
+      <div className="pv-in flex items-start gap-1.5 px-0.5" style={D(4.2)}>
+        <Zap className="mt-[1px] size-2.5 shrink-0 text-accent" />
+        <span className="text-[0.52rem] font-600 leading-snug text-ink-faint">
+          Learned — next visitor gets this instantly
+        </span>
+      </div>
+      {/* input bar */}
+      <div className="mt-auto flex items-center gap-1.5">
+        <span className="h-[22px] flex-1 rounded-pill border border-line bg-surface px-2 text-[0.55rem] leading-[20px] text-ink-faint">
+          Message…
+        </span>
+        <span className="flex size-[22px] items-center justify-center rounded-full bg-accent text-[0.6rem] text-white" aria-hidden>
+          ↑
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/** The team's phone: Slack, three seconds later. */
+export function BeaconLeadInner() {
+  return (
+    <div className="flex h-full flex-col gap-1.5 bg-navy px-2 pb-2 pt-1 text-white">
+      <p className="px-0.5 text-[0.55rem] font-800 uppercase tracking-[0.09em] text-au-mint">
+        # leads · just now
+      </p>
+      <div className="pv-in rounded-[10px] bg-white/10 px-2 py-1.5" style={D(3.2)}>
+        <p className="text-[0.62rem] font-700">Dana K. · CarePath Health</p>
+        <p className="mt-0.5 text-[0.52rem] leading-snug text-white/65">
+          Needs an EHR-integrated copilot
+        </p>
+        <Pill className="pv-pop mt-1 bg-[#123B23] px-1.5 text-[0.5rem] text-[#4ADE80]" style={D(3.9)}>
+          <Check className="size-2.5" /> booked Tue 2:30
+        </Pill>
+      </div>
+      {/* an earlier lead, for depth */}
+      <div className="pv-in rounded-[10px] bg-white/[0.05] px-2 py-1.5 opacity-60" style={D(4.4)}>
+        <p className="text-[0.58rem] font-700 text-white/80">M. Alvarez · Brightline PT</p>
+        <p className="mt-0.5 text-[0.5rem] text-white/50">Pricing question · replied</p>
+      </div>
+      <p className="mt-auto px-0.5 text-[0.5rem] font-600 text-white/40">
+        Leads land here while you sleep
+      </p>
+    </div>
   )
 }
 
@@ -620,13 +644,17 @@ const vessels = [
   { id: 'HRB-22', task: 'Crane inspection', status: 'ok', at: 1.9 },
 ]
 
-export function HarborViz() {
+/** Harbor as a deck tablet app — hardware/status bar come from the frame. */
+export function HarborInner() {
   return (
-    <Window
-      title="Fleet logbook · Harbor Industrial"
-      badge={<Pill className="bg-bg text-ink-soft">18 assets tracked</Pill>}
-    >
-      <div className="flex h-full flex-col gap-2.5" style={wash}>
+    <div className="flex h-full flex-col gap-2 p-2.5 sm:gap-2.5" style={wash}>
+      {/* app header */}
+      <div className="flex items-center justify-between">
+        <p className="text-[0.62rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+          Fleet logbook · Harbor Industrial
+        </p>
+        <Pill className="bg-bg text-ink-soft">18 assets tracked</Pill>
+      </div>
         {/* structured logbook rows — the thing that replaced paper */}
         {vessels.map((v) => (
           <div key={v.id} className="pv-in flex items-center gap-3 rounded-inner border border-line bg-surface px-3 py-2" style={D(v.at)}>
@@ -669,18 +697,32 @@ export function HarborViz() {
             </div>
           ))}
         </div>
-      </div>
-    </Window>
+    </div>
   )
 }
 
-export const VIGNETTES: Record<string, () => React.ReactNode> = {
-  forge: ForgeViz,
-  tera: TeraViz,
-  cortex: CortexViz,
-  omni: OmniViz,
-  harbor: HarborViz,
-  convey: SentinelViz,
-  beacon: BeaconViz,
-  keystone: ReputationViz,
+/** Push notifications on a small phone — floats beside the Vantage laptop. */
+export function VantagePushInner() {
+  return (
+    <div
+      className="flex h-full flex-col gap-1 px-1.5 pb-1.5 pt-1"
+      style={{ background: 'linear-gradient(165deg, #EDEDFF 0%, #DEDFF9 100%)' }}
+    >
+      <p className="px-0.5 pt-0.5 text-center text-[0.48rem] font-700 uppercase tracking-[0.08em] text-ink-faint">
+        Notifications
+      </p>
+      <div className="pv-in rounded-[8px] border border-line bg-surface/95 px-1.5 py-1 shadow-sm" style={D(2.2)}>
+        <p className="text-[0.5rem] font-800 text-ink">Vantage · now</p>
+        <p className="mt-0.5 text-[0.48rem] leading-snug text-ink-soft">
+          New 4★ review — Downtown
+        </p>
+      </div>
+      <div className="pv-in rounded-[8px] border border-line bg-surface/95 px-1.5 py-1 shadow-sm" style={D(3)}>
+        <p className="text-[0.5rem] font-800 text-ink">Reply drafted</p>
+        <p className="mt-0.5 flex items-center gap-1 text-[0.48rem] leading-snug text-[#1D8A46]">
+          <Check className="size-2" /> on-brand · sent
+        </p>
+      </div>
+    </div>
+  )
 }

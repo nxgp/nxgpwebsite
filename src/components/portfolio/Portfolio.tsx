@@ -19,22 +19,16 @@ const CYCLE_MS = 7000
  * (depth, one story at a time). Auto-advances like a demo reel until the
  * visitor takes over; a click pins their choice.
  */
-/** Placeholder with the same chrome and footprint as a real vignette, so the
- *  stage never flashes empty and nothing shifts when the chunk lands. */
+/** Placeholder with the same footprint as a real scene — a bare studio
+ *  backdrop, so the stage never flashes empty and nothing shifts when the
+ *  chunk lands. */
 function VignetteSkeleton() {
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-inner border border-line bg-surface shadow-sm">
-      <div className="flex shrink-0 items-center gap-2.5 border-b border-line bg-bg/50 px-3.5 py-2.5">
-        <div className="win-dots flex gap-1.5">
-          <span style={{ background: '#E4E4EA' }} />
-          <span style={{ background: '#E4E4EA' }} />
-          <span style={{ background: '#E4E4EA' }} />
-        </div>
-        <span className="h-2 w-28 rounded bg-bg" />
-      </div>
-      <div className="flex-1 p-3.5">
-        <div className="h-full w-full rounded-[12px] bg-bg/60" />
-      </div>
+    <div
+      className="flex h-full w-full items-end justify-center overflow-hidden rounded-inner border border-line pb-8 shadow-sm"
+      style={{ background: 'linear-gradient(160deg, #F0F1F6 0%, #E2E4EE 60%, #D6D9E8 100%)' }}
+    >
+      <div className="h-[62%] w-[72%] animate-pulse rounded-[14px] bg-white/45" />
     </div>
   )
 }
@@ -197,9 +191,9 @@ export function Portfolio() {
                 8x the nodes and animations for one visible scene. They're
                 decorative, so nothing is lost for crawlers or screen readers. */}
             <div key={product.id} className="pv-stage-in" aria-hidden>
-              {/* taller on phones: the interiors stack vertically there, so the
-                  stage is portrait — 330px was clipping footers and metrics */}
-              <div className="h-[430px] sm:h-[400px]">
+              {/* portrait on phones (stacked interiors), taller from sm up so
+                  the studio scenes have air around the hardware */}
+              <div className="h-[460px] sm:h-[480px]">
                 <Suspense fallback={<VignetteSkeleton />}>
                   {seen ? <Vignettes id={product.id} /> : <VignetteSkeleton />}
                 </Suspense>

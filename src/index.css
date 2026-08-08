@@ -82,6 +82,9 @@
     0 14px 40px rgba(20, 22, 30, 0.07);
   --shadow-lg: 0 6px 16px rgba(20, 22, 30, 0.06),
     0 30px 70px rgba(20, 22, 30, 0.1);
+  /* floating device hardware on the portfolio stage */
+  --shadow-device: 0 2px 6px rgba(6, 11, 51, 0.18),
+    0 24px 48px rgba(6, 11, 51, 0.22);
 
   /* ---- motion ---- */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
@@ -568,6 +571,35 @@ html.lenis body {
   animation: pv-flash 1s ease forwards;
   animation-delay: var(--d, 0s);
 }
+/* ---- device hardware motion (portfolio showcase scenes) ----
+   Layered on separate wrappers so transforms never fight: entrance rise on
+   one, idle float loop on the next, static 3D tilt innermost. */
+.dev-in {
+  opacity: 0;
+  animation: dev-in 0.9s var(--ease-out-expo) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes dev-in {
+  from { opacity: 0; transform: translateY(44px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+.dev-float {
+  animation: dev-float 6.5s ease-in-out infinite alternate;
+  animation-delay: var(--fd, 0s);
+}
+@keyframes dev-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-9px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dev-float { animation: none !important; }
+}
+/* static 3D poses, desktop-only — phones show devices straight-on */
+@media (min-width: 640px) {
+  .sm-tilt-l { transform: perspective(1400px) rotateY(7deg) rotateX(1.5deg) rotate(0.8deg); }
+  .sm-tilt-r { transform: perspective(1400px) rotateY(-8deg) rotateX(1.5deg) rotate(-1deg); }
+}
+
 /* combined with .pv-in the later animation declaration would win and the
    element would sit at pv-in's opacity: 0 forever — run both together */
 .pv-in.pv-flash {
