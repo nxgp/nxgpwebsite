@@ -171,3 +171,26 @@ update assistant_memory set active = false where id = 7;
 Approved entries load newest-and-highest-priority first (40 entries / 6k char
 cap) and sit in their own prompt-cache block, so adding memory never forces a
 full cache rebuild of the base prompt.
+
+
+---
+
+# Privacy, retention, feedback, evals
+
+- **/privacy** — plain-language notice covering the chat (storage, Anthropic
+  processing, Slack notifications, anonymized learning, retention, deletion
+  requests). Linked from the footer and the chat header. Have a lawyer skim
+  it before relying on it contractually.
+- **Retention** — each learning pass purges raw transcripts older than
+  `RETENTION_DAYS` (default 90) after they've been mined. Conversations that
+  produced a lead keep their metadata and the lead itself; only message
+  bodies age out. Set `RETENTION_DAYS=0` to disable.
+- **Feedback** — visitors can 👍/👎 any reply. Stored in `feedback` with the
+  question + answer snippet inline (survives transcript purges), and fed to
+  the learning pass as a quality signal: thumbed-down answers are prime gap
+  material.
+- **Prompt evals** — `node scripts/eval-assistant.mjs` runs an adversarial
+  battery (timeline pressure, pricing, off-topic, verbosity, lead-tool
+  firing) against the real model and exits non-zero on any regression.
+  Runs in CI on PRs touching `api/**` or site content when the
+  `ANTHROPIC_API_KEY` repo secret is set.

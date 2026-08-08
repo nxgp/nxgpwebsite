@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Maximize2, Minimize2, Send, X } from 'lucide-react'
+import { Maximize2, Minimize2, Send, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { NxMark } from '../ui/Logo'
 import { Markdown } from './markdown'
@@ -33,6 +33,8 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  // message index -> rating already sent (prevents double-votes, drives UI)
+  const [voted, setVoted] = useState<Record<number, 1 | -1>>({})
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -117,6 +119,23 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
     }
   }
 
+  function rate(index: number, rating: 1 | -1) {
+    if (!session || voted[index]) return
+    setVoted((v) => ({ ...v, [index]: rating }))
+    const answer = session.messages[index]?.content ?? ''
+    const question = [...session.messages.slice(0, index)].reverse().find((m) => m.role === 'user')?.content ?? ''
+    fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        conversationId: session.id,
+        rating,
+        question: question.slice(0, 500),
+        answer: answer.slice(0, 500),
+      }),
+    }).catch(() => {})
+  }
+
   if (!session) return null
   const showChips = session.messages.length === 0 && !busy
 
@@ -149,7 +168,10 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
         <div className="min-w-0">
           <p className="text-[0.95rem] font-800 leading-tight">Nx Assistant</p>
           <p className="text-[0.7rem] font-600 text-ink-faint">
-            AI assistant · answers in real time
+            AI assistant · answers in real time ·{' '}
+            <a href="/privacy" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-ink">
+              privacy
+            </a>
           </p>
         </div>
         <button
@@ -174,21 +196,49 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
           <Markdown text={GREETING} />
         </Bubble>
         {session.messages.map((m, i) => (
-          <Bubble key={i} role={m.role}>
-            {m.content ? (
-              m.role === 'assistant' ? (
-                <Markdown text={m.content} />
+          <div key={i}>
+            <Bubble role={m.role}>
+              {m.content ? (
+                m.role === 'assistant' ? (
+                  <Markdown text={m.content} />
+                ) : (
+                  m.content
+                )
               ) : (
-                m.content
-              )
-            ) : (
-              <span className="chat-typing" aria-label="Assistant is typing">
-                <i />
-                <i />
-                <i />
-              </span>
+                <span className="chat-typing" aria-label="Assistant is typing">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              )}
+            </Bubble>
+            {m.role === 'assistant' && m.content && !(busy && i === session.messages.length - 1) && (
+              <div className="mt-1 flex gap-1 pl-1">
+                {voted[i] ? (
+                  <span className="text-[0.72rem] font-600 text-ink-faint">
+                    {voted[i] === 1 ? 'Thanks!' : 'Thanks — we’ll improve this.'}
+                  </span>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => rate(i, 1)}
+                      aria-label="Helpful"
+                      className="flex size-6 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-accent-wash hover:text-accent-deep"
+                    >
+                      <ThumbsUp className="size-3.5" />
+                    </button>
+                    <button
+                      onClick={() => rate(i, -1)}
+                      aria-label="Not helpful"
+                      className="flex size-6 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-accent-wash hover:text-accent-deep"
+                    >
+                      <ThumbsDown className="size-3.5" />
+                    </button>
+                  </>
+                )}
+              </div>
             )}
-          </Bubble>
+          </div>
         ))}
         {showChips && (
           <div className="flex flex-wrap gap-2 pt-1">

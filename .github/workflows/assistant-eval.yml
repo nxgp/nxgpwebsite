@@ -1,0 +1,25 @@
+name: assistant-eval
+
+# Prompt-regression battery for the Nx Assistant: any PR touching the
+# assistant's brain must not reintroduce timelines/pricing/off-topic replies.
+# Requires the ANTHROPIC_API_KEY repo secret; the script skips (passes) when
+# the secret is absent, so forks don't break.
+
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+      - 'src/data/content.ts'
+      - 'scripts/eval-assistant.mjs'
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/eval-assistant.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
