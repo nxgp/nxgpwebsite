@@ -125,10 +125,11 @@ export function ForgeViz() {
           Every agent, same backbone
         </p>
 
-        {/* the flow every production agent follows */}
-        <div className="flex items-stretch gap-1">
+        {/* the flow every production agent follows — a 2×2 grid on phones
+            (four cells in a row can't fit 345px), one arrowed row from sm up */}
+        <div className="grid grid-cols-2 gap-1.5 sm:flex sm:items-stretch sm:gap-1">
           {chain.map((c, i) => (
-            <div key={c.label} className="flex flex-1 items-center gap-1">
+            <div key={c.label} className="flex items-center gap-1 sm:flex-1">
               <div
                 className={cn(
                   'pv-pop min-w-0 flex-1 rounded-[9px] border bg-surface px-2 py-1.5 shadow-sm',
@@ -137,12 +138,14 @@ export function ForgeViz() {
                 style={D(c.at)}
               >
                 <p className={cn('truncate text-[0.66rem] font-800', c.guard ? 'text-peri' : 'text-ink')}>
+                  {/* numbers carry the sequence where the arrows are hidden */}
+                  <span className="sm:hidden">{i + 1}. </span>
                   {c.label}
                 </p>
                 <p className="truncate text-[0.55rem] font-600 text-ink-faint">{c.sub}</p>
               </div>
               {i < chain.length - 1 && (
-                <span className="pv-in shrink-0 text-[0.7rem] font-700 text-peri" style={D(c.at + 0.3)}>
+                <span className="pv-in hidden shrink-0 text-[0.7rem] font-700 text-peri sm:inline" style={D(c.at + 0.3)}>
                   →
                 </span>
               )}
@@ -186,9 +189,9 @@ export function ForgeViz() {
           ))}
         </div>
 
-        <div className="pv-in flex items-center justify-between rounded-inner bg-ink px-3 py-2 text-white" style={D(4.6)}>
-          <span className="text-[0.7rem] font-700">3 agents in production</span>
-          <span className="text-[0.7rem] font-700 text-au-mint">shipped without an ML team</span>
+        <div className="pv-in mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-inner bg-ink px-3 py-2 text-white" style={D(4.6)}>
+          <span className="text-[0.66rem] font-700 sm:text-[0.7rem]">3 agents in production</span>
+          <span className="text-[0.66rem] font-700 text-au-mint sm:text-[0.7rem]">shipped without an ML team</span>
         </div>
       </div>
     </Window>
@@ -227,10 +230,12 @@ export function TeraViz() {
         </Pill>
       }
     >
-      <div className="flex h-full gap-3" style={wash}>
+      {/* phones: workflows as a wrapping strip above a full-width chat —
+          the side rail squeezed the thread until every action truncated */}
+      <div className="flex h-full flex-col gap-2 sm:flex-row sm:gap-3" style={wash}>
         {/* the platform surface: every workflow it covers */}
-        <div className="flex w-[104px] shrink-0 flex-col gap-1">
-          <p className="pb-0.5 text-[0.54rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
+        <div className="flex shrink-0 flex-wrap gap-1 sm:w-[104px] sm:flex-col sm:flex-nowrap">
+          <p className="w-full pb-0.5 text-[0.54rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
             Clinic workflows
           </p>
           {domains.map((d) => (
@@ -266,9 +271,9 @@ export function TeraViz() {
             ))}
           </div>
 
-          <div className="pv-in mt-auto flex items-center justify-between rounded-inner bg-ink px-3 py-2 text-white" style={D(4.1)}>
-            <span className="text-[0.7rem] font-700">Afternoon ready · 14 patients</span>
-            <span className="text-[0.7rem] font-700 text-au-mint">0 staff touches</span>
+          <div className="pv-in mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-inner bg-ink px-3 py-2 text-white" style={D(4.1)}>
+            <span className="text-[0.66rem] font-700 sm:text-[0.7rem]">Afternoon ready · 14 patients</span>
+            <span className="text-[0.66rem] font-700 text-au-mint sm:text-[0.7rem]">0 staff touches</span>
           </div>
         </div>
       </div>
@@ -287,14 +292,20 @@ const srcs = [
 export function CortexViz() {
   return (
     <Window title="Knowledge engine · Kiotel" badge={<Pill className="bg-bg text-ink-soft">3 sources connected</Pill>}>
-      <div className="relative h-full w-full" style={wash}>
+      {/* phones: a vertical flow (sources → converge → answer) — the desktop
+          collage of absolutely-positioned panels collides at 345px */}
+      <div className="relative flex h-full w-full flex-col gap-1.5 sm:block" style={wash}>
         {srcs.map((s0) => (
-          <div key={s0.label} className="pv-in absolute left-2 flex items-center gap-1.5 rounded-pill border border-line bg-surface px-2.5 py-1.5" style={{ top: s0.y, ...D(s0.at) }}>
+          <div key={s0.label} className="pv-in flex w-fit items-center gap-1.5 rounded-pill border border-line bg-surface px-2.5 py-1.5 sm:absolute sm:left-2" style={{ top: s0.y, ...D(s0.at) }}>
             <FileText className="size-3 text-peri" />
             <span className="text-[0.64rem] font-600 text-ink-soft">{s0.label}</span>
           </div>
         ))}
-        <svg className="absolute inset-0 h-full w-full" aria-hidden>
+        {/* the convergence, spelled out vertically on phones */}
+        <span className="pv-in self-center text-[0.9rem] font-700 leading-none text-peri sm:hidden" style={D(1.9)}>
+          ↓
+        </span>
+        <svg className="absolute inset-0 hidden h-full w-full sm:block" aria-hidden>
           {[40, 110, 180].map((y, i) => (
             <path
               key={y}
@@ -307,7 +318,7 @@ export function CortexViz() {
             />
           ))}
         </svg>
-        <div className="pv-pop absolute right-2 top-[54px] w-[240px] rounded-inner border border-accent/40 bg-surface p-3 shadow-soft" style={D(2.8)}>
+        <div className="pv-pop w-full rounded-inner border border-accent/40 bg-surface p-3 shadow-soft sm:absolute sm:right-2 sm:top-[54px] sm:w-[240px]" style={D(2.8)}>
           <p className="text-[0.62rem] font-700 uppercase tracking-[0.08em] text-ink-faint">Answer</p>
           <p className="mt-1 text-[0.74rem] leading-relaxed text-ink">
             Enterprise plans: 30-day refund window, pro-rated credit within 5 business days.
@@ -316,7 +327,7 @@ export function CortexViz() {
             <Check className="size-3" /> grounded · 3 sources cited
           </Pill>
         </div>
-        <p className="pv-in absolute inset-x-0 bottom-1 text-center text-[0.66rem] font-600 text-ink-faint" style={D(4.2)}>
+        <p className="pv-in mt-auto text-center text-[0.66rem] font-600 text-ink-faint sm:absolute sm:inset-x-0 sm:bottom-1 sm:mt-0" style={D(4.2)}>
           Docs, wikis, tickets — one brain, every answer cited
         </p>
       </div>
@@ -399,7 +410,7 @@ export function OmniViz() {
         </div>
 
         {/* grounding: which enterprise systems it read */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-[0.6rem] font-700 uppercase tracking-[0.08em] text-ink-faint">
             reading
           </span>
@@ -410,8 +421,9 @@ export function OmniViz() {
           ))}
         </div>
 
-        {/* the generated dashboard */}
-        <div className="pv-in flex-1 rounded-inner border border-line bg-surface p-3" style={D(1.7)}>
+        {/* the generated dashboard — hugs its content on phones so the card
+            doesn't stretch into dead space; fills the stage from sm up */}
+        <div className="pv-in rounded-inner border border-line bg-surface p-3 sm:flex-1" style={D(1.7)}>
           <div className="flex items-start justify-between">
             <p className="text-[0.66rem] font-800 uppercase tracking-[0.08em] text-ink-faint">
               Q3 pipeline · by region
@@ -429,7 +441,9 @@ export function OmniViz() {
                 className="pv-in absolute inset-x-0 border-t border-dashed border-ink-faint/50"
                 style={{ top: TARGET_TOP, ...D(2.3) }}
               >
-                <span className="absolute -top-[7px] right-0 bg-surface pl-1 text-[0.5rem] font-700 uppercase tracking-[0.06em] text-ink-faint">
+                {/* label sits over the short NA bar on the left — on the right
+                    it collided with the tall LATAM bar on narrow screens */}
+                <span className="absolute -top-[7px] left-0 bg-surface pr-1 text-[0.5rem] font-700 uppercase tracking-[0.06em] text-ink-faint">
                   target
                 </span>
               </span>
@@ -449,7 +463,7 @@ export function OmniViz() {
             </div>
 
             {/* KPI readouts */}
-            <div className="flex w-[112px] shrink-0 flex-col gap-1.5">
+            <div className="flex w-[92px] shrink-0 flex-col gap-1.5 sm:w-[112px]">
               {[
                 { v: '$18.4M', l: 'weighted', at: 3.1 },
                 { v: '112%', l: 'of target', at: 3.3 },
@@ -461,7 +475,7 @@ export function OmniViz() {
               ))}
             </div>
           </div>
-          <div className="mt-1 flex justify-around pr-[124px]">
+          <div className="mt-1 flex justify-around pr-[104px] sm:pr-[124px]">
             {bars.map((b) => (
               <span key={b.label} className="w-9 text-center text-[0.54rem] font-700 text-ink-faint">
                 {b.label}
@@ -470,10 +484,14 @@ export function OmniViz() {
           </div>
         </div>
 
-        <div className="pv-in flex items-center gap-2 rounded-inner bg-ink px-3 py-2 text-white" style={D(4)}>
+        <div className="pv-in mt-auto flex items-center gap-2 rounded-inner bg-ink px-3 py-2 text-white sm:mt-0" style={D(4)}>
           <BarChart3 className="size-3.5 shrink-0 text-au-mint" />
-          <span className="text-[0.72rem] font-700">Dashboard built from the question</span>
-          <Pill className="ml-auto bg-white/10 text-white/80">export · share</Pill>
+          <span className="text-[0.68rem] font-700 sm:text-[0.72rem]">Dashboard built from the question</span>
+          {/* wrapper carries the responsive hide — Pill's own inline-flex would
+              fight `hidden` for CSS-order priority */}
+          <span className="ml-auto hidden sm:block">
+            <Pill className="bg-white/10 text-white/80">export · share</Pill>
+          </span>
         </div>
       </div>
     </Window>
@@ -485,7 +503,9 @@ export function OmniViz() {
 export function ReputationViz() {
   return (
     <Window title="Reputation console · Vantage" badge={<Pill className="bg-bg text-ink-soft">watching 12 locations</Pill>}>
-      <div className="flex h-full flex-col gap-2.5" style={wash}>
+      {/* phones: spread the three blocks through the portrait stage instead of
+          leaving one large hole above the bottom-pinned location bars */}
+      <div className="flex h-full flex-col justify-between gap-2.5 sm:justify-start" style={wash}>
         <div className="grid grid-cols-3 gap-2.5">
           <div className="pv-in rounded-inner border border-line bg-surface p-2.5" style={D(0.3)}>
             <p className="text-[0.58rem] font-700 uppercase tracking-[0.07em] text-ink-faint">Rating</p>
@@ -515,13 +535,13 @@ export function ReputationViz() {
             ))}
             <Star className="size-3 text-line" />
           </span>
-          <span className="truncate text-[0.7rem] italic text-ink-soft">“Great service — wait time could improve…”</span>
+          <span className="min-w-0 flex-1 truncate text-[0.7rem] italic text-ink-soft">“Great service — wait time could improve…”</span>
           <Pill className="pv-pop ml-auto shrink-0 bg-[#E7F8EC] text-[#1D8A46]" style={D(3)}>
             <Check className="size-3" /> replied on-brand
           </Pill>
         </div>
 
-        <div className="mt-auto space-y-1.5">
+        <div className="space-y-1.5 sm:mt-auto">
           {[
             { l: 'Downtown', w: '92%', at: 3.6 },
             { l: 'Riverside', w: '78%', at: 3.8 },
@@ -540,53 +560,7 @@ export function ReputationViz() {
   )
 }
 
-/* ---------- 07 · Keystone — kanban CRM ---------- */
-
-function GhostCard({ delay }: { delay: number }) {
-  return (
-    <div className="pv-in rounded-[10px] border border-line bg-surface p-2" style={D(delay)}>
-      <div className="h-1.5 w-3/4 rounded bg-bg" />
-      <div className="mt-1 h-1.5 w-1/2 rounded bg-bg" />
-    </div>
-  )
-}
-
-export function KeystoneViz() {
-  return (
-    <Window title="CRM · pipeline" badge={<Pill className="bg-accent-wash text-accent-deep">custom fields</Pill>}>
-      <div className="relative grid h-full grid-cols-3 gap-2.5" style={wash}>
-        {['Qualified', 'Proposal', 'Closed'].map((c, ci) => (
-          <div key={c} className="flex flex-col gap-2 rounded-[12px] border border-dashed border-line bg-bg/40 p-2">
-            <p className="text-[0.58rem] font-800 uppercase tracking-[0.08em] text-ink-faint">{c}</p>
-            {ci === 0 && <div className="h-[104px]" />}
-            {ci === 1 && <GhostCard delay={0.5} />}
-            {ci === 2 && <GhostCard delay={0.7} />}
-          </div>
-        ))}
-        {/* the live deal card — drags itself from Qualified to Proposal */}
-        <div
-          className="pv-slide absolute left-2 top-8 w-[calc(33.33%-14px)] rounded-[10px] border border-accent/50 bg-surface p-2.5 shadow-soft"
-          style={{ ...D(2.2), '--tx': 'calc(100% + 16px)' } as React.CSSProperties}
-        >
-          <p className="pv-in text-[0.7rem] font-700" style={D(0.4)}>Meridian Logistics</p>
-          <div className="mt-1.5 flex flex-wrap gap-1">
-            <Pill className="pv-in bg-accent-wash text-accent-deep" style={D(0.9)}>Fleet: 240</Pill>
-            <Pill className="pv-in bg-accent-wash text-accent-deep" style={D(1.2)}>TX-88410</Pill>
-            <Pill className="pv-in bg-accent-wash text-accent-deep" style={D(1.5)}>Renews 3/27</Pill>
-          </div>
-          <Pill className="pv-pop mt-1.5 bg-[#E7F8EC] text-[#1D8A46]" style={D(3.2)}>
-            <Check className="size-3" /> stage advanced
-          </Pill>
-        </div>
-        <p className="pv-in absolute inset-x-0 bottom-1 text-center text-[0.66rem] font-600 text-ink-faint" style={D(4)}>
-          Their fields, their pipeline — live in days
-        </p>
-      </div>
-    </Window>
-  )
-}
-
-/* ---------- 08 · Sentinel — live terminal ---------- */
+/* ---------- 06 · Sentinel — live terminal ---------- */
 
 const logs = [
   { t: '08:41:02', line: 'gateway ok · 200 · 34ms', at: 0.3 },

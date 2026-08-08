@@ -197,7 +197,9 @@ export function Portfolio() {
                 8x the nodes and animations for one visible scene. They're
                 decorative, so nothing is lost for crawlers or screen readers. */}
             <div key={product.id} className="pv-stage-in" aria-hidden>
-              <div className="h-[330px] sm:h-[400px]">
+              {/* taller on phones: the interiors stack vertically there, so the
+                  stage is portrait — 330px was clipping footers and metrics */}
+              <div className="h-[430px] sm:h-[400px]">
                 <Suspense fallback={<VignetteSkeleton />}>
                   {seen ? <Vignettes id={product.id} /> : <VignetteSkeleton />}
                 </Suspense>

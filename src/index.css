@@ -568,6 +568,14 @@ html.lenis body {
   animation: pv-flash 1s ease forwards;
   animation-delay: var(--d, 0s);
 }
+/* combined with .pv-in the later animation declaration would win and the
+   element would sit at pv-in's opacity: 0 forever — run both together */
+.pv-in.pv-flash {
+  animation:
+    pv-in 0.55s var(--ease-out-expo) forwards,
+    pv-flash 1s ease forwards;
+  animation-delay: var(--d, 0s), var(--d, 0s);
+}
 @keyframes pv-flash {
   0% { background: transparent; }
   35% { background: rgba(255, 90, 90, 0.22); }
