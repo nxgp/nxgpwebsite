@@ -20,7 +20,7 @@ export const nav = {
     { label: 'How we work', id: 'how-we-work' },
     { label: 'Services', id: 'services' },
     { label: 'Industries', id: 'industries' },
-    { label: 'Work', id: 'work' },
+    { label: 'Products', id: 'work' },
     { label: 'About', id: 'about' },
   ],
   cta: 'Book a call',
@@ -225,84 +225,97 @@ export const industries = {
   ] as Industry[],
 }
 
-export type Venture = {
+export type Product = {
+  id: string
   name: string
   tag: string
-  domain: string
+  outcome: string
   blurb: string
-  metrics?: { value: string; label: string }[]
-  visual: 'vitals' | 'uptime' | 'build' | 'assets' | 'scaffold' | 'orchestrator' | 'messages'
-  accent: string
+  proof: string[]
+  dark?: boolean
 }
 
-// Client case studies from the company deck (with real outcome metrics),
-// plus products the team has shipped end to end — the bar we work to.
-export const work = {
-  kicker: 'Client case studies',
+// THE PORTFOLIO — eight production platforms NX has built and deployed.
+// Every proof chip is an approved claim; nothing here is aspirational.
+export const portfolio = {
+  kicker: "What we've built",
   h2: "The proof isn't a deck. It's what we've shipped.",
-  sub: 'Real engagements, real production systems, real numbers — this is the bar the embedded team works to.',
-  ventures: [
+  sub: 'Eight production platforms — built for real clients, running today, and ready to deploy for you. Watch what each one does.',
+  products: [
     {
-      name: 'Western Digital',
-      tag: 'Enterprise AI at scale',
-      domain: 'Computer hardware manufacturer',
+      id: 'agentic',
+      name: 'NX Agentic Platform',
+      tag: 'Agent runtime',
+      outcome: 'Ship production AI agents without an ML team.',
       blurb:
-        'Built and deployed an organization-wide AI platform that unified multiple agents, internal knowledge sources, and workflows into one secure experience designed to scale across the enterprise.',
-      metrics: [
-        { value: '$5M', label: 'SaaS contract spend eliminated' },
-        { value: '3×', label: 'more capabilities delivered' },
-        { value: '50%', label: 'faster delivery of AI functionality' },
-      ],
-      visual: 'orchestrator',
-      accent: '#0000F4',
+        'Creation and runtime for AI agents — registry, deployment and monitoring in one platform, proven inside Western Digital\u2019s enterprise AI rollout.',
+      proof: ['Proven at Western Digital', '$5M SaaS spend eliminated', '3\u00d7 more capabilities'],
     },
     {
-      name: 'Harbor Industrial',
-      tag: 'Operational intelligence',
-      domain: 'Maritime transportation',
-      blurb:
-        'Built a maintenance operations platform combining structured logbooks, asset tracking, analytics, and an AI copilot — giving teams more accurate, consistent data and faster decision-making.',
-      metrics: [
-        { value: '40%', label: 'less time spent on reporting' },
-        { value: '25%', label: 'faster issue resolution' },
-        { value: '15%', label: 'higher fleet availability' },
-      ],
-      visual: 'assets',
-      accent: '#5B5BD6',
-    },
-    {
-      name: 'Kiotel',
-      tag: 'Accelerating delivery',
-      domain: 'Hospitality technology',
-      blurb:
-        'Re-architected the platform and expanded its guest experience capabilities to improve reliability, support continuous operation, and make new features easier to launch without disrupting service.',
-      metrics: [
-        { value: '35%', label: 'faster release cycles' },
-        { value: '2×', label: 'features shipped per quarter' },
-        { value: '30%', label: 'lower property support costs' },
-      ],
-      visual: 'build',
-      accent: '#060B33',
-    },
-    {
-      name: 'Mentera',
+      id: 'tera',
+      name: 'Tera',
       tag: 'Healthcare AI',
-      domain: 'Clinical platform',
+      outcome: 'A clinic\u2019s day that runs itself.',
       blurb:
-        'A full clinical platform, built end to end — backend, web, native iOS and Android, and 50+ EHR integrations, with AI woven through the workflow. Shipped to a regulated bar.',
-      visual: 'vitals',
-      accent: '#0000F4',
+        'The AI assistant inside Mentera \u2014 intake, consents, scheduling and follow-ups handled end to end, across 50+ EHR integrations, at a regulated bar.',
+      proof: ['Running inside Mentera', '50+ EHR integrations'],
     },
     {
-      name: 'Convey',
-      tag: 'Reliability',
-      domain: 'Operations platform',
+      id: 'graphbrain',
+      name: 'Graph Brain',
+      tag: 'Company knowledge',
+      outcome: 'Answers grounded in your own knowledge.',
       blurb:
-        'An autonomous reliability agent for regulated utilities — it cuts root-cause analysis from days to under an hour, and remembers the codebase so the team does not have to.',
-      visual: 'uptime',
-      accent: '#5B5BD6',
+        'A plug-and-play knowledge brain: connect docs, wikis and tickets, and every answer arrives grounded \u2014 with its sources attached.',
+      proof: ['Deployed for Kiotel', 'Plug-and-play GraphRAG'],
     },
-  ] as Venture[],
+    {
+      id: 'assistant',
+      name: 'NX Chat Assistant',
+      tag: 'Website AI',
+      outcome: 'Visitors become qualified leads while you sleep.',
+      blurb:
+        'An embeddable website assistant that answers from your knowledge, hands leads to your team in Slack, and learns from every conversation \u2014 with verified memory.',
+      proof: ['Live on this site', 'Self-learning', 'One-tag embed'],
+    },
+    {
+      id: 'entchat',
+      name: 'Enterprise Chat',
+      tag: 'AI workspace',
+      outcome: 'One chat that acts across every tool you use.',
+      blurb:
+        'A ChatGPT-class workspace for the enterprise \u2014 grounded in company data and wired into 50+ apps, so answers turn into actions.',
+      proof: ['Born at Western Digital', '50+ app integrations'],
+    },
+    {
+      id: 'birdeye',
+      name: 'NX Bird Eye',
+      tag: 'Reputation \u2192 pipeline',
+      outcome: 'Reviews answer themselves \u2014 and turn into leads.',
+      blurb:
+        'Agentic review management: drafts on-brand replies, watches your ratings, and converts happy customers into pipeline.',
+      proof: ['Agentic review ops', 'Lead generation built in'],
+    },
+    {
+      id: 'crm',
+      name: 'NX CRM',
+      tag: 'Deployable CRM',
+      outcome: 'A CRM shaped to your business in days.',
+      blurb:
+        'Deployed per client with the custom fields, views and pipelines their operation actually needs \u2014 no platform tax, no year-long rollout.',
+      proof: ['Custom fields per client', 'Deploys in days'],
+    },
+    {
+      id: 'sre',
+      name: 'SRE Agent',
+      tag: 'Reliability AI',
+      outcome: 'Incidents fixed before customers notice.',
+      blurb:
+        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 proven in regulated utility operations.',
+      proof: ['Proven at a regulated utility', 'Root cause: days \u2192 under an hour'],
+      dark: true,
+    },
+  ] as Product[],
 }
 
 export const about = {
@@ -393,7 +406,7 @@ export const footer = {
       heading: 'Company',
       links: [
         { label: 'How we work', href: '#how-we-work' },
-        { label: 'Work', href: '#work' },
+        { label: 'Products', href: '#work' },
         { label: 'About', href: '#about' },
         { label: 'Book a call', href: '#cta' },
       ],

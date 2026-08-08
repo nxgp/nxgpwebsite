@@ -6,7 +6,7 @@
 import {
   services,
   engagement,
-  work,
+  portfolio,
   reviews,
   about,
   faq,
@@ -16,12 +16,13 @@ import {
 export const CALENDLY_URL =
   process.env.CALENDLY_URL || 'https://calendly.com/ravi-nxgp'
 
-const caseStudies = work.ventures
-  .map((v) => {
-    const metrics = v.metrics?.map((m) => `${m.value} ${m.label}`).join('; ')
-    return `- ${v.name} (${v.domain}): ${v.blurb}${metrics ? ` Results: ${metrics}.` : ''}`
-  })
+const products = portfolio.products
+  .map((p) => `- ${p.name} (${p.tag}): ${p.outcome} ${p.blurb} Proof: ${p.proof.join('; ')}.`)
   .join('\n')
+
+// Client results not carried by a product entry but still approved to share.
+const extraResults =
+  '- Harbor Industrial (maritime transportation): maintenance operations platform with logbooks, asset tracking, analytics and an AI copilot \u2014 40% less time on reporting, 25% faster issue resolution, 15% higher fleet availability.'
 
 const serviceList = services.pillars
   .map((p) => `- ${p.title}: ${p.body} Capabilities: ${p.caps.join(', ')}.`)
@@ -85,8 +86,11 @@ ${engagementList}
 # Who NxGP serves
 ${industryList}
 
-# Case studies (real, with real numbers)
-${caseStudies}
+# Pre-built products (real, deployed \u2014 these can be deployed for new clients too)
+${products}
+
+# Additional client results
+${extraResults}
 
 # What clients say
 ${quotes}

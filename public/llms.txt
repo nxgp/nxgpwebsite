@@ -18,6 +18,17 @@ Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx
 - **Nx Managed Support** (3–12+ months): a senior-led team embedded in your organization, delivering against a prioritized roadmap.
 - **Nx Embedded Engineering** (ongoing, quarterly): operation, monitoring, and continuous improvement of deployed systems.
 
+## Pre-built products (deployable for new clients)
+
+- **NX Agentic Platform** — creation and runtime for production AI agents (registry, deployment, monitoring). Proven at Western Digital.
+- **Tera** — healthcare AI assistant running clinic workflows end to end inside Mentera; 50+ EHR integrations.
+- **Graph Brain** — plug-and-play company-knowledge GraphRAG; answers grounded with sources. Deployed for Kiotel.
+- **NX Chat Assistant** — embeddable, self-learning website AI that captures leads to Slack. Live on nxgp.io.
+- **Enterprise Chat** — ChatGPT-class enterprise workspace wired into 50+ apps, born at Western Digital.
+- **NX Bird Eye** — agentic review management and lead generation.
+- **NX CRM** — per-client deployable CRM with custom fields, views and pipelines.
+- **SRE Agent** — log intelligence that finds root cause and opens fix PRs; proven in regulated utility operations.
+
 ## Client results
 
 - **Western Digital** (computer hardware): organization-wide AI platform unifying agents, knowledge sources and workflows — $5M SaaS contract spend eliminated, 3x more capabilities delivered, 50% faster delivery of AI functionality.
