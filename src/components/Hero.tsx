@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
-import { gsap } from '../lib/gsap'
+import { withMotion } from '../lib/motion'
 import { prefersReducedMotion, isSmallScreen } from '../lib/reducedMotion'
 import { scrollToId } from '../lib/useSmoothScroll'
 import { hero } from '../data/content'
@@ -17,41 +17,39 @@ export function Hero() {
 
   useEffect(() => {
     const el = root.current
-    if (!el) return
-    const reduce = prefersReducedMotion()
+    // Reduced motion: the prerendered hero is already fully visible — nothing
+    // to hide, nothing to animate, no need to load the motion runtime.
+    if (!el || prefersReducedMotion()) return
 
-    const ctx = gsap.context(() => {
-      const words = gsap.utils.toArray<HTMLElement>('[data-hero-word]')
-      const consoleRows = mockRef.current?.querySelectorAll<HTMLElement>('[data-console]') ?? []
-      const supporting = gsap.utils.toArray<HTMLElement>('[data-hero-fade]')
+    return withMotion(({ gsap }) => {
+      const ctx = gsap.context(() => {
+        const words = gsap.utils.toArray<HTMLElement>('[data-hero-word]')
+        const consoleRows = mockRef.current?.querySelectorAll<HTMLElement>('[data-console]') ?? []
+        const supporting = gsap.utils.toArray<HTMLElement>('[data-hero-fade]')
 
-      if (reduce) {
-        gsap.set([words, supporting, consoleRows], { clearProps: 'all', opacity: 1, y: 0 })
-        return
-      }
+        // ---- on load: clip-reveal + console assembly ----
+        const tl = gsap.timeline({ delay: 0.15 })
+        tl.set(words, { yPercent: 110 })
+          .set(consoleRows, { opacity: 0, y: 18 })
+          .set(supporting, { opacity: 0, y: 16 })
+          .to(words, { yPercent: 0, duration: 1, ease: 'expo.out', stagger: 0.06 })
+          .to(supporting, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1 }, '-=0.7')
+          .to(mockRef.current, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.9')
+          .to(consoleRows, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.07 }, '-=0.55')
 
-      // ---- on load: clip-reveal + console assembly ----
-      const tl = gsap.timeline({ delay: 0.15 })
-      tl.set(words, { yPercent: 110 })
-        .set(consoleRows, { opacity: 0, y: 18 })
-        .set(supporting, { opacity: 0, y: 16 })
-        .to(words, { yPercent: 0, duration: 1, ease: 'expo.out', stagger: 0.06 })
-        .to(supporting, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1 }, '-=0.7')
-        .to(mockRef.current, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.9')
-        .to(consoleRows, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.07 }, '-=0.55')
+        // ---- on scroll: gentle parallax, NO pin (smooth, never sticks) ----
+        if (!isSmallScreen()) {
+          gsap.timeline({
+            scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: 1 },
+          })
+            .to(textRef.current, { y: -50, ease: 'none' }, 0)
+            .to(mockRef.current, { y: -90, ease: 'none' }, 0)
+            .to(auroraRef.current, { y: 40, ease: 'none' }, 0)
+        }
+      }, el)
 
-      // ---- on scroll: gentle parallax, NO pin (smooth, never sticks) ----
-      if (!isSmallScreen()) {
-        gsap.timeline({
-          scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: 1 },
-        })
-          .to(textRef.current, { y: -50, ease: 'none' }, 0)
-          .to(mockRef.current, { y: -90, ease: 'none' }, 0)
-          .to(auroraRef.current, { y: 40, ease: 'none' }, 0)
-      }
-    }, el)
-
-    return () => ctx.revert()
+      return () => ctx.revert()
+    })
   }, [])
 
   return (
@@ -98,7 +96,10 @@ export function Hero() {
           <p data-hero-fade className="mt-6 max-w-[34rem] text-[0.88rem] font-600 text-ink-faint">{hero.note}</p>
         </div>
 
-        <div ref={mockRef} className="min-w-0 opacity-0" style={{ willChange: 'transform' }}>
+        {/* starts hidden for the entrance, but .hero-mock is a CSS failsafe
+            that fades it in regardless — so no-JS visitors, reduced-motion
+            users and slow connections all still get the console */}
+        <div ref={mockRef} className="hero-mock min-w-0 opacity-0" style={{ willChange: 'transform' }}>
           <HeroConsole />
         </div>
       </div>

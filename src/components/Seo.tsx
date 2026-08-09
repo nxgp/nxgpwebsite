@@ -109,6 +109,8 @@ const graph = {
       about: { '@id': `${SITE}/#organization` },
       primaryImageOfPage: `${SITE}/og.png`,
       inLanguage: 'en',
+      // stamped at build time — freshness signal for crawlers/answer engines
+      dateModified: __BUILD_DATE__,
     },
     {
       // The portfolio as a structured ItemList — lets answer engines cite

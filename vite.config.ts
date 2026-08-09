@@ -5,6 +5,12 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    // Build date, stamped into the JSON-LD WebPage.dateModified. Client and
+    // SSR builds run in the same `npm run build`, so both see the same value
+    // and the prerendered markup hydrates without mismatch.
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
   build: {
     // Split stable vendor code from app code so returning visitors only
     // re-download the (small) app chunk when content changes.
