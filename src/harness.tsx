@@ -4,6 +4,8 @@ import './index.css'
 import VignetteStage from './components/portfolio/vignetteStage'
 import ChatPanel from './components/chat/ChatPanel'
 import { BookingProvider, useBooking } from './components/BookingModal'
+import AgentCanvas from './components/sketch/AgentCanvas'
+import type { Sketch } from './lib/sketch-types'
 
 /**
  * Visual test harness (dev-only, never built into dist): renders all eight
@@ -43,6 +45,23 @@ function OpenBookingOnMount() {
   return <p style={{ padding: 16 }}>booking harness</p>
 }
 
+const CANNED_SKETCH: Sketch = {
+  name: 'Invoice Triage Agent',
+  summary: 'Matches every inbound AP invoice to its PO, posts clean ones to NetSuite, and routes exceptions to your AP lead.',
+  trigger: { label: 'Invoice lands', detail: 'in the AP inbox (Outlook shared mailbox)' },
+  steps: [
+    { type: 'read', label: 'Pull the PO', detail: 'Looks up the matching purchase order in NetSuite by vendor + amount' },
+    { type: 'reason', label: 'Three-way match', detail: 'Compares invoice, PO and receiving record; flags price or quantity gaps' },
+    { type: 'act', label: 'Post or hold', detail: 'Posts clean invoices to NetSuite; holds mismatches with a note' },
+    { type: 'notify', label: 'Daily digest', detail: 'Summarizes posted + held invoices to #ap-ops each morning' },
+  ],
+  guardrail: { condition: 'Invoice > $5,000 or vendor not in the master file', action: 'AP lead approves in Slack before posting' },
+  integrations: ['Outlook shared mailbox', 'NetSuite', 'Slack'],
+  metrics: ['Hours of manual matching per week', 'Exception rate', 'Days payable outstanding'],
+  clarify: 'What share of invoices arrive without a PO today — and who chases those down?',
+  feasibility: 'standard',
+}
+
 const ui = new URLSearchParams(window.location.search).get('ui')
 const root = createRoot(document.getElementById('root')!)
 
@@ -62,6 +81,14 @@ if (ui === 'chat') {
     }),
   )
   root.render(<ChatHarness />)
+} else if (ui === 'sketch') {
+  root.render(
+    <BookingProvider>
+      <div style={{ maxWidth: 900, margin: '40px auto', padding: 16 }}>
+        <AgentCanvas sketch={CANNED_SKETCH} sketchId="00000000-0000-0000-0000-000000000000" />
+      </div>
+    </BookingProvider>,
+  )
 } else if (ui === 'booking') {
   root.render(
     <BookingProvider>

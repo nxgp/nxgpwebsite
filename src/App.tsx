@@ -11,6 +11,7 @@ import { Services } from './components/Services'
 import { Engagement } from './components/Engagement'
 import { Industries } from './components/Industries'
 import { Portfolio } from './components/portfolio/Portfolio'
+import { SketchSection } from './components/sketch/SketchSection'
 import { Reviews } from './components/Reviews'
 import { About } from './components/About'
 import { FAQ } from './components/FAQ'
@@ -72,6 +73,7 @@ export default function App({ path = '/' }: { path?: string }) {
             <Engagement />
             <Industries />
             <Portfolio />
+            <SketchSection />
             <Reviews />
             <About />
             <FAQ />

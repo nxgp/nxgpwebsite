@@ -13,6 +13,7 @@ Book a 30-minute intro call: https://calendly.com/ravi-nxgp
 - https://nxgp.io/industries — private equity, enterprise, government
 - https://nxgp.io/work — everything we've built, in production
 - https://nxgp.io/work/agent-hub · https://nxgp.io/work/tera · https://nxgp.io/work/kiotel · https://nxgp.io/work/wd-chat · https://nxgp.io/work/harbor · https://nxgp.io/work/convey · https://nxgp.io/work/elevano · https://nxgp.io/work/vantage — individual product pages
+- https://nxgp.io/sketch — describe a workflow, get a first-pass AI agent design (free, interactive)
 - https://nxgp.io/about — the team and the numbers
 - https://nxgp.io/faq — the questions buyers ask first
 

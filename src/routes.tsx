@@ -9,6 +9,7 @@ import { About } from './components/About'
 import { Reviews } from './components/Reviews'
 import { FAQ } from './components/FAQ'
 import { PageHeader, type Crumb } from './pages/PageHeader'
+import { SketchSection } from './components/sketch/SketchSection'
 import { ProductPage } from './pages/ProductPage'
 
 /**
@@ -146,6 +147,20 @@ export const ROUTES: Route[] = [
         })),
       },
     ],
+  },
+  {
+    path: '/sketch',
+    title: 'Sketch My Agent — Free AI Agent Design Tool | Nx Growth Partners',
+    description: clip(
+      'Describe a workflow in one sentence and get a first-pass AI agent design: the steps, the human escalation gate, likely integrations and what to measure.',
+    ),
+    crumbs: [home, { label: 'Sketch my agent', href: '/sketch' }],
+    main: () => (
+      <>
+        <PageHeader crumbs={[home, { label: 'Sketch my agent', href: '/sketch' }]} title="Sketch my agent" />
+        <SketchSection />
+      </>
+    ),
   },
   ...productRoutes,
 ]
