@@ -25,7 +25,7 @@ const check = (name, ok, detail = '') => {
 
 /* ---------- mock upstream servers ---------- */
 
-const state = { emails: [], slack: [], emailMode: 'ok' }
+const state = { emails: [], slack: [], anthropic: [], emailMode: 'ok' }
 
 const sse = (events) =>
   events.map((e) => `data: ${JSON.stringify(e)}\n`).join('\n') + '\n'
@@ -34,6 +34,21 @@ const toolUse = (name, input) =>
   sse([
     { type: 'content_block_start', content_block: { type: 'tool_use', id: 'tu_1', name } },
     { type: 'content_block_delta', delta: { type: 'input_json_delta', partial_json: JSON.stringify(input) } },
+    { type: 'content_block_stop' },
+    { type: 'message_delta', delta: { stop_reason: 'tool_use' } },
+  ])
+
+/** Both tools in one round — plus an empty text block, which the real API
+ *  emits sometimes and then REJECTS if echoed back in the assistant turn. */
+const dualToolUse = (lead) =>
+  sse([
+    { type: 'content_block_start', content_block: { type: 'text' } },
+    { type: 'content_block_stop' },
+    { type: 'content_block_start', content_block: { type: 'tool_use', id: 'tu_a', name: 'capture_lead' } },
+    { type: 'content_block_delta', delta: { type: 'input_json_delta', partial_json: JSON.stringify(lead) } },
+    { type: 'content_block_stop' },
+    { type: 'content_block_start', content_block: { type: 'tool_use', id: 'tu_b', name: 'show_calendar' } },
+    { type: 'content_block_delta', delta: { type: 'input_json_delta', partial_json: '{}' } },
     { type: 'content_block_stop' },
     { type: 'message_delta', delta: { stop_reason: 'tool_use' } },
   ])
@@ -60,11 +75,14 @@ const mock = http.createServer((req, res) => {
   req.on('end', () => {
     if (req.url.startsWith('/anthropic')) {
       const parsed = JSON.parse(body)
+      state.anthropic.push(parsed)
       const hasToolResult = JSON.stringify(parsed.messages).includes('tool_result')
       const lastUser = parsed.messages[parsed.messages.length - 1]
       res.writeHead(200, { 'content-type': 'text/event-stream' })
       if (hasToolResult) {
         res.end(textReply("You're all set — pick a time below."))
+      } else if (JSON.stringify(lastUser).includes('BOTH_NOW')) {
+        res.end(dualToolUse(LEAD))
       } else if (JSON.stringify(lastUser).includes('BOOK_NOW')) {
         res.end(toolUse('show_calendar', {}))
       } else if (JSON.stringify(lastUser).includes('LEAD_NOW')) {
@@ -187,6 +205,37 @@ console.log('scenario 4: email provider down → lead still lands, slack flags i
   check('lead still captured', types.includes('lead'))
   check('calendar still shown', types.includes('calendar'))
   check('slack flags failed email', (state.slack[slackBefore] || '').includes('FAILED'))
+}
+
+/* ---------- scenario 5: both tools in one round (+ empty text block) ---------- */
+console.log('scenario 5: capture_lead + show_calendar in one round')
+{
+  state.emailMode = 'ok'
+  const emailsBefore = state.emails.length
+  const anthropicBefore = state.anthropic.length
+  const events = await chat('BOTH_NOW please')
+  const types = events.map((e) => e.t)
+  check('lead captured once', types.filter((t) => t === 'lead').length === 1)
+  check('one email sent', state.emails.length === emailsBefore + 1)
+  const cal = events.find((e) => e.t === 'calendar')
+  check('single calendar event', events.filter((e) => e.t === 'calendar').length === 1)
+  check('calendar keeps the lead prefill', !!cal && cal.url.includes(encodeURIComponent('dana@carepath.io')))
+  check('stream completes (no API 400)', types[types.length - 1] === 'done')
+
+  // the follow-up request must answer BOTH tool_use blocks and must not
+  // echo the empty text block back to the API
+  const followupReq = state.anthropic[anthropicBefore + 1]
+  const lastMsg = followupReq?.messages[followupReq.messages.length - 1]
+  const resultIds = (Array.isArray(lastMsg?.content) ? lastMsg.content : [])
+    .filter((c) => c.type === 'tool_result')
+    .map((c) => c.tool_use_id)
+    .sort()
+  check('tool_result for every tool_use', JSON.stringify(resultIds) === '["tu_a","tu_b"]')
+  const assistantMsg = followupReq?.messages[followupReq.messages.length - 2]
+  const emptyText = (Array.isArray(assistantMsg?.content) ? assistantMsg.content : []).some(
+    (c) => c.type === 'text' && !c.text.trim(),
+  )
+  check('empty text block filtered from assistant turn', !emptyText)
 }
 
 mock.close()

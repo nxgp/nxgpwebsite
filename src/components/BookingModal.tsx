@@ -30,11 +30,21 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!open) return
     closeRef.current?.focus()
+    // lock the page behind the overlay — pause Lenis AND clamp native scroll
+    // (data-lenis-prevent alone lets the document keep scrolling natively)
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis
+    lenis?.stop()
+    const prevOverflow = document.documentElement.style.overflow
+    document.documentElement.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close()
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.documentElement.style.overflow = prevOverflow
+      lenis?.start()
+    }
   }, [open, close])
 
   // embed_domain is required for hide_gdpr_banner to take effect. Guarded:

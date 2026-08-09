@@ -9,6 +9,20 @@ import { CalendarDays } from 'lucide-react'
 export function CalendlyCard({ url }: { url: string }) {
   const [loaded, setLoaded] = useState(false)
 
+  // the new-tab link should be the normal scheduling page, not the
+  // stripped-down embed view — drop embed params, keep the name/email prefill
+  const openUrl = (() => {
+    try {
+      const u = new URL(url)
+      u.searchParams.delete('embed_type')
+      u.searchParams.delete('embed_domain')
+      u.searchParams.delete('hide_gdpr_banner')
+      return u.toString()
+    } catch {
+      return url
+    }
+  })()
+
   return (
     <div className="mt-2 overflow-hidden rounded-inner border border-line bg-surface shadow-sm">
       <div className="flex items-center gap-2 border-b border-line bg-bg/60 px-3.5 py-2">
@@ -36,7 +50,7 @@ export function CalendlyCard({ url }: { url: string }) {
       </div>
       <p className="border-t border-line px-3.5 py-1.5 text-[0.68rem] font-600 text-ink-faint">
         Prefer a full page?{' '}
-        <a href={url} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-ink">
+        <a href={openUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-ink">
           Open the calendar in a new tab
         </a>
       </p>

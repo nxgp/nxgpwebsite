@@ -362,44 +362,61 @@ export default async function handler(req: Request): Promise<Response> {
           send({ t: 'delta', text: t })
         }, memoryBlock)
 
-        // one tool round max — handle the tool, then let the model confirm
+        // one tool round max — handle EVERY tool_use block in the round (the
+        // API rejects the follow-up with a 400 if any block lacks a
+        // tool_result, and "book me in, here's my email" can trigger both
+        // capture_lead and show_calendar in a single turn), then let the
+        // model confirm.
         if (round.stopReason === 'tool_use') {
-          const tool = round.blocks.find(
+          const toolUses = round.blocks.filter(
             (b): b is Extract<ContentBlock, { type: 'tool_use' }> =>
-              b.type === 'tool_use' &&
-              (b.name === 'capture_lead' || b.name === 'show_calendar'),
+              b.type === 'tool_use',
           )
-          if (tool) {
-            let toolResult: string
+          if (toolUses.length > 0) {
             let calUrl: string | null = null
+            const results: { tool_use_id: string; content: string }[] = []
 
-            if (tool.name === 'capture_lead') {
-              const lead = tool.input as unknown as Lead
-              // recap email first, so the Slack ping can report its status
-              const followup = await sendFollowupEmail(lead, CALENDLY_URL)
-              const slackOk = await notifySlack(lead, conversationId, followup)
-              await sbInsert('leads', {
-                conversation_id: conversationId,
-                name: lead.name ?? null,
-                email: lead.email,
-                company: lead.company ?? null,
-                interest: lead.interest,
-                summary: lead.summary,
-                slack_notified: slackOk,
-              })
-              leadCaptured = true
-              send({ t: 'lead' })
-              calUrl = calendarUrl(lead)
-              toolResult =
-                'Lead recorded and the NxGP team has been notified.' +
-                (followup === 'sent'
-                  ? ' A recap email with the booking link is on its way to the visitor.'
-                  : '') +
-                ' The booking calendar will now appear in the chat — confirm the team has their note and invite them to grab a time right here. Do not paste any URL.'
-            } else {
-              calUrl = calendarUrl()
-              toolResult =
-                'The booking calendar is now visible in the chat. Tell the visitor to pick a time that works for them. Do not paste any URL.'
+            for (const tool of toolUses) {
+              if (tool.name === 'capture_lead' && !leadCaptured) {
+                const lead = tool.input as unknown as Lead
+                // recap email first, so the Slack ping can report its status
+                const followup = await sendFollowupEmail(lead, CALENDLY_URL)
+                const slackOk = await notifySlack(lead, conversationId, followup)
+                await sbInsert('leads', {
+                  conversation_id: conversationId,
+                  name: lead.name ?? null,
+                  email: lead.email,
+                  company: lead.company ?? null,
+                  interest: lead.interest,
+                  summary: lead.summary,
+                  slack_notified: slackOk,
+                })
+                leadCaptured = true
+                send({ t: 'lead' })
+                // prefilled always wins, whatever order the tools came in
+                calUrl = calendarUrl(lead)
+                results.push({
+                  tool_use_id: tool.id,
+                  content:
+                    'Lead recorded and the NxGP team has been notified.' +
+                    (followup === 'sent'
+                      ? ' A recap email with the booking link is on its way to the visitor.'
+                      : '') +
+                    ' The booking calendar will now appear in the chat — confirm the team has their note and invite them to grab a time right here. Do not paste any URL.',
+                })
+              } else if (tool.name === 'show_calendar') {
+                if (!calUrl) calUrl = calendarUrl()
+                results.push({
+                  tool_use_id: tool.id,
+                  content:
+                    'The booking calendar is now visible in the chat. Tell the visitor to pick a time that works for them. Do not paste any URL.',
+                })
+              } else {
+                results.push({
+                  tool_use_id: tool.id,
+                  content: 'Already handled — continue the conversation.',
+                })
+              }
             }
 
             // visual break between pre-tool text and the confirmation
@@ -408,12 +425,17 @@ export default async function handler(req: Request): Promise<Response> {
               send({ t: 'delta', text: '\n\n' })
             }
 
-            apiMessages.push({ role: 'assistant', content: round.blocks })
+            // the API also rejects assistant messages containing empty text
+            // blocks (a text block can open and close without content)
+            apiMessages.push({
+              role: 'assistant',
+              content: round.blocks.filter(
+                (b) => b.type !== 'text' || b.text.trim().length > 0,
+              ),
+            })
             apiMessages.push({
               role: 'user',
-              content: [
-                { type: 'tool_result', tool_use_id: tool.id, content: toolResult },
-              ],
+              content: results.map((r) => ({ type: 'tool_result', ...r })),
             })
             round = await anthropicStream(apiMessages, (t) => {
               assistantText += t
