@@ -158,7 +158,9 @@ async function alertError(detail: string): Promise<void> {
 
 /* ---------- generation ---------- */
 
-async function generateSketch(description: string): Promise<Sketch> {
+/** One attempt; the caller retries once — structured generation occasionally
+ *  drops a required field, and a second sample almost always lands. */
+async function generateOnce(description: string): Promise<Sketch> {
   const r = await fetch(`${ANTHROPIC_BASE_URL}/v1/messages`, {
     method: 'POST',
     headers: {
@@ -186,8 +188,25 @@ async function generateSketch(description: string): Promise<Sketch> {
   }
   const j = (await r.json()) as { content?: { type: string; input?: unknown }[] }
   const tool = j.content?.find((c) => c.type === 'tool_use')
-  if (!tool || !validSketch(tool.input)) throw new Error('model returned an invalid sketch')
+  if (!tool || !validSketch(tool.input)) {
+    throw new Error(
+      `model returned an invalid sketch: ${JSON.stringify(tool?.input ?? null).slice(0, 400)}`,
+    )
+  }
   return tool.input
+}
+
+async function generateSketch(description: string): Promise<Sketch> {
+  try {
+    return await generateOnce(description)
+  } catch (e) {
+    // retry only on invalid structure, not on API/auth failures
+    if (e instanceof Error && e.message.startsWith('model returned an invalid sketch')) {
+      console.warn('sketch retry:', e.message.slice(0, 200))
+      return await generateOnce(description)
+    }
+    throw e
+  }
 }
 
 /* ---------- handler ---------- */

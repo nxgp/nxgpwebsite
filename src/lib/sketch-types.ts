@@ -23,7 +23,12 @@ export type Sketch = {
   feasibilityNote?: string
 }
 
-/** Either a rejection, or a complete design — nothing in between ships. */
+/**
+ * Either a rejection, or a complete design — nothing in between ships.
+ * Tolerant on soft bounds: JSON-schema min/max hints are advisory during
+ * tool use, so a 6-step run or a single metric is accepted rather than
+ * failing the visitor; hard structure (types, required fields) is not.
+ */
 export function validSketch(s: unknown): s is Sketch {
   if (!s || typeof s !== 'object') return false
   const k = s as Sketch
@@ -35,14 +40,14 @@ export function validSketch(s: unknown): s is Sketch {
     !!k.trigger?.detail &&
     Array.isArray(k.steps) &&
     k.steps.length >= 2 &&
-    k.steps.length <= 5 &&
+    k.steps.length <= 8 &&
     k.steps.every((st) => st?.label && st?.detail && ['read', 'reason', 'act', 'notify'].includes(st.type)) &&
     !!k.guardrail?.condition &&
     !!k.guardrail?.action &&
     Array.isArray(k.integrations) &&
     k.integrations.length >= 1 &&
     Array.isArray(k.metrics) &&
-    k.metrics.length >= 2 &&
+    k.metrics.length >= 1 &&
     typeof k.clarify === 'string' &&
     (k.feasibility === 'standard' || k.feasibility === 'ambitious')
   )
