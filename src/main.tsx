@@ -9,8 +9,9 @@ import App from './App.tsx'
 // Production HTML is prerendered at build time (scripts/prerender.mjs), so
 // hydrate when static markup is present; fall back to a client render in dev.
 const container = document.getElementById('root')!
+const path = window.location.pathname
 if (container.hasChildNodes()) {
-  hydrateRoot(container, <App />)
+  hydrateRoot(container, <App path={path} />)
 } else {
-  createRoot(container).render(<App />)
+  createRoot(container).render(<App path={path} />)
 }

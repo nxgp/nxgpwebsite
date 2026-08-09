@@ -1,40 +1,125 @@
 /**
- * Post-build prerender: injects the SSR-rendered app into dist/index.html.
+ * Post-build prerender: renders every route to its own static HTML file with
+ * page-specific head tags, and generates the sitemap from the same route
+ * table — URLs, titles and sitemap can never drift apart.
+ *
  * Runs after `vite build` (client) + `vite build --ssr` (server bundle).
+ *   dist/index.html            — home (full scroll)
+ *   dist/<route>/index.html    — one per route in src/routes.tsx
+ *   dist/sitemap.xml           — generated, build-dated
  */
-import { readFileSync, writeFileSync, rmSync } from 'node:fs'
+import { readFileSync, writeFileSync, rmSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const SITE = 'https://nxgp.io'
 
-const { render } = await import(
-  path.join(root, 'dist-server/entry-server.js')
-)
+const { render, ROUTES } = await import(path.join(root, 'dist-server/entry-server.js'))
 
-const indexPath = path.join(root, 'dist/index.html')
-let html = readFileSync(indexPath, 'utf8')
+/* ---------- template: read once, inline the stylesheet once ---------- */
 
-// 1) Inject the SSR-rendered app markup.
-const appHtml = render()
-if (!html.includes('<div id="root"></div>')) {
+let template = readFileSync(path.join(root, 'dist/index.html'), 'utf8')
+if (!template.includes('<div id="root"></div>')) {
   throw new Error('prerender: could not find <div id="root"></div> in dist/index.html')
 }
-html = html.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`)
 
-// 2) Inline the (single, small) stylesheet — with prerendered HTML this makes
-//    first paint need zero render-blocking requests.
-const cssLink = html.match(/<link[^>]*rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/)
+// Inline the (single, small) stylesheet — with prerendered HTML this makes
+// first paint need zero render-blocking requests.
+const cssLink = template.match(/<link[^>]*rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/)
 if (cssLink) {
   const css = readFileSync(path.join(root, 'dist', cssLink[1]), 'utf8')
-  html = html.replace(cssLink[0], `<style>${css}</style>`)
+  template = template.replace(cssLink[0], `<style>${css}</style>`)
 } else {
   console.warn('prerender: no stylesheet link found to inline')
 }
 
-writeFileSync(indexPath, html)
+/* ---------- per-page head rewriting ---------- */
+
+const escAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+
+/** Swap title/description/canonical/og/twitter for a route. Every pattern
+ *  must match the template — throw loudly rather than ship a page with the
+ *  home page's metadata. */
+function headFor(html, { title, description, url }) {
+  const swaps = [
+    [/<title>[\s\S]*?<\/title>/, `<title>${escAttr(title)}</title>`],
+    [
+      /<meta\s+name="description"\s+content="[\s\S]*?"\s*\/>/,
+      `<meta name="description" content="${escAttr(description)}" />`,
+    ],
+    [
+      /<link rel="canonical" href="[^"]*" \/>/,
+      `<link rel="canonical" href="${url}" />`,
+    ],
+    [
+      /<meta property="og:url" content="[^"]*" \/>/,
+      `<meta property="og:url" content="${url}" />`,
+    ],
+    [
+      /<meta property="og:title" content="[^"]*" \/>/,
+      `<meta property="og:title" content="${escAttr(title)}" />`,
+    ],
+    [
+      /<meta\s+property="og:description"\s+content="[\s\S]*?"\s*\/>/,
+      `<meta property="og:description" content="${escAttr(description)}" />`,
+    ],
+    [
+      /<meta name="twitter:title" content="[^"]*" \/>/,
+      `<meta name="twitter:title" content="${escAttr(title)}" />`,
+    ],
+    [
+      /<meta\s+name="twitter:description"\s+content="[\s\S]*?"\s*\/>/,
+      `<meta name="twitter:description" content="${escAttr(description)}" />`,
+    ],
+  ]
+  for (const [re, replacement] of swaps) {
+    if (!re.test(html)) throw new Error(`prerender: head pattern not found: ${re}`)
+    html = html.replace(re, replacement)
+  }
+  return html
+}
+
+/* ---------- render every page ---------- */
+
+// home
+const homeHtml = template.replace('<div id="root"></div>', `<div id="root">${render('/')}</div>`)
+writeFileSync(path.join(root, 'dist/index.html'), homeHtml)
+
+// routes
+for (const route of ROUTES) {
+  let html = headFor(template, {
+    title: route.title,
+    description: route.description,
+    url: `${SITE}${route.path}`,
+  })
+  html = html.replace('<div id="root"></div>', `<div id="root">${render(route.path)}</div>`)
+  const dir = path.join(root, 'dist', route.path.slice(1))
+  mkdirSync(dir, { recursive: true })
+  writeFileSync(path.join(dir, 'index.html'), html)
+}
+
+/* ---------- sitemap, from the same table ---------- */
+
+const today = new Date().toISOString().slice(0, 10)
+const urls = [
+  { loc: `${SITE}/`, priority: '1.0' },
+  ...ROUTES.map((r) => ({ loc: `${SITE}${r.path}`, priority: r.path.startsWith('/work/') ? '0.7' : '0.8' })),
+  { loc: `${SITE}/privacy`, priority: '0.2' },
+]
+const sitemap =
+  `<?xml version="1.0" encoding="UTF-8"?>\n` +
+  `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  urls
+    .map(
+      (u) =>
+        `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${u.priority}</priority>\n  </url>`,
+    )
+    .join('\n') +
+  `\n</urlset>\n`
+writeFileSync(path.join(root, 'dist/sitemap.xml'), sitemap)
 
 // the server bundle is a build intermediate — don't ship it
 rmSync(path.join(root, 'dist-server'), { recursive: true, force: true })
 
-console.log(`prerender: injected ${(appHtml.length / 1024).toFixed(1)}kB of static HTML into dist/index.html`)
+console.log(`prerender: home + ${ROUTES.length} routes + sitemap (${urls.length} URLs)`)

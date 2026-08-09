@@ -197,6 +197,8 @@ export const industries = {
 
 export type Product = {
   id: string
+  /** URL slug for the product's standalone page (/work/<slug>). */
+  slug: string
   /** Headline in the index — a client name, or a platform name where that
    *  reads better. */
   client: string
@@ -223,6 +225,7 @@ export const portfolio = {
   products: [
     {
       id: 'forge',
+      slug: 'agent-hub',
       client: 'Agent Hub',
       builtFor: 'Western Digital',
       built: 'Agent platform & runtime',
@@ -234,6 +237,7 @@ export const portfolio = {
     },
     {
       id: 'tera',
+      slug: 'tera',
       client: 'Mentera',
       built: 'Tera \u00b7 clinical AI platform',
       role: 'Healthcare AI',
@@ -244,6 +248,7 @@ export const portfolio = {
     },
     {
       id: 'cortex',
+      slug: 'kiotel',
       client: 'Kiotel',
       built: 'Company knowledge engine',
       role: 'Knowledge & GraphRAG',
@@ -254,6 +259,7 @@ export const portfolio = {
     },
     {
       id: 'omni',
+      slug: 'wd-chat',
       client: 'Western Digital',
       built: 'WD Chat \u00b7 analytics workspace',
       role: 'Enterprise copilot',
@@ -264,6 +270,7 @@ export const portfolio = {
     },
     {
       id: 'harbor',
+      slug: 'harbor',
       client: 'Harbor Industrial',
       built: 'Maintenance operations platform',
       role: 'Maritime operations',
@@ -274,6 +281,7 @@ export const portfolio = {
     },
     {
       id: 'convey',
+      slug: 'convey',
       client: 'Convey',
       built: 'Reliability & SRE agent',
       role: 'Regulated utilities',
@@ -285,6 +293,7 @@ export const portfolio = {
     },
     {
       id: 'beacon',
+      slug: 'elevano',
       client: 'Elevano',
       built: 'Website concierge AI',
       role: 'Lead capture & support',
@@ -295,6 +304,7 @@ export const portfolio = {
     },
     {
       id: 'keystone',
+      slug: 'vantage',
       client: 'Vantage',
       built: 'Reputation & pipeline platform',
       role: 'Multi-location revenue ops',
@@ -378,25 +388,26 @@ export const footer = {
     {
       heading: 'Services',
       links: [
-        { label: 'AI & Workflow Automation', href: '#services' },
-        { label: 'Software & Product Delivery', href: '#services' },
-        { label: 'Embedded Engineering', href: '#services' },
+        { label: 'AI & Workflow Automation', href: '/services' },
+        { label: 'Software & Product Delivery', href: '/services' },
+        { label: 'Embedded Engineering', href: '/services' },
       ],
     },
     {
       heading: 'Industries',
       links: [
-        { label: 'Private Equity', href: '#industries' },
-        { label: 'Enterprise', href: '#industries' },
-        { label: 'Government', href: '#industries' },
+        { label: 'Private Equity', href: '/industries' },
+        { label: 'Enterprise', href: '/industries' },
+        { label: 'Government', href: '/industries' },
       ],
     },
     {
       heading: 'Company',
       links: [
-        { label: 'How we work', href: '#how-we-work' },
-        { label: 'Products', href: '#work' },
-        { label: 'About', href: '#about' },
+        { label: 'How we work', href: '/how-we-work' },
+        { label: 'Products', href: '/work' },
+        { label: 'About', href: '/about' },
+        { label: 'FAQ', href: '/faq' },
         { label: 'Book a call', href: '#cta' },
       ],
     },
