@@ -20,7 +20,7 @@ export const nav = {
     { label: 'How we work', id: 'how-we-work' },
     { label: 'Services', id: 'services' },
     { label: 'Industries', id: 'industries' },
-    { label: 'Work', id: 'work' },
+    { label: 'Products', id: 'work' },
     { label: 'About', id: 'about' },
   ],
   cta: 'Book a call',
@@ -225,84 +225,115 @@ export const industries = {
   ] as Industry[],
 }
 
-export type Venture = {
-  name: string
-  tag: string
-  domain: string
+export type Product = {
+  id: string
+  /** Headline in the index — a client name, or a platform name where that
+   *  reads better. */
+  client: string
+  /** Who it was actually built for, when that differs from the headline.
+   *  The stage attributes proof to this, so metrics never drift from the
+   *  engagement that earned them. */
+  builtFor?: string
+  built: string
+  role: string
+  outcome: string
   blurb: string
-  metrics?: { value: string; label: string }[]
-  visual: 'vitals' | 'uptime' | 'build' | 'assets' | 'scaffold' | 'orchestrator' | 'messages'
-  accent: string
+  proof: string[]
+  dark?: boolean
 }
 
-// Client case studies from the company deck (with real outcome metrics),
-// plus products the team has shipped end to end — the bar we work to.
-export const work = {
-  kicker: 'Client case studies',
+// THE PORTFOLIO — what NX built, named by who we built it for. This section
+// is a showcase of delivered work, NOT a product catalogue: it should never
+// read as "these are off-the-shelf things we resell". Every proof chip is an
+// approved claim.
+export const portfolio = {
+  kicker: "What we've built",
   h2: "The proof isn't a deck. It's what we've shipped.",
-  sub: 'Real engagements, real production systems, real numbers — this is the bar the embedded team works to.',
-  ventures: [
+  sub: 'A selection of the systems we\u2019ve designed, built and shipped \u2014 running in production for the teams we work with.',
+  products: [
     {
-      name: 'Western Digital',
-      tag: 'Enterprise AI at scale',
-      domain: 'Computer hardware manufacturer',
+      id: 'forge',
+      client: 'Agent Hub',
+      builtFor: 'Western Digital',
+      built: 'Agent platform & runtime',
+      role: 'Enterprise AI at scale',
+      outcome: 'Ship production AI agents without an ML team.',
       blurb:
-        'Built and deployed an organization-wide AI platform that unified multiple agents, internal knowledge sources, and workflows into one secure experience designed to scale across the enterprise.',
-      metrics: [
-        { value: '$5M', label: 'SaaS contract spend eliminated' },
-        { value: '3×', label: 'more capabilities delivered' },
-        { value: '50%', label: 'faster delivery of AI functionality' },
-      ],
-      visual: 'orchestrator',
-      accent: '#0000F4',
+        'An organization-wide platform to design agents, wire their actions, and deploy them to a governed runtime \u2014 unifying agents, knowledge and workflows in one secure experience.',
+      proof: ['$5M SaaS spend eliminated', '3\u00d7 more capabilities', '50% faster AI delivery'],
     },
     {
-      name: 'Harbor Industrial',
-      tag: 'Operational intelligence',
-      domain: 'Maritime transportation',
+      id: 'tera',
+      client: 'Mentera',
+      built: 'Tera \u00b7 clinical AI platform',
+      role: 'Healthcare AI',
+      outcome: 'A clinic\u2019s day that runs itself.',
       blurb:
-        'Built a maintenance operations platform combining structured logbooks, asset tracking, analytics, and an AI copilot — giving teams more accurate, consistent data and faster decision-making.',
-      metrics: [
-        { value: '40%', label: 'less time spent on reporting' },
-        { value: '25%', label: 'faster issue resolution' },
-        { value: '15%', label: 'higher fleet availability' },
-      ],
-      visual: 'assets',
-      accent: '#5B5BD6',
+        'A chat-first AI platform for the whole clinic \u2014 front desk, scheduling, personalised outreach, pre-charting, back office and analytics. Staff ask in plain language; Tera takes the actions, end to end, across 50+ EHR integrations at a regulated bar.',
+      proof: ['50+ EHR integrations', 'Front desk \u2192 back office', 'Acts with tools'],
     },
     {
-      name: 'Kiotel',
-      tag: 'Accelerating delivery',
-      domain: 'Hospitality technology',
+      id: 'cortex',
+      client: 'Kiotel',
+      built: 'Company knowledge engine',
+      role: 'Knowledge & GraphRAG',
+      outcome: 'Answers grounded in your own knowledge.',
       blurb:
-        'Re-architected the platform and expanded its guest experience capabilities to improve reliability, support continuous operation, and make new features easier to launch without disrupting service.',
-      metrics: [
-        { value: '35%', label: 'faster release cycles' },
-        { value: '2×', label: 'features shipped per quarter' },
-        { value: '30%', label: 'lower property support costs' },
-      ],
-      visual: 'build',
-      accent: '#060B33',
+        'A plug-and-play knowledge brain over docs, wikis and tickets \u2014 every answer arrives with its sources attached, so teams can trust what it tells them.',
+      proof: ['Plug-and-play GraphRAG', 'Sources on every answer'],
     },
     {
-      name: 'Mentera',
-      tag: 'Healthcare AI',
-      domain: 'Clinical platform',
+      id: 'omni',
+      client: 'Western Digital',
+      built: 'WD Chat \u00b7 analytics workspace',
+      role: 'Enterprise copilot',
+      outcome: 'Ask a question, get the dashboard.',
       blurb:
-        'A full clinical platform, built end to end — backend, web, native iOS and Android, and 50+ EHR integrations, with AI woven through the workflow. Shipped to a regulated bar.',
-      visual: 'vitals',
-      accent: '#0000F4',
+        'A ChatGPT-class workspace wired into the company\u2019s warehouse, CRM and finance systems \u2014 ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.',
+      proof: ['50+ app integrations', 'Dashboards & reports on demand'],
     },
     {
-      name: 'Convey',
-      tag: 'Reliability',
-      domain: 'Operations platform',
+      id: 'harbor',
+      client: 'Harbor Industrial',
+      built: 'Maintenance operations platform',
+      role: 'Maritime operations',
+      outcome: 'Fleet operations that report themselves.',
       blurb:
-        'An autonomous reliability agent for regulated utilities — it cuts root-cause analysis from days to under an hour, and remembers the codebase so the team does not have to.',
-      visual: 'uptime',
-      accent: '#5B5BD6',
+        'Structured logbooks, asset tracking and analytics with an AI copilot on top \u2014 giving crews accurate, consistent data and faster decisions across the fleet.',
+      proof: ['40% less time on reporting', '25% faster issue resolution', '15% higher fleet availability'],
     },
-  ] as Venture[],
+    {
+      id: 'convey',
+      client: 'Convey',
+      built: 'Reliability & SRE agent',
+      role: 'Regulated utilities',
+      outcome: 'Incidents fixed before customers notice.',
+      blurb:
+        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 and remembers the codebase so the team doesn\u2019t have to.',
+      proof: ['Root cause: days \u2192 under an hour'],
+      dark: true,
+    },
+    {
+      id: 'beacon',
+      client: 'Elevano',
+      built: 'Website concierge AI',
+      role: 'Lead capture & support',
+      outcome: 'Visitors become qualified leads while you sleep.',
+      blurb:
+        'An embeddable assistant that answers from the company\u2019s own knowledge, hands qualified leads straight to the team in Slack, and learns from every conversation with verified memory.',
+      proof: ['Self-learning', 'Leads straight to Slack'],
+    },
+    {
+      id: 'keystone',
+      client: 'Vantage',
+      built: 'Reputation & pipeline platform',
+      role: 'Multi-location revenue ops',
+      outcome: 'Reviews answer themselves \u2014 and turn into leads.',
+      blurb:
+        'Watches every location, drafts on-brand replies, and converts happy customers into pipeline \u2014 paired with a CRM built around the fields, views and stages their operation actually runs on.',
+      proof: ['Agentic review ops', 'Custom-built CRM'],
+    },
+  ] as Product[],
 }
 
 export const about = {
@@ -393,7 +424,7 @@ export const footer = {
       heading: 'Company',
       links: [
         { label: 'How we work', href: '#how-we-work' },
-        { label: 'Work', href: '#work' },
+        { label: 'Products', href: '#work' },
         { label: 'About', href: '#about' },
         { label: 'Book a call', href: '#cta' },
       ],

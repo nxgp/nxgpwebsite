@@ -11,7 +11,7 @@ import { Services } from './components/Services'
 import { Engagement } from './components/Engagement'
 import { Embedded } from './components/Embedded'
 import { Industries } from './components/Industries'
-import { Work } from './components/Work'
+import { Portfolio } from './components/portfolio/Portfolio'
 import { Reviews } from './components/Reviews'
 import { About } from './components/About'
 import { FAQ } from './components/FAQ'
@@ -51,7 +51,7 @@ export default function App() {
         <Engagement />
         <Embedded />
         <Industries />
-        <Work />
+        <Portfolio />
         <Reviews />
         <About />
         <FAQ />
