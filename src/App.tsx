@@ -19,8 +19,18 @@ import { Footer } from './components/Footer'
 import { Seo } from './components/Seo'
 import { ChatWidget } from './components/chat/ChatWidget'
 import { BookingProvider } from './components/BookingModal'
+import { matchRoute } from './routes'
+import { PageSeo } from './pages/PageSeo'
 
-export default function App() {
+/**
+ * Route-aware shell. `path` comes from the SSG entry at build time and from
+ * window.location at hydrate, so server and client always agree. The home
+ * page is the full single-scroll story; every other route is a focused
+ * standalone page (see src/routes.tsx) sharing the same Nav/CTA/Footer/chat.
+ * Navigation between pages is plain <a> — full loads of tiny static pages,
+ * no client router to maintain.
+ */
+export default function App({ path = '/' }: { path?: string }) {
   useSmoothScroll()
 
   // Scroll triggers measure layout up front — recompute once fonts settle.
@@ -37,30 +47,41 @@ export default function App() {
     })
   }, [])
 
+  const route = matchRoute(path)
+
   return (
     <BookingProvider>
       <a href="#main" className="skip-link">
         Skip to content
       </a>
       <TonalBackground />
-      <Nav />
+      <Nav home={!route} />
       <main id="main">
-        <Hero />
-        <Proof />
-        <Shift />
-        <OperatingModel />
-        <Services />
-        <Engagement />
-        <Industries />
-        <Portfolio />
-        <Reviews />
-        <About />
-        <FAQ />
-        <CTA />
+        {route ? (
+          <>
+            {route.main()}
+            <CTA />
+          </>
+        ) : (
+          <>
+            <Hero />
+            <Proof />
+            <Shift />
+            <OperatingModel />
+            <Services />
+            <Engagement />
+            <Industries />
+            <Portfolio />
+            <Reviews />
+            <About />
+            <FAQ />
+            <CTA />
+          </>
+        )}
       </main>
       <Footer />
       <ChatWidget />
-      <Seo />
+      {route ? <PageSeo route={route} /> : <Seo />}
     </BookingProvider>
   )
 }

@@ -19,7 +19,7 @@ export const CALENDLY_URL =
 const products = portfolio.products
   .map(
     (p) =>
-      `- For ${p.builtFor ?? p.client} — ${p.built}${p.builtFor ? ` (known as ${p.client})` : ''} (${p.role}): ${p.outcome} ${p.blurb} Proof: ${p.proof.join('; ')}.`,
+      `- For ${p.builtFor ?? p.client} — ${p.built}${p.builtFor ? ` (known as ${p.client})` : ''} (${p.role}): ${p.outcome} ${p.blurb} Proof: ${p.proof.join('; ')}. Details: https://nxgp.io/work/${p.slug}`,
   )
   .join('\n')
 

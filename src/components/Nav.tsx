@@ -6,7 +6,10 @@ import { scrollToId } from '../lib/useSmoothScroll'
 import { useBooking } from './BookingModal'
 import { cn } from '../lib/cn'
 
-export function Nav() {
+/** Maps a home-page section id to its standalone page URL. */
+const pageFor = (id: string) => `/${id}`
+
+export function Nav({ home = true }: { home?: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const openBooking = useBooking()
@@ -27,11 +30,15 @@ export function Nav() {
     >
       <nav className="shell flex h-[var(--nav-h)] items-center justify-between gap-6">
         <a
-          href="#top"
-          onClick={(e) => {
-            e.preventDefault()
-            scrollToId('top')
-          }}
+          href="/"
+          onClick={
+            home
+              ? (e) => {
+                  e.preventDefault()
+                  scrollToId('top')
+                }
+              : undefined
+          }
           aria-label="Nx Growth Partners — home"
         >
           <Logo />
@@ -41,11 +48,15 @@ export function Nav() {
           {nav.links.map((l) => (
             <a
               key={l.id}
-              href={`#${l.id}`}
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToId(l.id)
-              }}
+              href={pageFor(l.id)}
+              onClick={
+                home
+                  ? (e) => {
+                      e.preventDefault()
+                      scrollToId(l.id)
+                    }
+                  : undefined
+              }
               className="link-underline text-[0.93rem] font-600 text-ink-soft transition-colors hover:text-ink"
             >
               {l.label}
@@ -82,8 +93,12 @@ export function Nav() {
           {nav.links.map((l) => (
             <a
               key={l.id}
-              href={`#${l.id}`}
-              onClick={(e) => { e.preventDefault(); scrollToId(l.id); setOpen(false) }}
+              href={pageFor(l.id)}
+              onClick={
+                home
+                  ? (e) => { e.preventDefault(); scrollToId(l.id); setOpen(false) }
+                  : () => setOpen(false)
+              }
               className="rounded-inner px-2 py-3 text-left text-[1.05rem] font-600 text-ink"
             >
               {l.label}
