@@ -24,6 +24,10 @@ import {
  *   elevano                                → two phones: the visitor's chat,
  *                                            the team's Slack
  *
+ * Devices sit straight-on — no 3D poses, no scaling of screen content: UI
+ * text rasterizes 1:1 and stays crisp. The laptop is sized so the app window
+ * fills its screen at the interiors' native design size.
+ *
  * Phones don't clip on phones, so those scenes render everywhere; laptop and
  * landscape-tablet screens would shrink below legibility at 345px, so on
  * mobile those scenes fall back to the flat app window (the composition
@@ -59,21 +63,17 @@ function LaptopScene({
     <Scene wordmark={wordmark} bg={studios[id]} dark={dark}>
       {/* phones: the flat window composition, already tuned for 345px */}
       <div className="flex h-full w-full p-3 sm:hidden">{viz()}</div>
-      {/* sm+: hardware. The app window renders at its designed 640×400 and is
-          scaled into the screen like a product screenshot — no reflow, no
-          per-scene fitting. Laptop width is fixed so the math is exact. */}
-      <div className="hidden h-full w-full items-end justify-center px-4 pb-7 sm:flex">
-        <div className="dev-in relative w-[600px] max-w-full" style={{ '--d': '0.05s' } as React.CSSProperties}>
+      {/* sm+: hardware. The screen is large enough to host the app window at
+          its native size — no scale transform, so text renders 1:1, crisp. */}
+      <div className="hidden h-full w-full items-end justify-center pb-7 sm:flex">
+        <div className="dev-in relative w-[min(640px,96%)]" style={{ '--d': '0.05s' } as React.CSSProperties}>
           <GroundShadow dark={dark} className="-bottom-3 left-1/2 h-[22px] w-[88%] -translate-x-1/2" />
           <div className="dev-float">
-            <div className="sm-tilt-l">
-              <LaptopFrame>
-                <div className="absolute inset-0" style={{ background: wallpaper }} />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-[400px] w-[640px] shrink-0 origin-center scale-[0.8]">{viz()}</div>
-                </div>
-              </LaptopFrame>
-            </div>
+            <LaptopFrame>
+              <div className="absolute inset-0" style={{ background: wallpaper }} />
+              {/* maximized app — fills the screen edge to edge */}
+              <div className="absolute inset-0 flex">{viz()}</div>
+            </LaptopFrame>
           </div>
         </div>
       </div>
@@ -87,11 +87,9 @@ function TeraScene() {
       <div className="dev-in relative w-[min(280px,82%)] sm:w-[320px]">
         <GroundShadow className="-bottom-4 left-1/2 h-[24px] w-[80%] -translate-x-1/2" />
         <div className="dev-float">
-          <div className="sm-tilt-r">
-            <TabletFrame>
-              <TeraInner />
-            </TabletFrame>
-          </div>
+          <TabletFrame>
+            <TeraInner />
+          </TabletFrame>
         </div>
       </div>
     </Scene>
@@ -109,14 +107,12 @@ function HarborScene() {
       </div>
       {/* sm+: deck tablet, landscape */}
       <div className="hidden h-full w-full items-center justify-center px-8 sm:flex">
-        <div className="dev-in relative w-[min(520px,88%)]">
+        <div className="dev-in relative w-[min(540px,90%)]">
           <GroundShadow className="-bottom-4 left-1/2 h-[24px] w-[84%] -translate-x-1/2" />
           <div className="dev-float">
-            <div className="sm-tilt-l">
-              <TabletFrame landscape>
-                <HarborInner />
-              </TabletFrame>
-            </div>
+            <TabletFrame landscape>
+              <HarborInner />
+            </TabletFrame>
           </div>
         </div>
       </div>
@@ -127,12 +123,10 @@ function HarborScene() {
 function CortexScene() {
   return (
     <Scene wordmark="KIOTEL" bg={studios.cortex} className="items-center justify-center">
-      <div className="dev-in relative h-[86%] w-[92%] sm:h-[330px] sm:w-[min(540px,88%)]">
+      <div className="dev-in relative h-[86%] w-[92%] sm:h-[330px] sm:w-[min(560px,90%)]">
         <GroundShadow className="-bottom-5 left-1/2 h-[24px] w-[86%] -translate-x-1/2" />
-        <div className="dev-float h-full">
-          <div className="sm-tilt-r h-full [&>*]:shadow-device">
-            <CortexViz />
-          </div>
+        <div className="dev-float h-full [&>*]:shadow-device">
+          <CortexViz />
         </div>
       </div>
     </Scene>
@@ -141,16 +135,14 @@ function CortexScene() {
 
 function BeaconScene() {
   return (
-    <Scene wordmark="ELEVANO" bg={studios.beacon} className="items-center justify-center gap-4 sm:gap-8">
+    <Scene wordmark="ELEVANO" bg={studios.beacon} className="items-center justify-center gap-5 sm:gap-9">
       {/* the visitor's phone */}
       <div className="dev-in relative w-[150px] sm:w-[196px]" style={{ '--d': '0.05s' } as React.CSSProperties}>
         <GroundShadow className="-bottom-3 left-1/2 h-[16px] w-[70%] -translate-x-1/2" />
         <div className="dev-float">
-          <div className="[transform:perspective(1300px)_rotateY(8deg)_rotate(-3deg)]">
-            <PhoneFrame>
-              <BeaconChatInner />
-            </PhoneFrame>
-          </div>
+          <PhoneFrame>
+            <BeaconChatInner />
+          </PhoneFrame>
         </div>
       </div>
       {/* the team's phone, a beat later */}
@@ -160,11 +152,9 @@ function BeaconScene() {
       >
         <GroundShadow className="-bottom-3 left-1/2 h-[14px] w-[70%] -translate-x-1/2" />
         <div className="dev-float">
-          <div className="[transform:perspective(1300px)_rotateY(-9deg)_rotate(4deg)]">
-            <PhoneFrame>
-              <BeaconLeadInner />
-            </PhoneFrame>
-          </div>
+          <PhoneFrame>
+            <BeaconLeadInner />
+          </PhoneFrame>
         </div>
       </div>
     </Scene>
@@ -179,34 +169,28 @@ function VantageScene() {
         <ReputationViz />
       </div>
       {/* sm+: laptop with the phone catching the pushes beside it */}
-      <div className="hidden h-full w-full items-end justify-center px-4 pb-7 sm:flex">
-        <div className="dev-in relative w-[600px] max-w-full">
+      <div className="hidden h-full w-full items-end justify-center pb-7 sm:flex">
+        <div className="dev-in relative w-[min(640px,96%)]">
           <GroundShadow className="-bottom-3 left-1/2 h-[22px] w-[88%] -translate-x-1/2" />
           <div className="dev-float">
-            <div className="sm-tilt-l">
-              <LaptopFrame>
-                <div
-                  className="absolute inset-0"
-                  style={{ background: 'linear-gradient(135deg, #ECEBFA 0%, #F8F8FE 100%)' }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-[400px] w-[640px] shrink-0 origin-center scale-[0.8]">
-                    <ReputationViz />
-                  </div>
-                </div>
-              </LaptopFrame>
-            </div>
+            <LaptopFrame>
+              <div
+                className="absolute inset-0"
+                style={{ background: 'linear-gradient(135deg, #ECEBFA 0%, #F8F8FE 100%)' }}
+              />
+              <div className="absolute inset-0 flex">
+                <ReputationViz />
+              </div>
+            </LaptopFrame>
           </div>
           <div
-            className="dev-in absolute -right-7 bottom-[-6px] w-[112px]"
+            className="dev-in absolute -bottom-1 right-2 w-[112px]"
             style={{ '--d': '0.5s', '--fd': '1.6s' } as React.CSSProperties}
           >
             <div className="dev-float">
-              <div className="[transform:perspective(1200px)_rotateY(-10deg)_rotate(5deg)]">
-                <PhoneFrame>
-                  <VantagePushInner />
-                </PhoneFrame>
-              </div>
+              <PhoneFrame>
+                <VantagePushInner />
+              </PhoneFrame>
             </div>
           </div>
         </div>

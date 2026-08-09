@@ -594,11 +594,6 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .dev-float { animation: none !important; }
 }
-/* static 3D poses, desktop-only — phones show devices straight-on */
-@media (min-width: 640px) {
-  .sm-tilt-l { transform: perspective(1400px) rotateY(7deg) rotateX(1.5deg) rotate(0.8deg); }
-  .sm-tilt-r { transform: perspective(1400px) rotateY(-8deg) rotateX(1.5deg) rotate(-1deg); }
-}
 
 /* combined with .pv-in the later animation declaration would win and the
    element would sit at pv-in's opacity: 0 forever — run both together */
