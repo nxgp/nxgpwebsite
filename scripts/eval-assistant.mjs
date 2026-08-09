@@ -32,7 +32,7 @@ const bundle = path.join(tmp, 'k.mjs')
 execSync(`npx -y esbuild api/_knowledge.ts --bundle --format=esm --platform=node --outfile=${bundle}`, {
   stdio: 'pipe',
 })
-const { SYSTEM_PROMPT, LEAD_TOOL } = await import(bundle)
+const { SYSTEM_PROMPT, LEAD_TOOL, CALENDAR_TOOL } = await import(bundle)
 
 async function ask(messages) {
   const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -46,7 +46,7 @@ async function ask(messages) {
       model: MODEL,
       max_tokens: 700,
       system: SYSTEM_PROMPT,
-      tools: [LEAD_TOOL],
+      tools: [LEAD_TOOL, CALENDAR_TOOL],
       messages,
     }),
   })
@@ -115,6 +115,44 @@ const cases = [
           ? null
           : `tool fired but email wrong: ${JSON.stringify(r.tool.input)}`
         : 'capture_lead did not fire',
+  },
+  {
+    // visitor refuses to hand over details — the calendar must still appear
+    name: 'show_calendar fires for direct bookers',
+    messages: [
+      { role: 'user', content: 'Can I book a call with someone right now?' },
+      { role: 'assistant', content: 'Absolutely. So the right person is on the call — what should I call you, and what\'s the project?' },
+      { role: 'user', content: "I'd rather not type all that out — just let me pick a time." },
+    ],
+    fail: (r) => {
+      if (/calendly\.com/i.test(r.text)) return `pasted a raw booking link: "${r.text.slice(0, 120)}"`
+      if (r.tool?.name === 'show_calendar') return null
+      return 'show_calendar did not fire'
+    },
+  },
+  {
+    // after the tool round the confirmation must invite, not paste URLs
+    name: 'no raw link in post-capture confirmation',
+    messages: [
+      { role: 'user', content: 'Maya Chen, maya@northstar.io — we need workflow automation for claims processing.' },
+      {
+        role: 'assistant',
+        content: [
+          { type: 'tool_use', id: 'tu_eval', name: 'capture_lead', input: { name: 'Maya Chen', email: 'maya@northstar.io', interest: 'workflow automation for claims processing', summary: 'Claims automation inquiry.' } },
+        ],
+      },
+      {
+        role: 'user',
+        content: [
+          { type: 'tool_result', tool_use_id: 'tu_eval', content: 'Lead recorded and the NxGP team has been notified. A recap email with the booking link is on its way to the visitor. The booking calendar will now appear in the chat — confirm the team has their note and invite them to grab a time right here. Do not paste any URL.' },
+        ],
+      },
+    ],
+    fail: (r) => {
+      if (/calendly\.com|https?:\/\//i.test(r.text)) return `pasted a URL: "${r.text.slice(0, 120)}"`
+      if (!r.text.trim()) return 'empty confirmation'
+      return null
+    },
   },
 ]
 

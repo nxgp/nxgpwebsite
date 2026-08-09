@@ -3,8 +3,11 @@ import { Maximize2, Minimize2, Send, ThumbsDown, ThumbsUp, X } from 'lucide-reac
 import { cn } from '../../lib/cn'
 import { NxMark } from '../ui/Logo'
 import { Markdown } from './markdown'
+import { CalendlyCard } from './CalendlyCard'
 
-type Msg = { role: 'user' | 'assistant'; content: string }
+// calendarUrl: set by the server's `calendar` SSE event — renders the inline
+// booking card under the message (and survives reloads via localStorage)
+type Msg = { role: 'user' | 'assistant'; content: string; calendarUrl?: string }
 
 const STORAGE_KEY = 'nx-chat-v1'
 const GREETING =
@@ -72,6 +75,12 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
       const decoder = new TextDecoder()
       let buf = ''
       let reply = ''
+      let calendarUrl: string | undefined
+      const push = () =>
+        setSession({
+          id: session.id,
+          messages: [...base, { role: 'assistant', content: reply, calendarUrl }],
+        })
       for (;;) {
         const { done, value } = await reader.read()
         if (done) break
@@ -84,16 +93,13 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
             const ev = JSON.parse(line.slice(5))
             if (ev.t === 'delta') {
               reply += ev.text
-              setSession({
-                id: session.id,
-                messages: [...base, { role: 'assistant', content: reply }],
-              })
+              push()
+            } else if (ev.t === 'calendar' && typeof ev.url === 'string') {
+              calendarUrl = ev.url
+              push()
             } else if (ev.t === 'err') {
               reply = reply || ev.message
-              setSession({
-                id: session.id,
-                messages: [...base, { role: 'assistant', content: reply }],
-              })
+              push()
             }
           } catch {
             /* partial line */
@@ -212,6 +218,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
                 </span>
               )}
             </Bubble>
+            {m.calendarUrl && <CalendlyCard url={m.calendarUrl} />}
             {m.role === 'assistant' && m.content && !(busy && i === session.messages.length - 1) && (
               <div className="mt-1 flex gap-1 pl-1">
                 {voted[i] ? (

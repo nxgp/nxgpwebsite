@@ -42,13 +42,37 @@ Visitor ⇄ ChatWidget (React, lazy-loaded panel, SSE streaming)
       **Add New Webhook to Workspace** → choose `#website-leads` → **Allow**.
    3. Copy the `https://hooks.slack.com/services/…` URL → set
       `SLACK_WEBHOOK_URL`.
-4. **Vercel** — Project → Settings → Environment Variables → add the four
+4. **Resend** (lead follow-up email) — resend.com → verify the `nxgp.io`
+   domain (DNS records they show you), create an API key. Set
+   `RESEND_API_KEY`, and optionally `EMAIL_FROM` (default
+   `Nx Growth Partners <hello@nxgp.io>` — must be on the verified domain)
+   and `EMAIL_REPLY_TO` (default hello@nxgp.io). Without the key, leads are
+   still captured and Slack notes the email was skipped.
+5. **Vercel** — Project → Settings → Environment Variables → add the
    vars above (Production + Preview), then redeploy.
 
 Every integration degrades gracefully: without Slack the lead still lands in
-Supabase; without Supabase the chat still answers; without the Anthropic key
-the endpoint returns 503 and the widget shows a friendly fallback with
+Supabase; without Supabase the chat still answers; without Resend the lead is
+captured and Slack flags that no recap email went out; without the Anthropic
+key the endpoint returns 503 and the widget shows a friendly fallback with
 hello@nxgp.io.
+
+## Booking flow
+
+Visitors book without leaving the site. Every "Book a call" button opens an
+embedded Calendly modal, and inside the chat the calendar renders inline:
+
+- `capture_lead` → recap email to the visitor (Resend) → Slack ping (with
+  email status) → SSE `{"t":"calendar","url"}` → the panel renders the
+  calendar, prefilled with their name/email.
+- `show_calendar` → same calendar event for visitors who want to book
+  without sharing details first. A booked call beats a captured email.
+
+Test the whole pipeline offline (mock Anthropic/Resend/Slack):
+
+```
+npm run test:chat
+```
 
 ## Useful queries
 

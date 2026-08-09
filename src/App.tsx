@@ -18,6 +18,7 @@ import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 import { Seo } from './components/Seo'
 import { ChatWidget } from './components/chat/ChatWidget'
+import { BookingProvider } from './components/BookingModal'
 
 export default function App() {
   useSmoothScroll()
@@ -37,7 +38,7 @@ export default function App() {
   }, [])
 
   return (
-    <>
+    <BookingProvider>
       <a href="#main" className="skip-link">
         Skip to content
       </a>
@@ -60,6 +61,6 @@ export default function App() {
       <Footer />
       <ChatWidget />
       <Seo />
-    </>
+    </BookingProvider>
   )
 }

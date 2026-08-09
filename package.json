@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:chat": "node scripts/test-chat-e2e.mjs",
+    "eval": "node scripts/eval-assistant.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

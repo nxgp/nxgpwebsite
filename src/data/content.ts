@@ -365,6 +365,7 @@ export const cta = {
   h2Lines: ['Let’s find what', 'moves your business.'],
   sub: "Tell us where you are — PE, enterprise or government — and we'll map where technology can create the most value. A 30-minute intro, no pitch deck.",
   email: 'hello@nxgp.io',
+  calendly: 'https://calendly.com/ravi-nxgp',
   ctaPrimary: 'Book a call',
   ctaSecondary: 'See the pillars',
 }
