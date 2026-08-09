@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
-import { gsap } from '../lib/gsap'
+import { withMotion } from '../lib/motion'
 import { prefersReducedMotion } from '../lib/reducedMotion'
 import { cta } from '../data/content'
 import { Button } from './ui/Button'
@@ -14,15 +14,17 @@ export function CTA() {
   useEffect(() => {
     const el = root.current
     if (!el || prefersReducedMotion()) return
-    const ctx = gsap.context(() => {
-      const words = el.querySelectorAll<HTMLElement>('[data-cta-word]')
-      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 72%' } })
-      tl.from(words, { yPercent: 110, duration: 0.9, ease: 'expo.out', stagger: 0.08 })
+    return withMotion(({ gsap }) => {
+      const ctx = gsap.context(() => {
+        const words = el.querySelectorAll<HTMLElement>('[data-cta-word]')
+        const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 72%' } })
+        tl.from(words, { yPercent: 110, duration: 0.9, ease: 'expo.out', stagger: 0.08 })
       if (aurora.current) {
         gsap.fromTo(aurora.current, { opacity: 0.4, scale: 0.92 }, { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 78%' } })
       }
-    }, el)
-    return () => ctx.revert()
+      }, el)
+      return () => ctx.revert()
+    })
   }, [])
 
   return (
