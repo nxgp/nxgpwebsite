@@ -4,6 +4,7 @@
  * POST /api/chat  { conversationId: string, messages: [{role, content}] }
  * → SSE stream:   data: {"t":"delta","text":"..."}
  *                 data: {"t":"lead"}            (lead captured, team notified)
+ *                 data: {"t":"calendar","url"}  (render the inline booking calendar)
  *                 data: {"t":"done"}
  *                 data: {"t":"err","message"}
  *
@@ -11,9 +12,11 @@
  *      SUPABASE_URL + SUPABASE_SECRET_KEY   (conversation + lead storage)
  *      SLACK_WEBHOOK_URL                    (lead notifications)
  *      CALENDLY_URL                         (booking link; has default)
+ *      RESEND_API_KEY (+ EMAIL_FROM)        (lead follow-up email)
  * Missing integrations degrade gracefully — chat keeps working.
  */
-import { SYSTEM_PROMPT, LEAD_TOOL, CALENDLY_URL } from './_knowledge'
+import { SYSTEM_PROMPT, LEAD_TOOL, CALENDAR_TOOL, CALENDLY_URL } from './_knowledge'
+import { sendFollowupEmail, type FollowupResult } from './_email'
 import { loadMemory, renderMemory } from './_memory'
 
 export const config = { runtime: 'edge' }
@@ -38,6 +41,19 @@ type Lead = {
   company?: string
   interest: string
   summary: string
+}
+
+/** Inline-embed URL for the chat's booking card, prefilled when we know who
+ *  the visitor is so Calendly's form is one click, not a re-typing exercise. */
+function calendarUrl(lead?: Lead): string {
+  const u = new URL(CALENDLY_URL)
+  u.searchParams.set('hide_gdpr_banner', '1')
+  // Calendly only honors hide_gdpr_banner when embed_domain is present
+  u.searchParams.set('embed_domain', 'nxgp.io')
+  u.searchParams.set('embed_type', 'Inline')
+  if (lead?.name) u.searchParams.set('name', lead.name.slice(0, 100))
+  if (lead?.email) u.searchParams.set('email', lead.email.slice(0, 200))
+  return u.toString()
 }
 
 // best-effort per-isolate limiter (backstop when Supabase isn't configured)
@@ -120,13 +136,24 @@ async function overDailyLimits(ip: string): Promise<boolean> {
 
 /* ---------------- Slack ---------------- */
 
-async function notifySlack(lead: Lead, conversationId: string): Promise<boolean> {
+async function notifySlack(
+  lead: Lead,
+  conversationId: string,
+  followup: FollowupResult,
+): Promise<boolean> {
   const url = process.env.SLACK_WEBHOOK_URL
   if (!url) return false
+  const followupLine =
+    followup === 'sent'
+      ? 'recap email sent to the lead ✓'
+      : followup === 'skipped'
+        ? 'recap email skipped (RESEND_API_KEY not set)'
+        : 'recap email FAILED — follow up manually'
   const text =
     `:large_blue_diamond: *New website lead*\n` +
     `*Name:* ${lead.name || '—'}\n*Email:* ${lead.email}\n*Company:* ${lead.company || '—'}\n` +
     `*Needs:* ${lead.interest}\n*Summary:* ${lead.summary}\n` +
+    `*Follow-up:* ${followupLine}\n` +
     `*Conversation:* \`${conversationId}\``
   try {
     const r = await fetch(url, {
@@ -192,7 +219,7 @@ async function anthropicStream(
       model: MODEL,
       max_tokens: MAX_TOKENS,
       system,
-      tools: [LEAD_TOOL],
+      tools: [LEAD_TOOL, CALENDAR_TOOL],
       messages,
       stream: true,
     }),
@@ -335,26 +362,45 @@ export default async function handler(req: Request): Promise<Response> {
           send({ t: 'delta', text: t })
         }, memoryBlock)
 
-        // one tool round max — capture_lead, then let the model confirm
+        // one tool round max — handle the tool, then let the model confirm
         if (round.stopReason === 'tool_use') {
           const tool = round.blocks.find(
             (b): b is Extract<ContentBlock, { type: 'tool_use' }> =>
-              b.type === 'tool_use' && b.name === 'capture_lead',
+              b.type === 'tool_use' &&
+              (b.name === 'capture_lead' || b.name === 'show_calendar'),
           )
           if (tool) {
-            const lead = tool.input as unknown as Lead
-            const slackOk = await notifySlack(lead, conversationId)
-            await sbInsert('leads', {
-              conversation_id: conversationId,
-              name: lead.name ?? null,
-              email: lead.email,
-              company: lead.company ?? null,
-              interest: lead.interest,
-              summary: lead.summary,
-              slack_notified: slackOk,
-            })
-            leadCaptured = true
-            send({ t: 'lead' })
+            let toolResult: string
+            let calUrl: string | null = null
+
+            if (tool.name === 'capture_lead') {
+              const lead = tool.input as unknown as Lead
+              // recap email first, so the Slack ping can report its status
+              const followup = await sendFollowupEmail(lead, CALENDLY_URL)
+              const slackOk = await notifySlack(lead, conversationId, followup)
+              await sbInsert('leads', {
+                conversation_id: conversationId,
+                name: lead.name ?? null,
+                email: lead.email,
+                company: lead.company ?? null,
+                interest: lead.interest,
+                summary: lead.summary,
+                slack_notified: slackOk,
+              })
+              leadCaptured = true
+              send({ t: 'lead' })
+              calUrl = calendarUrl(lead)
+              toolResult =
+                'Lead recorded and the NxGP team has been notified.' +
+                (followup === 'sent'
+                  ? ' A recap email with the booking link is on its way to the visitor.'
+                  : '') +
+                ' The booking calendar will now appear in the chat — confirm the team has their note and invite them to grab a time right here. Do not paste any URL.'
+            } else {
+              calUrl = calendarUrl()
+              toolResult =
+                'The booking calendar is now visible in the chat. Tell the visitor to pick a time that works for them. Do not paste any URL.'
+            }
 
             // visual break between pre-tool text and the confirmation
             if (assistantText.trim()) {
@@ -366,17 +412,16 @@ export default async function handler(req: Request): Promise<Response> {
             apiMessages.push({
               role: 'user',
               content: [
-                {
-                  type: 'tool_result',
-                  tool_use_id: tool.id,
-                  content: `Lead recorded and the NxGP team has been notified. Confirm this to the visitor and share the booking link: ${CALENDLY_URL}`,
-                },
+                { type: 'tool_result', tool_use_id: tool.id, content: toolResult },
               ],
             })
             round = await anthropicStream(apiMessages, (t) => {
               assistantText += t
               send({ t: 'delta', text: t })
             }, memoryBlock)
+
+            // after the confirmation text, so the card lands beneath it
+            if (calUrl) send({ t: 'calendar', url: calUrl })
           }
         }
 

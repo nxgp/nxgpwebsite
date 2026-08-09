@@ -1,6 +1,9 @@
+import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import VignetteStage from './components/portfolio/vignetteStage'
+import ChatPanel from './components/chat/ChatPanel'
+import { BookingProvider, useBooking } from './components/BookingModal'
 
 /**
  * Visual test harness (dev-only, never built into dist): renders all eight
@@ -28,4 +31,43 @@ function Harness() {
   )
 }
 
-createRoot(document.getElementById('root')!).render(<Harness />)
+/** ?ui=chat — chat panel restored from a session that already booked, so the
+ *  inline Calendly card renders (also exercises the localStorage path). */
+function ChatHarness() {
+  return <ChatPanel onClose={() => {}} />
+}
+
+function OpenBookingOnMount() {
+  const openBooking = useBooking()
+  useEffect(() => openBooking(), [openBooking])
+  return <p style={{ padding: 16 }}>booking harness</p>
+}
+
+const ui = new URLSearchParams(window.location.search).get('ui')
+const root = createRoot(document.getElementById('root')!)
+
+if (ui === 'chat') {
+  localStorage.setItem(
+    'nx-chat-v1',
+    JSON.stringify({
+      id: 'harness',
+      messages: [
+        { role: 'user', content: 'Can I book a call with the team?' },
+        {
+          role: 'assistant',
+          content: "You're all set — the team has your note. Grab a time below that works for you.",
+          calendarUrl: 'https://calendly.com/ravi-nxgp?hide_gdpr_banner=1&embed_type=Inline',
+        },
+      ],
+    }),
+  )
+  root.render(<ChatHarness />)
+} else if (ui === 'booking') {
+  root.render(
+    <BookingProvider>
+      <OpenBookingOnMount />
+    </BookingProvider>,
+  )
+} else {
+  root.render(<Harness />)
+}

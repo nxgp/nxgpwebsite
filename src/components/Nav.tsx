@@ -3,11 +3,13 @@ import { Button } from './ui/Button'
 import { Logo } from './ui/Logo'
 import { nav } from '../data/content'
 import { scrollToId } from '../lib/useSmoothScroll'
+import { useBooking } from './BookingModal'
 import { cn } from '../lib/cn'
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const openBooking = useBooking()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -52,7 +54,7 @@ export function Nav() {
         </div>
 
         <div className="hidden items-center gap-2.5 md:flex">
-          <Button variant="dark" onClick={() => scrollToId('cta')}>
+          <Button variant="dark" onClick={openBooking}>
             {nav.cta}
           </Button>
         </div>
@@ -87,7 +89,7 @@ export function Nav() {
               {l.label}
             </a>
           ))}
-          <Button variant="dark" magnetic={false} className="mt-2 w-full" onClick={() => { scrollToId('cta'); setOpen(false) }}>
+          <Button variant="dark" magnetic={false} className="mt-2 w-full" onClick={() => { setOpen(false); openBooking() }}>
             {nav.cta}
           </Button>
         </div>

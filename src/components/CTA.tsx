@@ -6,10 +6,12 @@ import { cta } from '../data/content'
 import { Button } from './ui/Button'
 import { Aurora } from './ui/Aurora'
 import { scrollToId } from '../lib/useSmoothScroll'
+import { useBooking } from './BookingModal'
 
 export function CTA() {
   const root = useRef<HTMLDivElement>(null)
   const aurora = useRef<HTMLDivElement>(null)
+  const openBooking = useBooking()
 
   useEffect(() => {
     const el = root.current
@@ -53,7 +55,7 @@ export function CTA() {
             <p className="t-lead mx-auto mt-5 text-white/65">{cta.sub}</p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button variant="light" href={`mailto:${cta.email}`} className="bg-white text-ink">
+              <Button variant="light" className="bg-white text-ink" onClick={openBooking}>
                 {cta.ctaPrimary}
                 <ArrowRight className="size-4" />
               </Button>
@@ -61,6 +63,12 @@ export function CTA() {
                 {cta.ctaSecondary}
               </Button>
             </div>
+            <p className="mt-5 text-[0.85rem] font-600 text-white/50">
+              Prefer email?{' '}
+              <a href={`mailto:${cta.email}`} className="underline underline-offset-2 hover:text-white">
+                {cta.email}
+              </a>
+            </p>
           </div>
         </div>
       </div>
