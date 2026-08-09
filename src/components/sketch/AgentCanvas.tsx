@@ -1,71 +1,94 @@
 import { useState } from 'react'
-import { ArrowRight, Check, CalendarDays, Link2, Mail } from 'lucide-react'
+import { ArrowRight, Check, CalendarDays, Link2, Mail, UserRound, Zap } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { sketch as copy } from '../../data/content'
 import { useBooking } from '../BookingModal'
-import type { Sketch } from '../../lib/sketch-types'
+import type { Sketch, SketchStep } from '../../lib/sketch-types'
 
 /**
- * The payoff: a visitor's workflow rendered as a first-pass agent design, in
- * the exact visual language of the Agent Hub vignette — studio backdrop,
- * cropped wordmark, chain cells with the periwinkle human-gate, assembling
- * with the same staggered choreography.
+ * The payoff: a visitor's workflow rendered as a first-pass agent design.
+ *
+ * Layout principle (v2, after "too confusing" feedback on the card grid):
+ * the RUN reads as a run — one vertical timeline with a connecting spine,
+ * numbered nodes and type-colored chips, ending at the periwinkle human
+ * gate. Everything that annotates the run (integrations, metrics, the
+ * architect's question) lives in a sidebar, visually subordinate.
  *
  * Default export so it can be lazy()-loaded behind the first submit.
  */
 
 const D = (s: number) => ({ '--d': `${s}s` }) as React.CSSProperties
 
-const TYPE_LABEL: Record<string, string> = {
-  read: 'read',
-  reason: 'reason',
-  act: 'act',
-  notify: 'notify',
+/** Type chips — each capability kind gets its own tint, so a run scans. */
+const TYPE_CHIP: Record<SketchStep['type'] | 'trigger' | 'escalate', string> = {
+  trigger: 'bg-accent text-white',
+  read: 'border border-line bg-bg text-ink-soft',
+  reason: 'bg-accent-wash text-accent-deep',
+  act: 'bg-[#E7F8EC] text-[#1D8A46]',
+  notify: 'bg-[#FFF3E4] text-[#B4671B]',
+  escalate: 'bg-peri/15 text-peri',
 }
 
-function Cell({
+function Node({
   n,
+  kind,
   label,
   detail,
-  tag,
-  guard = false,
+  last = false,
   delay,
 }: {
   n: number
+  kind: keyof typeof TYPE_CHIP
   label: string
   detail: string
-  tag?: string
-  guard?: boolean
+  last?: boolean
   delay: number
 }) {
+  const guard = kind === 'escalate'
   return (
-    <div
-      className={cn(
-        'pv-pop min-w-0 rounded-[10px] border bg-surface px-3 py-2 shadow-sm',
-        guard ? 'border-peri' : 'border-line',
-      )}
-      style={D(delay)}
-    >
-      <p className="flex items-baseline gap-1.5">
-        <span className={cn('text-[0.62rem] font-800 tabular-nums', guard ? 'text-peri' : 'text-ink-faint')}>
-          {n}
+    <li className="grid grid-cols-[30px_1fr] gap-x-3">
+      {/* marker + spine segment */}
+      <div className="flex flex-col items-center">
+        <span
+          className={cn(
+            'pv-pop flex size-[30px] shrink-0 items-center justify-center rounded-full text-[0.72rem] font-800',
+            guard
+              ? 'border-2 border-peri bg-peri/10 text-peri'
+              : kind === 'trigger'
+                ? 'bg-accent text-white'
+                : 'border border-line bg-surface text-ink-soft',
+          )}
+          style={D(delay)}
+        >
+          {guard ? <UserRound className="size-3.5" /> : n}
         </span>
-        <span className={cn('truncate text-[0.8rem] font-800', guard ? 'text-peri' : 'text-ink')}>{label}</span>
-        {tag && (
-          <span className="ml-auto shrink-0 rounded-[5px] bg-bg px-1.5 py-0.5 text-[0.52rem] font-700 uppercase tracking-[0.05em] text-ink-faint">
-            {tag}
+        {!last && <span aria-hidden className="w-px flex-1 bg-line" />}
+      </div>
+      {/* the step */}
+      <div className={cn('pv-in min-w-0', last ? 'pb-0' : 'pb-4')} style={D(delay + 0.06)}>
+        <p className="flex flex-wrap items-center gap-2">
+          <span className={cn('text-[0.9rem] font-800 leading-tight', guard ? 'text-peri' : 'text-ink')}>
+            {label}
           </span>
-        )}
-      </p>
-      <p className="mt-0.5 text-[0.7rem] font-600 leading-snug text-ink-soft">{detail}</p>
-    </div>
+          <span
+            className={cn(
+              'rounded-pill px-2 py-0.5 text-[0.56rem] font-700 uppercase tracking-[0.06em]',
+              TYPE_CHIP[kind],
+            )}
+          >
+            {kind}
+          </span>
+        </p>
+        <p className="mt-1 max-w-[36rem] text-[0.85rem] leading-snug text-ink-soft">{detail}</p>
+      </div>
+    </li>
   )
 }
 
 /** Inline "email me this sketch" — also the lead-capture mechanic. */
 function EmailMe({ sketchId }: { sketchId: string }) {
   const [email, setEmail] = useState('')
-  const [state, setState] = useState<'idle' | 'busy' | 'sent' | 'error'>('idle')
+  const [state, setState] = useState<'idle' | 'busy' | 'sent' | 'recorded' | 'error'>('idle')
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -77,21 +100,26 @@ function EmailMe({ sketchId }: { sketchId: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: sketchId, email }),
       })
-      setState(r.ok ? 'sent' : 'error')
+      const j = await r.json().catch(() => ({}))
+      // honest state: the lead always lands; the email itself may be
+      // deferred (provider not configured) — never claim an inbox delivery
+      // that didn't happen
+      setState(r.ok ? (j.emailed ? 'sent' : 'recorded') : 'error')
     } catch {
       setState('error')
     }
   }
 
-  if (state === 'sent') {
+  if (state === 'sent' || state === 'recorded') {
     return (
       <p className="flex items-center gap-1.5 text-[0.85rem] font-600 text-ink-soft">
-        <Check className="size-4 text-[#1D8A46]" /> Sent — check your inbox.
+        <Check className="size-4 text-[#1D8A46]" />
+        {state === 'sent' ? 'Sent — check your inbox.' : "Got it — the team will send it over shortly."}
       </p>
     )
   }
   return (
-    <form onSubmit={submit} className="flex min-w-0 items-center gap-2">
+    <form onSubmit={submit} className="flex min-w-0 flex-wrap items-center gap-2">
       <input
         type="email"
         required
@@ -117,9 +145,8 @@ export default function AgentCanvas({ sketch, sketchId }: { sketch: Sketch; sket
   const openBooking = useBooking()
   const [copied, setCopied] = useState(false)
   const steps = sketch.steps ?? []
-  // trigger + steps + guardrail, one continuous choreography
-  const delayFor = (i: number) => 0.15 + i * 0.16
-  const guardDelay = delayFor(steps.length + 1)
+  const delayFor = (i: number) => 0.15 + i * 0.14
+  const gateDelay = delayFor(steps.length + 1)
   const shareUrl = sketchId ? `https://nxgp.io/sketch?s=${sketchId}` : null
 
   function copyLink() {
@@ -167,83 +194,97 @@ export default function AgentCanvas({ sketch, sketchId }: { sketch: Sketch; sket
             </span>
           </div>
 
-          <div className="flex flex-col gap-3.5 p-3.5 sm:p-5">
+          <div className="p-4 sm:p-6">
             <div className="pv-in" style={D(0)}>
-              <p className="font-display text-[1.15rem] font-800 tracking-[-0.01em]">{sketch.name}</p>
-              <p className="mt-0.5 text-[0.85rem] leading-snug text-ink-soft">{sketch.summary}</p>
+              <p className="font-display text-[1.3rem] font-800 tracking-[-0.01em]">{sketch.name}</p>
+              <p className="mt-1 max-w-[44rem] text-[0.92rem] leading-snug text-ink-soft">{sketch.summary}</p>
             </div>
 
-            {/* the backbone: trigger → steps → human gate */}
-            <div>
-              <p className="mb-1.5 text-[0.56rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
-                One run, start to finish
-              </p>
-              <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
-                <Cell n={1} label={sketch.trigger?.label ?? ''} detail={sketch.trigger?.detail ?? ''} tag="trigger" delay={delayFor(0)} />
-                {steps.map((s, i) => (
-                  <Cell
-                    key={i}
-                    n={i + 2}
-                    label={s.label}
-                    detail={s.detail}
-                    tag={TYPE_LABEL[s.type]}
-                    delay={delayFor(i + 1)}
-                  />
-                ))}
-                <Cell
-                  n={steps.length + 2}
-                  label="Human gate"
-                  detail={`${sketch.guardrail?.condition ?? ''} → ${sketch.guardrail?.action ?? ''}`}
-                  tag="escalate"
-                  guard
-                  delay={guardDelay}
-                />
-              </div>
-            </div>
-
-            {/* architect's margins: integrations · metrics */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="pv-in rounded-[10px] border border-line bg-bg/50 px-3 py-2.5" style={D(guardDelay + 0.2)}>
-                <p className="text-[0.56rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
-                  Likely integrations
+            <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-10">
+              {/* ---- the run: one vertical timeline ---- */}
+              <div className="min-w-0">
+                <p className="mb-3 text-[0.6rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+                  One run, start to finish
                 </p>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  {(sketch.integrations ?? []).map((sys) => (
-                    <span key={sys} className="rounded-pill border border-line bg-surface px-2.5 py-1 text-[0.72rem] font-600 text-ink-soft">
-                      {sys}
-                    </span>
+                <ol className="flex flex-col">
+                  <Node
+                    n={1}
+                    kind="trigger"
+                    label={sketch.trigger?.label ?? ''}
+                    detail={sketch.trigger?.detail ?? ''}
+                    delay={delayFor(0)}
+                  />
+                  {steps.map((s, i) => (
+                    <Node
+                      key={i}
+                      n={i + 2}
+                      kind={s.type}
+                      label={s.label}
+                      detail={s.detail}
+                      delay={delayFor(i + 1)}
+                    />
                   ))}
-                </div>
+                  <Node
+                    n={steps.length + 2}
+                    kind="escalate"
+                    label="A human steps in"
+                    detail={`${sketch.guardrail?.condition ?? ''} → ${sketch.guardrail?.action ?? ''}`}
+                    last
+                    delay={gateDelay}
+                  />
+                </ol>
               </div>
-              <div className="pv-in rounded-[10px] border border-line bg-bg/50 px-3 py-2.5" style={D(guardDelay + 0.35)}>
-                <p className="text-[0.56rem] font-800 uppercase tracking-[0.09em] text-ink-faint">Worth measuring</p>
-                <ul className="mt-1.5 flex flex-col gap-1">
-                  {(sketch.metrics ?? []).map((m) => (
-                    <li key={m} className="flex items-start gap-1.5 text-[0.78rem] font-600 text-ink-soft">
-                      <Check className="mt-[2px] size-3.5 shrink-0 text-[#1D8A46]" /> {m}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
 
-            {/* the architect's question — proof of thinking, hook for the call */}
-            <div className="pv-in flex items-start gap-2.5 border-l-2 border-accent pl-3" style={D(guardDelay + 0.5)}>
-              <p className="text-[0.85rem] leading-snug text-ink">
-                <span className="font-700">The question we'd ask next: </span>
-                {sketch.clarify}
-              </p>
+              {/* ---- the margins: what annotates the run ---- */}
+              <div className="flex min-w-0 flex-col gap-4 lg:border-l lg:border-line lg:pl-8">
+                <div className="pv-in" style={D(gateDelay + 0.15)}>
+                  <p className="text-[0.6rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+                    Likely integrations
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {(sketch.integrations ?? []).map((sys) => (
+                      <span
+                        key={sys}
+                        className="rounded-pill border border-line bg-bg/60 px-2.5 py-1 text-[0.75rem] font-600 text-ink-soft"
+                      >
+                        {sys}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pv-in" style={D(gateDelay + 0.28)}>
+                  <p className="text-[0.6rem] font-800 uppercase tracking-[0.09em] text-ink-faint">
+                    Worth measuring
+                  </p>
+                  <ul className="mt-2 flex flex-col gap-1.5">
+                    {(sketch.metrics ?? []).map((m) => (
+                      <li key={m} className="flex items-start gap-1.5 text-[0.82rem] font-600 text-ink-soft">
+                        <Check className="mt-[2px] size-3.5 shrink-0 text-[#1D8A46]" /> {m}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pv-in rounded-[12px] bg-accent-wash/60 px-3.5 py-3" style={D(gateDelay + 0.4)}>
+                  <p className="flex items-center gap-1.5 text-[0.6rem] font-800 uppercase tracking-[0.09em] text-accent-deep">
+                    <Zap className="size-3" /> The question we'd ask next
+                  </p>
+                  <p className="mt-1.5 text-[0.85rem] leading-snug text-ink">{sketch.clarify}</p>
+                </div>
+
+                {sketch.feasibility === 'ambitious' && sketch.feasibilityNote && (
+                  <p className="pv-in text-[0.78rem] font-600 leading-snug text-ink-faint" style={D(gateDelay + 0.5)}>
+                    Why "ambitious": {sketch.feasibilityNote}
+                  </p>
+                )}
+              </div>
             </div>
-            {sketch.feasibility === 'ambitious' && sketch.feasibilityNote && (
-              <p className="pv-in -mt-1 text-[0.78rem] font-600 text-ink-faint" style={D(guardDelay + 0.6)}>
-                Why "ambitious": {sketch.feasibilityNote}
-              </p>
-            )}
           </div>
         </div>
 
         {/* the ask */}
-        <div className="pv-in mt-4 flex flex-wrap items-center gap-3" style={D(guardDelay + 0.7)}>
+        <div className="pv-in mt-4 flex flex-wrap items-center gap-3" style={D(gateDelay + 0.6)}>
           <button
             onClick={openBooking}
             className="inline-flex h-[42px] items-center gap-2 rounded-pill bg-ink px-5 text-[0.9rem] font-700 text-white shadow-sm transition-transform hover:-translate-y-0.5"
@@ -261,7 +302,7 @@ export default function AgentCanvas({ sketch, sketchId }: { sketch: Sketch; sket
             </button>
           )}
         </div>
-        <p className="pv-in mt-3 max-w-[52rem] text-[0.75rem] font-600 leading-relaxed text-ink-faint" style={D(guardDelay + 0.8)}>
+        <p className="pv-in mt-3 max-w-[52rem] text-[0.75rem] font-600 leading-relaxed text-ink-faint" style={D(gateDelay + 0.7)}>
           {copy.footnote}
         </p>
       </div>
