@@ -182,36 +182,6 @@ export const engagement = {
   ] as Engagement[],
 }
 
-export const embedded = {
-  kicker: 'The embedded model',
-  h2: 'Embedded, not handed off.',
-  sub: 'Most firms sell you projects or bodies. We put a senior team inside your environment and make ourselves accountable to the outcome.',
-  embed: {
-    label: 'Embedded — the Nx way',
-    points: [
-      'Inside your stack, standups and Slack',
-      'A senior, cross-functional team',
-      'Accountable to outcomes, not tickets',
-      'Production releases every week',
-      'Full transparency — you see the board live',
-      'Direct access to the people building',
-    ],
-  },
-  handoff: {
-    label: 'Hand-off / staff-aug',
-    points: [
-      'Over the wall, mostly async',
-      'Bodies you have to manage',
-      'Accountable to a statement of work',
-      'Big-bang delivery, months later',
-      'A status deck once a month',
-      'Account managers in between',
-    ],
-  },
-  cadence: ['Plan', 'Build', 'Demo', 'Ship'],
-  cadenceNote: 'A predictable weekly rhythm you can plan around.',
-}
-
 export type Industry = { name: string; buyer: string; frame: string; visual: 'pe' | 'enterprise' | 'gov'; accent: string; note?: string }
 
 export const industries = {
