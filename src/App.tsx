@@ -9,7 +9,6 @@ import { Shift } from './components/Shift'
 import { OperatingModel } from './components/OperatingModel'
 import { Services } from './components/Services'
 import { Engagement } from './components/Engagement'
-import { Embedded } from './components/Embedded'
 import { Industries } from './components/Industries'
 import { Portfolio } from './components/portfolio/Portfolio'
 import { Reviews } from './components/Reviews'
@@ -49,7 +48,6 @@ export default function App() {
         <OperatingModel />
         <Services />
         <Engagement />
-        <Embedded />
         <Industries />
         <Portfolio />
         <Reviews />
