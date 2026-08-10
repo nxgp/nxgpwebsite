@@ -1,6 +1,35 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) — GA4 property G-NXKF7HCKNV.
+         Two deliberate deviations from Google's copy-paste snippet:
+         1. Loads on the production host only, so Vercel preview deploys and
+            local dev don't pollute the property with fake sessions.
+         2. Measurement only — Google Signals and ad-personalization signals
+            are off, so this stays analytics and never becomes ad tracking
+            (what /privacy promises). Turn them on only if NxGP ever runs
+            Google Ads remarketing.
+         `gtag` is defined either way, so event calls elsewhere in the app are
+         no-ops off production rather than errors. Navigation is full page
+         loads (no client router), so page_view fires naturally per page. -->
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      if (location.hostname === 'nxgp.io' || location.hostname === 'www.nxgp.io') {
+        var gaScript = document.createElement('script')
+        gaScript.async = true
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-NXKF7HCKNV'
+        document.head.appendChild(gaScript)
+        gtag('js', new Date())
+        gtag('config', 'G-NXKF7HCKNV', {
+          allow_google_signals: false,
+          allow_ad_personalization_signals: false,
+        })
+      }
+    </script>
+
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

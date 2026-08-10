@@ -3,6 +3,7 @@ import { Maximize2, Minimize2, Send, ThumbsDown, ThumbsUp, X } from 'lucide-reac
 import { cn } from '../../lib/cn'
 import { NxMark } from '../ui/Logo'
 import { Markdown } from './markdown'
+import { track } from '../../lib/analytics'
 import { CalendlyCard } from './CalendlyCard'
 
 // calendarUrl: set by the server's `calendar` SSE event — renders the inline
@@ -94,6 +95,10 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
             if (ev.t === 'delta') {
               reply += ev.text
               push()
+            } else if (ev.t === 'lead') {
+              // the assistant captured contact details — the conversion the
+              // whole assistant exists for
+              track('lead_captured', { source: 'assistant' })
             } else if (ev.t === 'calendar' && typeof ev.url === 'string') {
               calendarUrl = ev.url
               push()
