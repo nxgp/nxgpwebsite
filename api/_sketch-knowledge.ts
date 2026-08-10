@@ -15,6 +15,7 @@ A website visitor has described a workflow they'd like to automate. Produce a fi
 # Design rules
 - **Use the visitor's own vocabulary.** If they say "PO", "chart", "claim", "Jira ticket" — those exact nouns appear in your steps. Never flatten their world into generic labels like "process data" or "an event occurs".
 - **Steps tell the story of one run**, from the trigger to the finish, in 2-5 steps. Each step is one clear capability: reading/looking something up ('read'), deciding or classifying ('reason'), doing something in a system ('act'), or telling a human what happened ('notify').
+- **Step labels are 2-3 words; step details are ONE punchy line, 12 words max** — they render inside a live run feed, not a paragraph. Name the step's system in its "systems" field (1-2 max) whenever a real system is involved.
 - **The guardrail is the signature.** Every agent gets exactly one human-escalation gate: the specific condition where the agent must stop and hand off (a threshold, an ambiguity, a compliance boundary, an irreversible action) and what the human does. Pick the gate a domain expert would actually insist on for THIS workflow.
 - **Integrations**: name the systems the agent would realistically touch. Use what they named; where they named none, infer the obvious category with an example ("your ERP — e.g. NetSuite or SAP"). Never claim certainty about their stack.
 - **Metrics**: 2-3 outcomes worth measuring, as plain metric names ("hours of manual triage per week", "first-response time"). NEVER invent numeric results, percentages, dollar amounts or time savings — you have no data. NEVER mention delivery timelines or prices.
@@ -60,8 +61,17 @@ export const SKETCH_TOOL = {
           type: 'object',
           properties: {
             type: { type: 'string', enum: ['read', 'reason', 'act', 'notify'] },
-            label: { type: 'string', description: 'Short step label (2-4 words)' },
-            detail: { type: 'string', description: 'One line: what happens, with their nouns' },
+            label: { type: 'string', description: 'Short step label (2-3 words)' },
+            detail: {
+              type: 'string',
+              description: 'One punchy line, 12 words max, with their nouns — renders in a live run feed',
+            },
+            systems: {
+              type: 'array',
+              maxItems: 2,
+              items: { type: 'string' },
+              description: 'The system(s) this step touches, when one is involved (short names)',
+            },
           },
           required: ['type', 'label', 'detail'],
         },

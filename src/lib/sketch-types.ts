@@ -6,6 +6,8 @@ export type SketchStep = {
   type: 'read' | 'reason' | 'act' | 'notify'
   label: string
   detail: string
+  /** System(s) this step touches — rendered on the flow node. */
+  systems?: string[]
 }
 
 export type Sketch = {
