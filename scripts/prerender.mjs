@@ -99,6 +99,24 @@ for (const route of ROUTES) {
   writeFileSync(path.join(dir, 'index.html'), html)
 }
 
+/* ---------- analytics on the hand-written static pages ----------
+   /privacy and 404 are plain files in public/, so they never pass through
+   the template above and would otherwise be the only untracked pages (404s
+   are worth seeing — they show broken inbound links). Inject the SAME
+   snippet from the template rather than keeping copies in sync by hand. */
+
+const gtagSnippet = template.match(/<!-- Google tag \(gtag\.js\)[\s\S]*?<\/script>/)
+if (!gtagSnippet) throw new Error('prerender: Google tag snippet not found in index.html')
+
+for (const rel of ['privacy.html', '404.html']) {
+  const file = path.join(root, 'dist', rel)
+  let html = readFileSync(file, 'utf8')
+  if (html.includes('gtag/js?id=')) continue // already tagged
+  if (!html.includes('<head>')) throw new Error(`prerender: no <head> in ${rel}`)
+  html = html.replace('<head>', `<head>\n    ${gtagSnippet[0]}`)
+  writeFileSync(file, html)
+}
+
 /* ---------- sitemap, from the same table ---------- */
 
 const today = new Date().toISOString().slice(0, 10)

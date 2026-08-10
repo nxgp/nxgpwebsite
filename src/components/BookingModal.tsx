@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { cta } from '../data/content'
+import { track } from '../lib/analytics'
 
 /**
  * Site-wide booking modal — every "Book a call" opens the Calendly embed in
@@ -20,6 +21,9 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   const openBooking = useCallback(() => {
     openedFrom.current = (document.activeElement as HTMLElement) ?? null
     setOpen(true)
+    // strongest intent signal on the site — which pages produce it is the
+    // question page views can't answer
+    track('book_call_opened', { page: window.location.pathname })
   }, [])
 
   const close = useCallback(() => {
