@@ -9,7 +9,10 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test:chat": "node scripts/test-chat-e2e.mjs",
-    "eval": "node scripts/eval-assistant.mjs"
+    "eval": "node scripts/eval-assistant.mjs",
+    "test:sketch": "node scripts/test-sketch-e2e.mjs",
+    "eval:sketch": "node scripts/eval-sketch.mjs",
+    "local": "node scripts/local-server.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

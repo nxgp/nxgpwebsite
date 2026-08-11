@@ -39,3 +39,16 @@ create index if not exists leads_created_idx on leads (created_at desc);
 alter table conversations enable row level security;
 alter table messages enable row level security;
 alter table leads enable row level security;
+
+-- "Sketch my agent" — generated agent designs (share links + lead intel).
+-- Purged by the same RETENTION_DAYS pass as transcripts (api/learn.ts).
+create table if not exists sketches (
+  id uuid primary key default gen_random_uuid(),
+  description text not null,
+  result jsonb not null,
+  ip text,
+  created_at timestamptz not null default now()
+);
+create index if not exists sketches_created_idx on sketches (created_at desc);
+create index if not exists sketches_ip_time_idx on sketches (ip, created_at);
+alter table sketches enable row level security;

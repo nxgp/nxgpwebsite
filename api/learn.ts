@@ -207,6 +207,11 @@ export default async function handler(req: Request): Promise<Response> {
         `${c.url}/rest/v1/conversations?last_active=lt.${cutoff}&lead_captured=eq.false`,
         { method: 'DELETE', headers: sbHeaders(c) },
       ).catch(() => {})
+      // old agent sketches expire too — share links are ephemeral by design
+      await fetch(`${c.url}/rest/v1/sketches?created_at=lt.${cutoff}`, {
+        method: 'DELETE',
+        headers: sbHeaders(c),
+      }).catch(() => {})
     }
 
     const rows: Row[] = await fetch(

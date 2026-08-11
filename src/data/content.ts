@@ -371,6 +371,28 @@ export const faq = {
   ],
 }
 
+/** "Sketch my agent" — the interactive agent-design section. */
+export const sketch = {
+  kicker: 'Try it live',
+  h2: 'Describe a workflow. Watch it become an agent.',
+  sub: "One sentence about a workflow you run — the same design discipline behind our client agents drafts a first pass: the steps, the human gate, the systems it touches, and what to measure.",
+  placeholder: 'e.g. Invoices land in our AP inbox and need matching to POs before approval…',
+  button: 'Sketch it',
+  examples: [
+    'Invoices land in our AP inbox and need matching to purchase orders before approval in NetSuite',
+    'Support tickets should be triaged by urgency and routed to the right specialist in Zendesk',
+    'New-hire onboarding: accounts, equipment and first-week training across HR and IT systems',
+  ],
+  designing: [
+    'Reading your workflow…',
+    'Naming the steps…',
+    'Placing the human gate…',
+    'Choosing what to measure…',
+  ],
+  footnote:
+    'A first sketch, generated from your description. A real engagement starts by pressure-testing it with the people who run the workflow.',
+}
+
 export const cta = {
   h2Lines: ['Let’s find what', 'moves your business.'],
   sub: "Tell us where you are — PE, enterprise or government — and we'll map where technology can create the most value. A 30-minute intro, no pitch deck.",

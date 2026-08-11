@@ -45,8 +45,8 @@ Visitor ⇄ ChatWidget (React, lazy-loaded panel, SSE streaming)
 4. **Resend** (lead follow-up email) — resend.com → verify the `nxgp.io`
    domain (DNS records they show you), create an API key. Set
    `RESEND_API_KEY`, and optionally `EMAIL_FROM` (default
-   `Nx Growth Partners <hello@nxgp.io>` — must be on the verified domain)
-   and `EMAIL_REPLY_TO` (default hello@nxgp.io). Without the key, leads are
+   `Gurjeet Nijjar <gurjeet@nxgp.io>` — must be on the verified domain)
+   and `EMAIL_REPLY_TO` (default gurjeet@nxgp.io). Without the key, leads are
    still captured and Slack notes the email was skipped.
 5. **Vercel** — Project → Settings → Environment Variables → add the
    vars above (Production + Preview), then redeploy.
@@ -72,6 +72,23 @@ Test the whole pipeline offline (mock Anthropic/Resend/Slack):
 
 ```
 npm run test:chat
+```
+
+## Sketch my agent (/sketch)
+
+`POST /api/sketch { description }` turns a one-sentence workflow into a
+first-pass agent design (forced `design_agent` tool call — structured JSON,
+never free text): trigger, typed steps, a human-escalation gate, likely
+integrations, metrics (no invented numbers), a clarifying question and an
+honesty flag (`standard`/`ambitious`). Stored in the `sketches` table for
+share links (`/sketch?s=<id>`); "Email me this sketch" sends it via Resend
+AND captures a lead (Slack + `leads` table). Limits: 10/IP/day, global
+`SKETCH_DAILY_CAP` (default 300). Old sketches are purged by the same
+`RETENTION_DAYS` pass as transcripts.
+
+```
+npm run test:sketch    # offline pipeline (mocked providers)
+npm run eval:sketch    # design-quality battery against the real model
 ```
 
 ## Useful queries
