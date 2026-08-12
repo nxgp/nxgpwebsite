@@ -5,7 +5,6 @@ import { prefersReducedMotion, isSmallScreen } from '../lib/reducedMotion'
 import { scrollToId } from '../lib/useSmoothScroll'
 import { useBooking } from './BookingModal'
 import { hero } from '../data/content'
-import { Pill } from './ui/Pill'
 import { Button } from './ui/Button'
 import { Aurora } from './ui/Aurora'
 import { HeroConsole } from './mockups/HeroConsole'
@@ -69,9 +68,6 @@ export function Hero() {
 
       <div className="shell grid items-center gap-12 pb-[clamp(40px,7vw,90px)] pt-[calc(var(--nav-h)+clamp(36px,7vw,84px))] lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         <div ref={textRef} className="min-w-0" style={{ willChange: 'transform' }}>
-          <span data-hero-fade className="inline-block">
-            <Pill arrow={false}>{hero.pill}</Pill>
-          </span>
 
           <h1 className="t-h1 mt-5">
             {[hero.h1a, hero.h1b].map((line, li) => (
@@ -92,7 +88,7 @@ export function Hero() {
               {hero.ctaPrimary}
               <ArrowRight className="size-4" />
             </Button>
-            <Button variant="light" onClick={() => scrollToId('how-we-work')}>{hero.ctaSecondary}</Button>
+            <Button variant="light" onClick={() => scrollToId('what-we-build')}>{hero.ctaSecondary}</Button>
           </div>
 
           <p data-hero-fade className="mt-6 max-w-[34rem] text-[0.88rem] font-600 text-ink-faint">{hero.note}</p>

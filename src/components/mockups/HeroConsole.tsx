@@ -37,7 +37,7 @@ export function HeroConsole() {
       </div>
 
       {/* On phones the loop rail is dropped entirely — it duplicates the
-          "How we work" section and squeezed the feed off-screen. */}
+          "What we build" section and squeezed the feed off-screen. */}
       <div className="grid grid-cols-1 sm:grid-cols-[148px_1fr]">
         <aside data-console className="hidden border-r border-line bg-bg/40 px-2.5 py-3 sm:block">
           <p className="px-2 pb-2 text-[0.62rem] font-700 uppercase tracking-[0.08em] text-ink-faint">The loop</p>

@@ -100,7 +100,7 @@ export function Portfolio() {
   return (
     <section id="work" ref={sectionRef} className="section bg-surface/40">
       <div ref={ref} className="shell">
-        <SectionHeader kicker={portfolio.kicker} title={portfolio.h2} sub={portfolio.sub} />
+        <SectionHeader title={portfolio.h2} sub={portfolio.sub} />
 
         {/* min-w-0 on every track: `1fr` is `minmax(auto, 1fr)`, so without it
             the vignette's min-content width becomes a floor and stretches the

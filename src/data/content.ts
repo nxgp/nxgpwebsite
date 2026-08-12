@@ -9,7 +9,7 @@
    AI-only, NOT staff-aug. The spine is the operating loop:
    Discover → Prioritize → Deliver → Optimize. Engagement models:
    Nx Blueprint → Nx Project Delivery → Nx Managed Support →
-   Nx Embedded Engineering. One CTA everywhere: Book a call.
+   Nx Embedded Engineering. One CTA everywhere: Discuss a project.
    ============================================================ */
 
 export const brand = 'Nx Growth Partners'
@@ -17,23 +17,22 @@ export const brand = 'Nx Growth Partners'
 export const nav = {
   brand,
   links: [
-    { label: 'How we work', id: 'how-we-work' },
+    { label: 'What we build', id: 'what-we-build' },
     { label: 'Services', id: 'services' },
     { label: 'Industries', id: 'industries' },
     { label: 'Products', id: 'work' },
     { label: 'About', id: 'about' },
   ],
-  cta: 'Book a call',
+  cta: 'Discuss a project',
 }
 
 export const hero = {
-  pill: 'An embedded technology partner',
   h1a: 'Your team, extended.',
   h1b: 'From idea to production.',
-  sub: 'Nx Growth Partners embeds experienced operators and engineers inside your business — to find the highest-impact opportunities, align technology to business outcomes, and build the systems that move you forward.',
-  ctaPrimary: 'Book a call',
-  ctaSecondary: 'See how we work',
-  note: 'AI engineering · custom software · embedded delivery — for private equity, enterprise and government.',
+  sub: "Nx Growth Partners helps businesses design, build, and operate custom software, AI automation, internal tools, and digital products when off-the-shelf technology isn't enough.",
+  ctaPrimary: 'Discuss a project',
+  ctaSecondary: 'See what we build',
+  note: 'AI engineering · custom software · embedded delivery. For private equity, enterprise and government.',
 }
 
 // Intrinsic pixel dimensions let the browser reserve the right aspect ratio
@@ -51,7 +50,6 @@ export const proof = {
 
 // CLIENT REVIEWS — real quotes and attributions from the company deck.
 export const reviews = {
-  kicker: 'In their words',
   h2: 'What it feels like to have us inside the team.',
   sub: 'Three engagements, told by the leaders who ran them.',
   items: [
@@ -77,55 +75,24 @@ export const reviews = {
 }
 
 // THE SHIFT — why now, straight from the deck (with cited sources).
-export const shift = {
-  kicker: 'The shift',
-  h2: 'AI is forcing a re-evaluation of how work gets done.',
-  sub: 'In every department, the conversation has moved from pilots to production — but most businesses are still figuring out where to start.',
-  frictions: [
-    {
-      label: 'Process friction',
-      title: 'Minutes become days',
-      body: 'Work crosses too many handoffs, approvals, spreadsheets, and disconnected systems before anything is decided.',
-    },
-    {
-      label: 'Manual dependency',
-      title: 'People are the glue',
-      body: 'Skilled teams spend their days moving information between systems instead of improving the business.',
-    },
-    {
-      label: 'Operational leakage',
-      title: 'Value quietly escapes',
-      body: 'Missed follow-ups, inconsistent data, and duplicated effort cost revenue, time, and insight every week.',
-    },
-  ],
-  stats: [
-    { value: '95%', body: 'of enterprise generative AI pilots deliver zero measurable P&L impact.', source: 'MIT NANDA, 2025' },
-    { value: '2/3', body: 'of companies remain stuck in experimentation or pilot mode.', source: 'McKinsey, 2025' },
-    { value: '90%', body: 'of companies have employees using personal AI tools for work.', source: 'MIT Shadow AI, 2026' },
-    { value: '73%', body: 'say they need more training and implementation resources.', source: 'Goldman Sachs, 2026' },
-  ],
-}
-
 export type LoopStep = { n: string; title: string; body: string }
 
 export const operatingModel = {
-  kicker: 'How we work',
-  h2: 'One loop, tied to your business — not just your backlog.',
-  sub: "We don't start from a backlog. We find what actually moves your numbers, then run the same four steps until it does — every release pointed at a result you can name.",
+  h2: 'One loop, tied to your business, not just your backlog.',
+  sub: "We don't start from a backlog. We find what actually moves your numbers, then run the same four steps until it does. Every release is pointed at a result you can name.",
   steps: [
-    { n: '01', title: 'Discover', body: "First we find what's worth building. Working inside the business, we follow where time, money and customers slip away — and come back with the few moves that matter most." },
+    { n: '01', title: 'Discover', body: "First we find what's worth building. Working inside the business, we follow where time, money and customers slip away, then come back with the few moves that matter most." },
     { n: '02', title: 'Prioritize', body: 'Then we sequence them. Each opportunity gets weighed by impact, effort and how ready your team is to adopt it, so we start where the return shows up fastest.' },
-    { n: '03', title: 'Deliver', body: 'We build inside your stack and ship continuously — real software in production that people use, not a pile of closed tickets or a demo that never lands.' },
-    { n: '04', title: 'Optimize', body: 'Then we watch what it does. Every release tells us the next move — what to scale, what to fix, and what to build next.' },
+    { n: '03', title: 'Deliver', body: 'We build inside your stack and ship continuously: real software in production that people use, not a pile of closed tickets or a demo that never lands.' },
+    { n: '04', title: 'Optimize', body: 'Then we watch what it does. Every release tells us the next move: what to scale, what to fix, and what to build next.' },
   ] as LoopStep[],
 }
 
 export type Pillar = { title: string; outcome: string; body: string; caps: string[]; icon: string }
 
 export const services = {
-  kicker: 'What we deliver',
   h2: 'Three pillars. One embedded team.',
-  sub: 'Engage one pillar, or a cross-functional team across all three. Each is led by the outcome — the capabilities are the proof of range.',
+  sub: 'Engage one pillar, or a cross-functional team across all three. Each is led by the outcome, and the capabilities are the proof of range.',
   pillars: [
     {
       title: 'AI & Workflow Automation',
@@ -151,32 +118,27 @@ export const services = {
   ] as Pillar[],
 }
 
-export type Engagement = { name: string; duration: string; body: string }
+export type Engagement = { name: string; body: string }
 
 // HOW WE ENGAGE — the four engagement models from the deck.
 export const engagement = {
-  kicker: 'How we engage',
   h2: 'Start with a blueprint. Scale as value lands.',
-  sub: 'Four ways to work together — from a focused discovery sprint to a fully embedded senior team.',
+  sub: 'Four ways to work together, from a focused discovery sprint to a fully embedded senior team.',
   items: [
     {
       name: 'Nx Blueprint',
-      duration: '2–4 weeks',
       body: 'Discovery and planning that identifies the highest-value workflow, software, and AI opportunities in your operation. You leave with a prioritized roadmap, estimated investment, and a sequenced plan for execution.',
     },
     {
       name: 'Nx Project Delivery',
-      duration: '8–16+ weeks',
       body: 'End-to-end design and development of a defined software, automation, data, or AI initiative. From solution design through production launch, in weekly increments with clear milestones.',
     },
     {
       name: 'Nx Managed Support',
-      duration: '3–12+ months',
       body: 'A senior-led team embedded in your organization, delivering against a prioritized roadmap. Built for businesses with multiple initiatives and evolving requirements.',
     },
     {
       name: 'Nx Embedded Engineering',
-      duration: 'Ongoing · quarterly',
       body: 'Operation, monitoring, and continuous improvement of deployed systems, so business value keeps compounding after launch.',
     },
   ] as Engagement[],
@@ -185,13 +147,12 @@ export const engagement = {
 export type Industry = { name: string; buyer: string; frame: string; visual: 'pe' | 'enterprise' | 'gov'; accent: string; note?: string }
 
 export const industries = {
-  kicker: 'Who we serve',
   h2: "Built for the buyers who can't wait.",
   sub: 'Enter by industry or by service. Private equity and enterprise lead on proof; government is where we are building.',
   items: [
-    { name: 'Private Equity', buyer: 'Operating partners & portfolio-company leadership', frame: 'Portfolio value creation, technical diligence and speed across portcos — one partner spanning GTM, AI and product, without standing up an in-house tech org.', visual: 'pe', accent: '#0000F4' },
-    { name: 'Enterprise', buyer: 'Revenue, IT, product and data leaders', frame: 'Senior capacity and outcomes without long agency cycles or heavy hiring — an embedded team that ships inside your stack and displaces slow integrators and staff aug.', visual: 'enterprise', accent: '#5B5BD6' },
-    { name: 'Government', buyer: 'Procurement-driven buyers', frame: 'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly — and never claim posture we do not hold.', visual: 'gov', accent: '#8080FF', note: 'Capabilities & teaming' },
+    { name: 'Private Equity', buyer: 'Operating partners & portfolio-company leadership', frame: 'Portfolio value creation, technical diligence and speed across portcos: one partner spanning GTM, AI and product, without standing up an in-house tech org.', visual: 'pe', accent: '#0000F4' },
+    { name: 'Enterprise', buyer: 'Revenue, IT, product and data leaders', frame: 'Senior capacity and outcomes without long agency cycles or heavy hiring: an embedded team that ships inside your stack and displaces slow integrators and staff aug.', visual: 'enterprise', accent: '#5B5BD6' },
+    { name: 'Government', buyer: 'Procurement-driven buyers', frame: 'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly, and never claim posture we do not hold.', visual: 'gov', accent: '#8080FF', note: 'Capabilities & teaming' },
   ] as Industry[],
 }
 
@@ -219,9 +180,8 @@ export type Product = {
 // read as "these are off-the-shelf things we resell". Every proof chip is an
 // approved claim.
 export const portfolio = {
-  kicker: "What we've built",
   h2: "The proof isn't a deck. It's what we've shipped.",
-  sub: 'A selection of the systems we\u2019ve designed, built and shipped \u2014 running in production for the teams we work with.',
+  sub: 'A selection of the systems we\u2019ve designed, built and shipped, running in production for the teams we work with.',
   products: [
     {
       id: 'forge',
@@ -232,7 +192,7 @@ export const portfolio = {
       role: 'Enterprise AI at scale',
       outcome: 'Ship production AI agents without an ML team.',
       blurb:
-        'An organization-wide platform to design agents, wire their actions, and deploy them to a governed runtime \u2014 unifying agents, knowledge and workflows in one secure experience.',
+        'An organization-wide platform to design agents, wire their actions, and deploy them to a governed runtime, unifying agents, knowledge and workflows in one secure experience.',
       proof: ['$5M SaaS spend eliminated', '3\u00d7 more capabilities', '50% faster AI delivery'],
     },
     {
@@ -243,7 +203,7 @@ export const portfolio = {
       role: 'Healthcare AI',
       outcome: 'A clinic\u2019s day that runs itself.',
       blurb:
-        'A chat-first AI platform for the whole clinic \u2014 front desk, scheduling, personalised outreach, pre-charting, back office and analytics. Staff ask in plain language; Tera takes the actions, end to end, across 50+ EHR integrations at a regulated bar.',
+        'A chat-first AI platform for the whole clinic: front desk, scheduling, personalised outreach, pre-charting, back office and analytics. Staff ask in plain language; Tera takes the actions, end to end, across 50+ EHR integrations at a regulated bar.',
       proof: ['50+ EHR integrations', 'Front desk \u2192 back office', 'Acts with tools'],
     },
     {
@@ -254,7 +214,7 @@ export const portfolio = {
       role: 'Knowledge & GraphRAG',
       outcome: 'Answers grounded in your own knowledge.',
       blurb:
-        'A plug-and-play knowledge brain over docs, wikis and tickets \u2014 every answer arrives with its sources attached, so teams can trust what it tells them.',
+        'A plug-and-play knowledge brain over docs, wikis and tickets. Every answer arrives with its sources attached, so teams can trust what it tells them.',
       proof: ['Plug-and-play GraphRAG', 'Sources on every answer'],
     },
     {
@@ -265,7 +225,7 @@ export const portfolio = {
       role: 'Enterprise copilot',
       outcome: 'Ask a question, get the dashboard.',
       blurb:
-        'A ChatGPT-class workspace wired into the company\u2019s warehouse, CRM and finance systems \u2014 ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.',
+        'A ChatGPT-class workspace wired into the company\u2019s warehouse, CRM and finance systems. Ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.',
       proof: ['50+ app integrations', 'Dashboards & reports on demand'],
     },
     {
@@ -276,7 +236,7 @@ export const portfolio = {
       role: 'Maritime operations',
       outcome: 'Fleet operations that report themselves.',
       blurb:
-        'Structured logbooks, asset tracking and analytics with an AI copilot on top \u2014 giving crews accurate, consistent data and faster decisions across the fleet.',
+        'Structured logbooks, asset tracking and analytics with an AI copilot on top, giving crews accurate, consistent data and faster decisions across the fleet.',
       proof: ['40% less time on reporting', '25% faster issue resolution', '15% higher fleet availability'],
     },
     {
@@ -287,7 +247,7 @@ export const portfolio = {
       role: 'Regulated utilities',
       outcome: 'Incidents fixed before customers notice.',
       blurb:
-        'Watches logs across large applications, finds root cause, and opens the fix PR \u2014 and remembers the codebase so the team doesn\u2019t have to.',
+        'Watches logs across large applications, finds root cause, and opens the fix PR, then remembers the codebase so the team doesn\u2019t have to.',
       proof: ['Root cause: days \u2192 under an hour'],
       dark: true,
     },
@@ -308,16 +268,15 @@ export const portfolio = {
       client: 'Vantage',
       built: 'Reputation & pipeline platform',
       role: 'Multi-location revenue ops',
-      outcome: 'Reviews answer themselves \u2014 and turn into leads.',
+      outcome: 'Reviews answer themselves, and turn into leads.',
       blurb:
-        'Watches every location, drafts on-brand replies, and converts happy customers into pipeline \u2014 paired with a CRM built around the fields, views and stages their operation actually runs on.',
+        'Watches every location, drafts on-brand replies, and converts happy customers into pipeline, paired with a CRM built around the fields, views and stages their operation actually runs on.',
       proof: ['Agentic review ops', 'Custom-built CRM'],
     },
   ] as Product[],
 }
 
 export const about = {
-  kicker: 'About',
   h2: "A senior team you'd want inside your business.",
   sub: 'Businesses are not short on ideas. They are constrained by the expertise and execution required to turn them into working systems. We founded NxGP to close the gap between a business idea and the engineering that brings it to life.',
   stats: [
@@ -345,20 +304,19 @@ export const about = {
 }
 
 export const faq = {
-  kicker: 'Questions',
   h2: 'The things buyers ask first.',
   items: [
     {
       q: 'How is this different from staff aug or a systems integrator?',
-      a: "We're embedded and accountable to the outcome — not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.",
+      a: "We're embedded and accountable to the outcome, not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.",
     },
     {
       q: 'How do you handle security, data and compliance?',
-      a: "We work inside your environment and to your controls — and for regulated work we run self-hosted, keeping data in your boundary. We'll tell you plainly what we do and don't hold rather than claim a posture we can't back. Detailed posture shared on request.",
+      a: "We work inside your environment and to your controls. For regulated work we run self-hosted, keeping data in your boundary. We'll tell you plainly what we do and don't hold rather than claim a posture we can't back. Detailed posture shared on request.",
     },
     {
       q: 'How do we contract and get started?',
-      a: 'We start with the Nx Blueprint — a 2–4 week discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.',
+      a: 'We start with the Nx Blueprint, a focused discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement, and the first step is a 30-minute call.',
     },
     {
       q: 'Are you big enough to handle our scale?',
@@ -366,17 +324,17 @@ export const faq = {
     },
     {
       q: 'Do we have to engage all three pillars?',
-      a: 'No — engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call, based on what moves your numbers.',
+      a: 'No. Engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call, based on what moves your numbers.',
     },
   ],
 }
 
 export const cta = {
   h2Lines: ['Let’s find what', 'moves your business.'],
-  sub: "Tell us where you are — PE, enterprise or government — and we'll map where technology can create the most value. A 30-minute intro, no pitch deck.",
+  sub: "Tell us where you are, whether PE, enterprise or government, and we'll map where technology can create the most value. A 30-minute intro, no pitch deck.",
   email: 'hello@nxgp.io',
   calendly: 'https://calendly.com/ravi-nxgp',
-  ctaPrimary: 'Book a call',
+  ctaPrimary: 'Discuss a project',
   ctaSecondary: 'See the pillars',
 }
 
@@ -404,11 +362,11 @@ export const footer = {
     {
       heading: 'Company',
       links: [
-        { label: 'How we work', href: '/how-we-work' },
+        { label: 'What we build', href: '/what-we-build' },
         { label: 'Products', href: '/work' },
         { label: 'About', href: '/about' },
         { label: 'FAQ', href: '/faq' },
-        { label: 'Book a call', href: '#cta' },
+        { label: 'Discuss a project', href: '#cta' },
       ],
     },
     {

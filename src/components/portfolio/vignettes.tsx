@@ -154,7 +154,7 @@ export function ForgeViz() {
         </div>
 
         <p className="pv-in text-[0.58rem] font-600 text-ink-faint" style={D(2.6)}>
-          Guardrails, retries and audit trail come with the runtime — not bolted on later.
+          Guardrails, retries and audit trail come with the runtime, not bolted on later.
         </p>
 
         {/* the fleet already in production */}
@@ -215,7 +215,7 @@ const domains = [
 
 const actions = [
   { tag: 'Pre-charting', text: '6 charts drafted from last-visit notes', at: 1.5 },
-  { tag: 'Comms', text: '4 patients texted — personalised, 1 replied', at: 2.0 },
+  { tag: 'Comms', text: '4 patients texted, personalised, 1 replied', at: 2.0 },
   { tag: 'Scheduling', text: 'No-show slot refilled from the waitlist', at: 2.6 },
   { tag: 'Back office', text: '2 prior auths submitted to payer', at: 3.1 },
 ]
@@ -254,7 +254,7 @@ export function TeraInner() {
           Prep my afternoon clinic
         </div>
         <div className="pv-in max-w-[92%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-1.5 text-[0.72rem] text-ink" style={D(0.9)}>
-          On it — working through the afternoon list now.
+          On it, working through the afternoon list now.
         </div>
 
         {/* tool calls executing, one per workflow */}
@@ -326,7 +326,7 @@ export function CortexViz() {
           </Pill>
         </div>
         <p className="pv-in mt-auto text-center text-[0.66rem] font-600 text-ink-faint sm:absolute sm:inset-x-0 sm:bottom-1 sm:mt-0" style={D(4.2)}>
-          Docs, wikis, tickets — one brain, every answer cited
+          Docs, wikis, tickets: one brain, every answer cited
         </p>
       </div>
     </Window>
@@ -352,10 +352,10 @@ export function BeaconChatInner() {
         Do you integrate with our EHR?
       </div>
       <div className="pv-in max-w-[92%] rounded-[10px] rounded-bl-[3px] border border-line bg-surface px-2 py-1 text-[0.6rem] leading-snug text-ink" style={D(1)}>
-        Yes — 50+ EHR integrations, two-way sync. Want me to intro the team?
+        Yes, 50+ EHR integrations with two-way sync. Want me to intro the team?
       </div>
       <div className="pv-in max-w-[88%] self-end rounded-[10px] rounded-br-[3px] bg-accent px-2 py-1 text-[0.6rem] font-500 leading-snug text-white" style={D(1.9)}>
-        Sure — dana@carepath.io
+        Sure, dana@carepath.io
       </div>
       <div className="pv-in flex items-center gap-1.5" style={D(2.7)}>
         <span className="h-px flex-1 bg-line" />
@@ -367,7 +367,7 @@ export function BeaconChatInner() {
       <div className="pv-in flex items-start gap-1.5 px-0.5" style={D(4.2)}>
         <Zap className="mt-[1px] size-2.5 shrink-0 text-accent" />
         <span className="text-[0.52rem] font-600 leading-snug text-ink-faint">
-          Learned — next visitor gets this instantly
+          Learned, next visitor gets this instantly
         </span>
       </div>
       {/* input bar */}
@@ -559,7 +559,7 @@ export function ReputationViz() {
             ))}
             <Star className="size-3 text-line" />
           </span>
-          <span className="min-w-0 flex-1 truncate text-[0.7rem] italic text-ink-soft">“Great service — wait time could improve…”</span>
+          <span className="min-w-0 flex-1 truncate text-[0.7rem] italic text-ink-soft">“Great service, wait time could improve…”</span>
           <Pill className="pv-pop ml-auto shrink-0 bg-[#E7F8EC] text-[#1D8A46]" style={D(3)}>
             <Check className="size-3" /> replied on-brand
           </Pill>
@@ -629,7 +629,7 @@ export function SentinelViz() {
         </Pill>
 
         <p className="pv-in mt-auto text-center font-sans text-[0.66rem] font-600 text-white/40" style={D(4.7)}>
-          Root cause in minutes, not days — customers never noticed
+          Root cause in minutes, not days. Customers never noticed
         </p>
       </div>
     </Window>
@@ -714,7 +714,7 @@ export function VantagePushInner() {
       <div className="pv-in rounded-[8px] border border-line bg-surface/95 px-1.5 py-1 shadow-sm" style={D(2.2)}>
         <p className="text-[0.5rem] font-800 text-ink">Vantage · now</p>
         <p className="mt-0.5 text-[0.48rem] leading-snug text-ink-soft">
-          New 4★ review — Downtown
+          New 4★ review, Downtown
         </p>
       </div>
       <div className="pv-in rounded-[8px] border border-line bg-surface/95 px-1.5 py-1 shadow-sm" style={D(3)}>

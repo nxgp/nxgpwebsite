@@ -55,7 +55,7 @@ if (ui === 'chat') {
         { role: 'user', content: 'Can I book a call with the team?' },
         {
           role: 'assistant',
-          content: "You're all set — the team has your note. Grab a time below that works for you.",
+          content: "You're all set. The team has your note. Grab a time below that works for you.",
           calendarUrl: 'https://calendly.com/ravi-nxgp?hide_gdpr_banner=1&embed_type=Inline',
         },
       ],

@@ -148,7 +148,7 @@ async function notifySlack(
       ? 'recap email sent to the lead ✓'
       : followup === 'skipped'
         ? 'recap email skipped (RESEND_API_KEY not set)'
-        : 'recap email FAILED — follow up manually'
+        : 'recap email FAILED, follow up manually'
   const text =
     `:large_blue_diamond: *New website lead*\n` +
     `*Name:* ${lead.name || '—'}\n*Email:* ${lead.email}\n*Company:* ${lead.company || '—'}\n` +
@@ -402,7 +402,7 @@ export default async function handler(req: Request): Promise<Response> {
                     (followup === 'sent'
                       ? ' A recap email with the booking link is on its way to the visitor.'
                       : '') +
-                    ' The booking calendar will now appear in the chat — confirm the team has their note and invite them to grab a time right here. Do not paste any URL.',
+                    ' The booking calendar will now appear in the chat. Confirm the team has their note and invite them to grab a time right here. Do not paste any URL.',
                 })
               } else if (tool.name === 'show_calendar') {
                 if (!calUrl) calUrl = calendarUrl()
@@ -414,7 +414,7 @@ export default async function handler(req: Request): Promise<Response> {
               } else {
                 results.push({
                   tool_use_id: tool.id,
-                  content: 'Already handled — continue the conversation.',
+                  content: 'Already handled, continue the conversation.',
                 })
               }
             }

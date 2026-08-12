@@ -1,52 +1,54 @@
 # Nx Growth Partners
 
-> An embedded technology partner across AI engineering, custom software and embedded delivery. Senior operators and engineers work inside your business and ship production software in weekly increments tied to business outcomes — from idea to production. Founded 2018 · 40+ team members · 50+ projects delivered.
+> Nx Growth Partners helps businesses design, build, and operate custom software, AI automation, internal tools, and digital products when off-the-shelf technology isn't enough. Senior operators and engineers work inside your business and ship production software in weekly increments tied to business outcomes. Founded 2018 · 40+ team members · 50+ projects delivered.
 
 Slogan: Your team, extended. From idea to production.
 Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx-growth-parnters
-Book a 30-minute intro call: https://calendly.com/ravi-nxgp
+Discuss a project (30-minute intro call): https://calendly.com/ravi-nxgp
 
 ## Pages
 
-- https://nxgp.io/services — AI & workflow automation, software & product delivery, embedded engineering
-- https://nxgp.io/how-we-work — the operating loop: Discover, Prioritize, Deliver, Optimize
-- https://nxgp.io/industries — private equity, enterprise, government
-- https://nxgp.io/work — everything we've built, in production
-- https://nxgp.io/work/agent-hub · https://nxgp.io/work/tera · https://nxgp.io/work/kiotel · https://nxgp.io/work/wd-chat · https://nxgp.io/work/harbor · https://nxgp.io/work/convey · https://nxgp.io/work/elevano · https://nxgp.io/work/vantage — individual product pages
-- https://nxgp.io/about — the team and the numbers
-- https://nxgp.io/faq — the questions buyers ask first
+- https://nxgp.io/services : AI & workflow automation, software & product delivery, embedded engineering
+- https://nxgp.io/what-we-build : the operating loop, Discover, Prioritize, Deliver, Optimize
+- https://nxgp.io/industries : private equity, enterprise, government
+- https://nxgp.io/work : everything we've built, in production
+- https://nxgp.io/work/agent-hub · https://nxgp.io/work/tera · https://nxgp.io/work/kiotel · https://nxgp.io/work/wd-chat · https://nxgp.io/work/harbor · https://nxgp.io/work/convey · https://nxgp.io/work/elevano · https://nxgp.io/work/vantage : individual product pages
+- https://nxgp.io/about : the team and the numbers
+- https://nxgp.io/faq : the questions buyers ask first
 
 ## Services
 
 - **AI & Workflow Automation**: AI agents and copilots, enterprise knowledge and RAG, workflow automation, human-in-the-loop design, evaluation and monitoring.
 - **Software & Product Delivery**: internal tools and portals, SaaS platforms, web and mobile applications, APIs and system integrations, data platforms and cloud.
-- **Embedded Engineering**: a senior-led team that plugs into your roadmap — product strategy and architecture, frontend/backend/AI/data, QA and DevOps, cloud delivery and support.
+- **Embedded Engineering**: a senior-led team that plugs into your roadmap, covering product strategy and architecture, frontend/backend/AI/data, QA and DevOps, cloud delivery and support.
 
 ## Engagement models
 
-- **Nx Blueprint** (2–4 weeks): discovery and planning — a prioritized roadmap, estimated investment, and a sequenced execution plan.
-- **Nx Project Delivery** (8–16+ weeks): end-to-end design and development of a defined software, automation, data, or AI initiative.
-- **Nx Managed Support** (3–12+ months): a senior-led team embedded in your organization, delivering against a prioritized roadmap.
-- **Nx Embedded Engineering** (ongoing, quarterly): operation, monitoring, and continuous improvement of deployed systems.
+Scope drives the shape of an engagement, so we size it against the actual problem rather than a fixed package.
+
+- **Nx Blueprint**: discovery and planning that produces a prioritized roadmap, estimated investment, and a sequenced execution plan.
+- **Nx Project Delivery**: end-to-end design and development of a defined software, automation, data, or AI initiative.
+- **Nx Managed Support**: a senior-led team embedded in your organization, delivering against a prioritized roadmap.
+- **Nx Embedded Engineering**: operation, monitoring, and continuous improvement of deployed systems.
 
 ## What we've built, and who we built it for
 
-Real systems designed, built and shipped by NxGP, running in production. Evidence of range — not an off-the-shelf product catalogue.
+Real systems designed, built and shipped by NxGP, running in production. Evidence of range, not an off-the-shelf product catalogue.
 
-- **Agent Hub — agent platform & runtime, built for Western Digital**: organization-wide platform to design, deploy and govern production AI agents. $5M SaaS spend eliminated, 3x more capabilities, 50% faster AI delivery.
-- **Western Digital — WD Chat, analytics workspace**: ChatGPT-class copilot wired into warehouse, CRM and finance systems; ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.
-- **Mentera — Tera, clinical AI operator**: intake, consents, scheduling and follow-ups end to end; 50+ EHR integrations, built to a regulated bar.
-- **Kiotel — company knowledge engine**: plug-and-play GraphRAG over docs, wikis and tickets; every answer cited.
-- **Harbor Industrial — maintenance operations platform**: structured logbooks, asset tracking, analytics and an AI copilot. 40% less reporting time, 25% faster issue resolution, 15% higher fleet availability.
-- **Convey — reliability & SRE agent** (regulated utilities): finds root cause across large applications and opens the fix PR. Root-cause analysis from days to under an hour.
-- **Elevano — website concierge AI**: embeddable, self-learning assistant that answers from company knowledge and hands qualified leads to the team in Slack. The same engine runs on nxgp.io.
-- **Vantage — reputation & pipeline platform**: agentic review management across multi-location businesses that drafts on-brand replies and turns customers into pipeline, paired with a CRM deployed per client with custom fields and stages.
+- **Agent Hub, agent platform & runtime, built for Western Digital**: organization-wide platform to design, deploy and govern production AI agents. $5M SaaS spend eliminated, 3x more capabilities, 50% faster AI delivery.
+- **Western Digital, WD Chat analytics workspace**: ChatGPT-class copilot wired into warehouse, CRM and finance systems; ask in plain language and it builds the dashboard or report, grounded in governed enterprise data.
+- **Mentera, Tera clinical AI operator**: intake, consents, scheduling and follow-ups end to end; 50+ EHR integrations, built to a regulated bar.
+- **Kiotel, company knowledge engine**: plug-and-play GraphRAG over docs, wikis and tickets; every answer cited.
+- **Harbor Industrial, maintenance operations platform**: structured logbooks, asset tracking, analytics and an AI copilot. 40% less reporting time, 25% faster issue resolution, 15% higher fleet availability.
+- **Convey, reliability & SRE agent** (regulated utilities): finds root cause across large applications and opens the fix PR. Root-cause analysis from days to under an hour.
+- **Elevano, website concierge AI**: embeddable, self-learning assistant that answers from company knowledge and hands qualified leads to the team in Slack. The same engine runs on nxgp.io.
+- **Vantage, reputation & pipeline platform**: agentic review management across multi-location businesses that drafts on-brand replies and turns customers into pipeline, paired with a CRM deployed per client with custom fields and stages.
 
 ## Client results
 
-- **Western Digital** (computer hardware): organization-wide AI platform unifying agents, knowledge sources and workflows — $5M SaaS contract spend eliminated, 3x more capabilities delivered, 50% faster delivery of AI functionality.
-- **Harbor Industrial** (maritime transportation): maintenance operations platform with logbooks, asset tracking, analytics and an AI copilot — 40% less time on reporting, 25% faster issue resolution, 15% higher fleet availability.
-- **Kiotel** (hospitality technology): platform re-architecture and guest-experience expansion — 35% faster release cycles, 2x features shipped per quarter, 30% lower property support costs.
+- **Western Digital** (computer hardware): organization-wide AI platform unifying agents, knowledge sources and workflows. $5M SaaS contract spend eliminated, 3x more capabilities delivered, 50% faster delivery of AI functionality.
+- **Harbor Industrial** (maritime transportation): maintenance operations platform with logbooks, asset tracking, analytics and an AI copilot. 40% less time on reporting, 25% faster issue resolution, 15% higher fleet availability.
+- **Kiotel** (hospitality technology): platform re-architecture and guest-experience expansion. 35% faster release cycles, 2x features shipped per quarter, 30% lower property support costs.
 
 ## Who we serve
 
@@ -54,24 +56,24 @@ Private equity (portfolio value creation), enterprise (revenue, IT, product and 
 
 ## How we work
 
-One operating loop — Discover, Prioritize, Deliver, Optimize — run by an embedded senior team, shipping production releases every week, accountable to business outcomes rather than tickets.
+One operating loop, Discover, Prioritize, Deliver, Optimize, run by an embedded senior team, shipping production releases every week, accountable to business outcomes rather than tickets.
 
 ## Frequently asked questions
 
 **How is this different from staff aug or a systems integrator?**
-We're embedded and accountable to the outcome — not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.
+We're embedded and accountable to the outcome, not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.
 
 **How do you handle security, data and compliance?**
-We work inside your environment and to your controls — and for regulated work we run self-hosted, keeping data in your boundary. Detailed posture shared on request.
+We work inside your environment and to your controls. For regulated work we run self-hosted, keeping data in your boundary. Detailed posture shared on request.
 
 **How do we contract and get started?**
-We start with the Nx Blueprint — a 2–4 week discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement — the first step is a 30-minute call.
+We start with the Nx Blueprint, a focused discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement, and the first step is a 30-minute call.
 
 **Are you big enough to handle our scale?**
 Our leverage is senior people and one operating loop, not headcount. The embedded model and weekly cadence scale with the work, backed by named proof of what the team has shipped.
 
 **Do we have to engage all three pillars?**
-No — engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call.
+No. Engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call.
 
 ---
-Last updated: 2026-08-07
+Last updated: 2026-08-11

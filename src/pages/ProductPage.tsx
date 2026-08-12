@@ -36,8 +36,10 @@ export function ProductPage({ product: p }: { product: Product }) {
           { label: 'Work', href: '/work' },
           { label: p.client, href: `/work/${p.slug}` },
         ]}
-        kicker={`Built for ${p.builtFor ?? p.client} · ${p.role}`}
-        title={`${p.client} — ${p.built}`}
+        title={`${p.client}: ${p.built}`}
+        // was the kicker; kept as the sub so product pages don't lose who
+        // the work was built for
+        sub={`Built for ${p.builtFor ?? p.client} · ${p.role}`}
       />
 
       <div className="shell">
@@ -81,7 +83,7 @@ export function ProductPage({ product: p }: { product: Product }) {
                   href={`/work/${o.slug}`}
                   className="link-underline text-[0.98rem] font-600 text-ink-soft transition-colors hover:text-ink"
                 >
-                  {o.client} — {o.built}
+                  {o.client}: {o.built}
                 </a>
               </li>
             ))}

@@ -79,7 +79,7 @@ const EXTRACT_TOOL = {
   },
 }
 
-const EXTRACT_PROMPT = `You are improving the AI sales assistant on nxgp.io (Nx Growth Partners — an embedded technology partner building AI agents, custom software, healthcare systems, RAG knowledge bases and business systems architecture).
+const EXTRACT_PROMPT = `You are improving the AI sales assistant on nxgp.io (Nx Growth Partners, an embedded technology partner building AI agents, custom software, healthcare systems, RAG knowledge bases and business systems architecture).
 
 You are given anonymized transcripts of real visitor conversations. Identify patterns that would make the assistant better at converting visitors into qualified leads.
 
@@ -92,7 +92,7 @@ Look for:
 ABSOLUTE RULES:
 - NEVER include a person's name, email address, phone number, or company name in any field. Generalize: "a healthcare provider", "an enterprise buyer".
 - Never record anything specific to one visitor's project that would identify them.
-- Only record patterns that would genuinely help future conversations. Quality over quantity — if there is nothing useful, return an empty list.
+- Only record patterns that would genuinely help future conversations. Quality over quantity. If there is nothing useful, return an empty list.
 - Suggested responses must follow assistant rules: concise, no delivery timelines, no pricing, no invented facts.
 
 Return at most 8 insights.`
@@ -131,7 +131,7 @@ const VERIFY_TOOL = {
 const VERIFY_PROMPT = `You are a strict fact-checker for an AI sales assistant's learning pipeline. You are given (1) the assistant's authoritative knowledge base and (2) candidate insights mined from conversations.
 
 For each candidate, judge:
-- grounded: is EVERY factual claim in its suggested response supported by the knowledge base or plainly evident from ordinary business reasoning? Claims of certifications, integrations, clients, metrics or capabilities that do not appear in the knowledge base are NOT grounded — even if they sound plausible. When in doubt, grounded=false.
+- grounded: is EVERY factual claim in its suggested response supported by the knowledge base or plainly evident from ordinary business reasoning? Claims of certifications, integrations, clients, metrics or capabilities that do not appear in the knowledge base are NOT grounded, even if they sound plausible. When in doubt, grounded=false.
 - high_stakes: does it assert anything about certifications, regulatory compliance, legal terms, security guarantees, pricing, or named clients?
 
 Judge every candidate, in order.`

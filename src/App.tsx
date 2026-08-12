@@ -5,9 +5,7 @@ import { TonalBackground } from './components/TonalBackground'
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
 import { Proof } from './components/Proof'
-import { Shift } from './components/Shift'
 import { OperatingModel } from './components/OperatingModel'
-import { Services } from './components/Services'
 import { Engagement } from './components/Engagement'
 import { Industries } from './components/Industries'
 import { Portfolio } from './components/portfolio/Portfolio'
@@ -66,9 +64,7 @@ export default function App({ path = '/' }: { path?: string }) {
           <>
             <Hero />
             <Proof />
-            <Shift />
             <OperatingModel />
-            <Services />
             <Engagement />
             <Industries />
             <Portfolio />

@@ -39,7 +39,7 @@ export function Nav({ home = true }: { home?: boolean }) {
                 }
               : undefined
           }
-          aria-label="Nx Growth Partners — home"
+          aria-label="Nx Growth Partners home"
         >
           <Logo />
         </a>

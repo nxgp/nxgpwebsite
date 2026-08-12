@@ -9,10 +9,9 @@ const icons: LucideIcon[] = [Search, ListChecks, GitBranch, RefreshCw]
 export function OperatingModel() {
   const ref = useReveal<HTMLDivElement>()
   return (
-    <section id="how-we-work" className="section">
+    <section id="what-we-build" className="section">
       <div ref={ref} className="shell">
         <SectionHeader
-          kicker={operatingModel.kicker}
           title={operatingModel.h2}
           sub={operatingModel.sub}
         />
@@ -59,7 +58,7 @@ export function OperatingModel() {
             <RotateCw className="size-5" />
           </span>
           <p className="text-[1.02rem] font-700 text-ink">
-            And then it runs again —{' '}
+            And then it runs again:{' '}
             <span className="font-500 text-ink-soft">
               every deployment feeds the next discovery, so the work compounds
               instead of resetting each quarter.
