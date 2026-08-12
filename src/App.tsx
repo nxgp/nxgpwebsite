@@ -7,7 +7,6 @@ import { Hero } from './components/Hero'
 import { Proof } from './components/Proof'
 import { OperatingModel } from './components/OperatingModel'
 import { Engagement } from './components/Engagement'
-import { Industries } from './components/Industries'
 import { Portfolio } from './components/portfolio/Portfolio'
 import { Reviews } from './components/Reviews'
 import { About } from './components/About'
@@ -66,7 +65,6 @@ export default function App({ path = '/' }: { path?: string }) {
             <Proof />
             <OperatingModel />
             <Engagement />
-            <Industries />
             <Portfolio />
             <Reviews />
             <About />
