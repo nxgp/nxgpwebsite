@@ -44,7 +44,7 @@ export async function sendFollowupEmail(
   const text = [
     `Hi ${firstName},`,
     '',
-    `Thanks for talking with our assistant on nxgp.io — the team has your note and will reach out shortly.`,
+    `Thanks for talking with our assistant on nxgp.io. The team has your note and will reach out shortly.`,
     '',
     `What you told us: ${lead.interest}`,
     '',
@@ -59,7 +59,7 @@ export async function sendFollowupEmail(
   const html = `<!doctype html><html><body style="margin:0;padding:32px 16px;background:#FDFDFC;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#14161F">
   <div style="max-width:540px;margin:0 auto">
     <p style="font-size:15px;line-height:1.6">Hi ${esc(firstName)},</p>
-    <p style="font-size:15px;line-height:1.6">Thanks for talking with our assistant on <a href="https://nxgp.io" style="color:#0000F4">nxgp.io</a> — the team has your note and will reach out shortly.</p>
+    <p style="font-size:15px;line-height:1.6">Thanks for talking with our assistant on <a href="https://nxgp.io" style="color:#0000F4">nxgp.io</a>. The team has your note and will reach out shortly.</p>
     <p style="font-size:14px;line-height:1.6;background:#ECECFE;border-radius:12px;padding:12px 16px"><strong>What you told us:</strong> ${esc(lead.interest)}</p>
     <p style="font-size:15px;line-height:1.6">If you'd like to skip the back-and-forth, grab a time that works for you:</p>
     <p style="margin:24px 0"><a href="${esc(calendlyUrl)}" style="background:#0000F4;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:12px 22px;border-radius:999px;display:inline-block">Book a 30-minute intro call</a></p>

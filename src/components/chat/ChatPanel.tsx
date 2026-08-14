@@ -12,7 +12,7 @@ type Msg = { role: 'user' | 'assistant'; content: string; calendarUrl?: string }
 
 const STORAGE_KEY = 'nx-chat-v1'
 const GREETING =
-  "Hi — I'm the Nx Assistant. Ask me anything about what we build, how engagements work, or whether we're a fit for what you need."
+  "Hi, I'm the Nx Assistant. Ask me anything about what we build, how engagements work, or whether we're a fit for what you need."
 const CHIPS = [
   'What do you build?',
   'How do engagements work?',
@@ -120,7 +120,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
           {
             role: 'assistant',
             content:
-              "I couldn't reach the assistant just now. Please try again in a moment — or email hello@nxgp.io and the team will get right back to you.",
+              "I couldn't reach the assistant just now. Please try again in a moment, or email hello@nxgp.io and the team will get right back to you.",
           },
         ],
       })
@@ -228,7 +228,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
               <div className="mt-1 flex gap-1 pl-1">
                 {voted[i] ? (
                   <span className="text-[0.72rem] font-600 text-ink-faint">
-                    {voted[i] === 1 ? 'Thanks!' : 'Thanks — we’ll improve this.'}
+                    {voted[i] === 1 ? 'Thanks!' : 'Thanks, we’ll improve this.'}
                   </span>
                 ) : (
                   <>

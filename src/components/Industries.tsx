@@ -14,7 +14,7 @@ export function Industries() {
   return (
     <section id="industries" className="section bg-surface/40">
       <div ref={ref} className="shell">
-        <SectionHeader kicker={industries.kicker} title={industries.h2} sub={industries.sub} />
+        <SectionHeader title={industries.h2} sub={industries.sub} />
 
         <div className="mt-14 grid gap-4 lg:grid-cols-3">
           {industries.items.map((ind) => {
@@ -44,7 +44,7 @@ export function Industries() {
             Not sure where you fit? We map it on the first call.
           </p>
           <Button variant="dark" onClick={() => scrollToId('cta')}>
-            Book a call
+            Discuss a project
           </Button>
         </div>
       </div>

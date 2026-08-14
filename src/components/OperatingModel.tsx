@@ -1,4 +1,4 @@
-import { Search, ListChecks, GitBranch, RefreshCw, ArrowRight, RotateCw } from 'lucide-react'
+import { Search, ListChecks, GitBranch, RefreshCw, ArrowRight } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 import { operatingModel } from '../data/content'
@@ -9,10 +9,9 @@ const icons: LucideIcon[] = [Search, ListChecks, GitBranch, RefreshCw]
 export function OperatingModel() {
   const ref = useReveal<HTMLDivElement>()
   return (
-    <section id="how-we-work" className="section">
+    <section id="what-we-build" className="section">
       <div ref={ref} className="shell">
         <SectionHeader
-          kicker={operatingModel.kicker}
           title={operatingModel.h2}
           sub={operatingModel.sub}
         />
@@ -50,22 +49,6 @@ export function OperatingModel() {
           </div>
         </div>
 
-        {/* the loop closes — make the cycle explicit */}
-        <div
-          data-reveal
-          className="mt-8 flex flex-col items-center gap-4 rounded-card border border-accent/20 bg-accent-wash/50 px-6 py-6 text-center sm:flex-row sm:justify-center sm:gap-3 sm:text-left"
-        >
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent text-white">
-            <RotateCw className="size-5" />
-          </span>
-          <p className="text-[1.02rem] font-700 text-ink">
-            And then it runs again —{' '}
-            <span className="font-500 text-ink-soft">
-              every deployment feeds the next discovery, so the work compounds
-              instead of resetting each quarter.
-            </span>
-          </p>
-        </div>
       </div>
     </section>
   )

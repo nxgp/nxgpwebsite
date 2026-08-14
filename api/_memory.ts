@@ -70,7 +70,7 @@ export function renderMemory(entries: MemoryEntry[]): string {
   let out =
     '\n\n# Learned from real conversations\n' +
     'Patterns the team has reviewed and approved from previous visitors. ' +
-    'Use them to answer more precisely. They are anonymized aggregates — ' +
+    'Use them to answer more precisely. They are anonymized aggregates, ' +
     'never imply you know anything about the current visitor from them, and ' +
     'never mention other clients or visitors.\n'
   for (const e of entries) {

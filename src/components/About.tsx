@@ -1,6 +1,5 @@
 import { useReveal } from '../hooks/useReveal'
 import { about } from '../data/content'
-import { Eyebrow } from './ui/Eyebrow'
 
 export function About() {
   const ref = useReveal<HTMLDivElement>()
@@ -9,7 +8,6 @@ export function About() {
       <div ref={ref} className="shell">
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div className="max-w-[36rem]">
-            <div data-reveal><Eyebrow>{about.kicker}</Eyebrow></div>
             <h2 data-reveal className="t-h2 mt-4">{about.h2}</h2>
             <p data-reveal className="t-lead mt-5">{about.sub}</p>
           </div>

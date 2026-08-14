@@ -1,15 +1,12 @@
-import { Eyebrow } from './Eyebrow'
 import { cn } from '../../lib/cn'
 
 export function SectionHeader({
-  kicker,
   title,
   sub,
   align = 'left',
   dark = false,
   className,
 }: {
-  kicker?: string
   title: React.ReactNode
   sub?: React.ReactNode
   align?: 'left' | 'center'
@@ -24,11 +21,6 @@ export function SectionHeader({
         className,
       )}
     >
-      {kicker && (
-        <div data-reveal className={cn(align === 'center' && 'flex justify-center')}>
-          <Eyebrow dark={dark}>{kicker}</Eyebrow>
-        </div>
-      )}
       <h2
         data-reveal
         className={cn('t-h2 mt-4', dark ? 'text-white' : 'text-ink')}

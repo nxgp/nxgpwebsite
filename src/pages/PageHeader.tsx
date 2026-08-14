@@ -1,4 +1,3 @@
-import { Eyebrow } from '../components/ui/Eyebrow'
 
 export type Crumb = { label: string; href: string }
 
@@ -8,12 +7,10 @@ export type Crumb = { label: string; href: string }
  */
 export function PageHeader({
   crumbs,
-  kicker,
   title,
   sub,
 }: {
   crumbs: Crumb[]
-  kicker?: string
   title: string
   sub?: string
 }) {
@@ -37,11 +34,6 @@ export function PageHeader({
           ))}
         </ol>
       </nav>
-      {kicker && (
-        <div className="mt-6">
-          <Eyebrow>{kicker}</Eyebrow>
-        </div>
-      )}
       <h1 className="t-h2 mt-4 max-w-[46rem]">{title}</h1>
       {sub && <p className="t-lead mt-5 max-w-[46rem]">{sub}</p>}
     </div>

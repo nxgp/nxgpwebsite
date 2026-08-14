@@ -4,7 +4,6 @@ import { Engagement } from './components/Engagement'
 import { Industries } from './components/Industries'
 import { Portfolio } from './components/portfolio/Portfolio'
 import { OperatingModel } from './components/OperatingModel'
-import { Shift } from './components/Shift'
 import { About } from './components/About'
 import { Reviews } from './components/Reviews'
 import { FAQ } from './components/FAQ'
@@ -43,14 +42,14 @@ const workCrumb: Crumb = { label: 'Work', href: '/work' }
 
 const productRoutes: Route[] = portfolio.products.map((p) => ({
   path: `/work/${p.slug}`,
-  title: clip(`${p.client} — ${p.built} | Nx Growth Partners`, 62),
+  title: clip(`${p.client}: ${p.built} | Nx Growth Partners`, 62),
   description: clip(`${p.outcome} ${p.blurb}`),
   crumbs: [home, workCrumb, { label: p.client, href: `/work/${p.slug}` }],
   main: () => <ProductPage product={p} />,
   jsonLd: () => [
     {
       '@type': 'CreativeWork',
-      name: `${p.client} — ${p.built}`,
+      name: `${p.client}: ${p.built}`,
       description: `${p.outcome} ${p.blurb}`,
       about: p.role,
       creator: { '@type': 'Organization', name: 'Nx Growth Partners', url: 'https://nxgp.io' },
@@ -74,15 +73,14 @@ export const ROUTES: Route[] = [
     ),
   },
   {
-    path: '/how-we-work',
-    title: 'How We Work — One Loop, Shipping Weekly | Nx Growth Partners',
+    path: '/what-we-build',
+    title: 'What We Build | Nx Growth Partners',
     description: clip(`${operatingModel.h2} ${operatingModel.sub}`),
-    crumbs: [home, { label: 'How we work', href: '/how-we-work' }],
+    crumbs: [home, { label: 'What we build', href: '/what-we-build' }],
     main: () => (
       <>
-        <PageHeader crumbs={[home, { label: 'How we work', href: '/how-we-work' }]} title="How we work" />
+        <PageHeader crumbs={[home, { label: 'What we build', href: '/what-we-build' }]} title="What we build" />
         <OperatingModel />
-        <Shift />
       </>
     ),
   },
@@ -100,7 +98,7 @@ export const ROUTES: Route[] = [
   },
   {
     path: '/work',
-    title: "What We've Built — AI Systems in Production | Nx Growth Partners",
+    title: "What We've Built: AI Systems in Production | Nx Growth Partners",
     description: clip(`${portfolio.h2} ${portfolio.sub}`),
     crumbs: [home, workCrumb],
     main: () => (
@@ -112,7 +110,7 @@ export const ROUTES: Route[] = [
   },
   {
     path: '/about',
-    title: 'About Nx Growth Partners — Senior Team, 50+ Projects Delivered',
+    title: 'About Nx Growth Partners: Senior Team, 50+ Projects Delivered',
     description: clip(`${about.h2} ${about.sub}`),
     crumbs: [home, { label: 'About', href: '/about' }],
     main: () => (
@@ -125,9 +123,9 @@ export const ROUTES: Route[] = [
   },
   {
     path: '/faq',
-    title: 'FAQ — Working with Nx Growth Partners',
+    title: 'FAQ: Working with Nx Growth Partners',
     description: clip(
-      'How NxGP differs from staff aug, how engagements start, security and compliance, and what to expect — the questions buyers ask first, answered directly.',
+      'How NxGP differs from staff aug, how engagements start, security and compliance, and what to expect. The questions buyers ask first, answered directly.',
     ),
     crumbs: [home, { label: 'FAQ', href: '/faq' }],
     main: () => (

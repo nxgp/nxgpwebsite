@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 import { faq } from '../data/content'
-import { Eyebrow } from './ui/Eyebrow'
 import { cn } from '../lib/cn'
 
 export function FAQ() {
@@ -13,7 +12,6 @@ export function FAQ() {
     <section id="faq" className="section">
       <div ref={ref} className="shell grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div className="max-w-[26rem]">
-          <div data-reveal><Eyebrow>{faq.kicker}</Eyebrow></div>
           <h2 data-reveal className="t-h2 mt-4">{faq.h2}</h2>
         </div>
 

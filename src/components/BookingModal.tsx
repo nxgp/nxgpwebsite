@@ -4,7 +4,7 @@ import { cta } from '../data/content'
 import { track } from '../lib/analytics'
 
 /**
- * Site-wide booking modal — every "Book a call" opens the Calendly embed in
+ * Site-wide booking modal: every "Discuss a project" opens the Calendly embed in
  * place instead of linking out. Nothing loads until first open (the iframe
  * mounts on demand), so the page pays zero cost for it.
  */
@@ -69,7 +69,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
           className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-6"
           role="dialog"
           aria-modal="true"
-          aria-label="Book a 30-minute intro call"
+          aria-label="Discuss a project"
         >
           <button
             aria-label="Close"
@@ -80,9 +80,9 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
           <div className="relative flex h-[min(760px,92dvh)] w-[min(1000px,96vw)] flex-col overflow-hidden rounded-card border border-line bg-surface shadow-lg">
             <div className="flex items-center gap-3 border-b border-line bg-bg/60 px-4 py-3">
               <div>
-                <p className="text-[0.95rem] font-800 leading-tight">Book a 30-minute intro call</p>
+                <p className="text-[0.95rem] font-800 leading-tight">Discuss a project</p>
                 <p className="text-[0.72rem] font-600 text-ink-faint">
-                  No pitch deck — tell us where you are, we map where technology creates value.
+                  No pitch deck. Tell us where you are, we map where technology creates value.
                 </p>
               </div>
               <button

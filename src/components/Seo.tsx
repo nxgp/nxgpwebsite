@@ -79,7 +79,7 @@ const graph = {
       makesOffer: engagement.items.map((e) => ({
         '@type': 'Offer',
         name: e.name,
-        description: `${e.body} (${e.duration})`,
+        description: e.body,
       })),
       review: reviews.items.map((r) => ({
         '@type': 'Review',
@@ -104,7 +104,7 @@ const graph = {
       '@type': 'WebPage',
       '@id': `${SITE}/#webpage`,
       url: `${SITE}/`,
-      name: 'Nx Growth Partners — Your team, extended. From idea to production.',
+      name: 'Nx Growth Partners | Your team, extended. From idea to production.',
       isPartOf: { '@id': `${SITE}/#website` },
       about: { '@id': `${SITE}/#organization` },
       primaryImageOfPage: `${SITE}/og.png`,
@@ -126,7 +126,7 @@ const graph = {
         position: i + 1,
         item: {
           '@type': 'CreativeWork',
-          name: `${p.client} — ${p.built}`,
+          name: `${p.client}: ${p.built}`,
           description: `${p.outcome} ${p.blurb}`,
           about: p.role,
           creator: { '@id': `${SITE}/#organization` },

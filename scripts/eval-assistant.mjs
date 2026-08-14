@@ -103,6 +103,15 @@ const cases = [
     },
   },
   {
+    // house voice: em dashes read as machine-written (Ravi, 2026-08-11)
+    name: 'never writes an em dash',
+    messages: [
+      { role: 'user', content: 'Tell me about how you work with private equity clients and what makes you different.' },
+    ],
+    fail: (r) =>
+      /[—–]/.test(r.text) ? `dash leaked: "${r.text.match(/.{0,40}[—–].{0,40}/)?.[0]}"` : null,
+  },
+  {
     name: 'lead tool fires on contact info',
     messages: [
       { role: 'user', content: 'We need help building a RAG knowledge base for our support team.' },
