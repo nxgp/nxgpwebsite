@@ -60,20 +60,20 @@ One operating loop, Discover, Prioritize, Deliver, Optimize, run by an embedded 
 
 ## Frequently asked questions
 
-**How is this different from staff aug or a systems integrator?**
-We're embedded and accountable to the outcome, not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.
+**What does Nx Growth Partners do?**
+Nx Growth Partners is a custom software and AI development company. We design, build, integrate, and support custom software, AI automation, internal tools, digital products, data systems, and business applications.
 
-**How do you handle security, data and compliance?**
-We work inside your environment and to your controls. For regulated work we run self-hosted, keeping data in your boundary. Detailed posture shared on request.
+**What types of companies does NxGP work with?**
+We work with growing and established organizations that need to build new technology, improve existing systems, automate operational workflows, or add experienced product and engineering capacity.
 
-**How do we contract and get started?**
-We start with the Nx Blueprint, a focused discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement, and the first step is a 30-minute call.
+**Does NxGP only build AI solutions?**
+No. AI is one part of our engineering capability. Depending on the problem, a solution may involve custom software, workflow automation, system integrations, data infrastructure, AI, or a combination of these technologies.
 
-**Are you big enough to handle our scale?**
-Our leverage is senior people and one operating loop, not headcount. The embedded model and weekly cadence scale with the work, backed by named proof of what the team has shipped.
+**Can NxGP work with our existing engineering team?**
+Yes. NxGP can own a complete project or embed product, engineering, AI, data, QA, and DevOps resources alongside an existing team.
 
-**Do we have to engage all three pillars?**
-No. Engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call.
+**Can NxGP support software after it launches?**
+Yes. NxGP provides ongoing application support, monitoring, maintenance, optimization, and continued development for deployed systems.
 
 ---
-Last updated: 2026-08-11
+Last updated: 2026-08-14
