@@ -27,16 +27,24 @@ export function About() {
         </div>
 
         {/* founding team */}
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {about.team.map((t) => (
             <div
               data-reveal
               key={t.name}
               className="rounded-card border border-line bg-surface p-6 shadow-sm"
             >
-              <span className="flex size-11 items-center justify-center rounded-full bg-accent-wash font-display text-[0.95rem] font-800 text-accent-deep">
-                {t.name.split(' ').map((w) => w[0]).join('')}
-              </span>
+              {/* width/height match the asset's intrinsic size so the browser
+                  reserves the box before it loads (no layout shift) */}
+              <img
+                src={t.photo}
+                alt={`${t.name}, ${t.role} at Nx Growth Partners`}
+                width={512}
+                height={512}
+                loading="lazy"
+                decoding="async"
+                className="size-16 rounded-full object-cover"
+              />
               <h3 className="mt-4 font-display text-[1.15rem] font-800 tracking-[-0.01em]">{t.name}</h3>
               <p className="text-[0.8rem] font-700 uppercase tracking-[0.06em] text-accent-deep">{t.role}</p>
               <p className="mt-3 text-[0.92rem] leading-relaxed text-ink-soft">{t.bio}</p>

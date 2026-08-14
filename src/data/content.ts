@@ -288,17 +288,14 @@ export const about = {
     {
       name: 'Gurjeet Nijjar',
       role: 'CEO',
+      photo: '/team/gurjeet-nijjar.jpg',
       bio: 'Systems engineering and operations-focused founder who has built tooling to help teams work smarter by connecting fragmented systems across startups and enterprises.',
     },
     {
       name: 'Ravi Singh',
       role: 'CTO',
+      photo: '/team/ravi-singh.jpg',
       bio: 'Principal Architect with experience building purpose-built solutions across industries, combining agents, LLMs, and modern application architecture to create AI-native, intent-driven user experiences.',
-    },
-    {
-      name: 'Monit Vats',
-      role: 'Operating Advisor',
-      bio: 'Versatile business leader and transformational operator with experience helping SaaS organizations scale through strategic sales, operational leadership, and cross-functional team transformation.',
     },
   ],
 }
@@ -307,24 +304,24 @@ export const faq = {
   h2: 'The things buyers ask first.',
   items: [
     {
-      q: 'How is this different from staff aug or a systems integrator?',
-      a: "We're embedded and accountable to the outcome, not bodies you manage or a statement of work you babysit. A senior, cross-functional team works inside your stack, ships every week, and owns the result.",
+      q: 'What does Nx Growth Partners do?',
+      a: 'Nx Growth Partners is a custom software and AI development company. We design, build, integrate, and support custom software, AI automation, internal tools, digital products, data systems, and business applications.',
     },
     {
-      q: 'How do you handle security, data and compliance?',
-      a: "We work inside your environment and to your controls. For regulated work we run self-hosted, keeping data in your boundary. We'll tell you plainly what we do and don't hold rather than claim a posture we can't back. Detailed posture shared on request.",
+      q: 'What types of companies does NxGP work with?',
+      a: 'We work with growing and established organizations that need to build new technology, improve existing systems, automate operational workflows, or add experienced product and engineering capacity.',
     },
     {
-      q: 'How do we contract and get started?',
-      a: 'We start with the Nx Blueprint, a focused discovery that produces a prioritized roadmap with estimated investment. From there we scope project delivery or an embedded engagement. We can work through enterprise and government procurement, and the first step is a 30-minute call.',
+      q: 'Does NxGP only build AI solutions?',
+      a: 'No. AI is one part of our engineering capability. Depending on the problem, a solution may involve custom software, workflow automation, system integrations, data infrastructure, AI, or a combination of these technologies.',
     },
     {
-      q: 'Are you big enough to handle our scale?',
-      a: 'Our leverage is senior people and one operating loop, not headcount. The embedded model and weekly cadence scale with the work, backed by named proof of what the team has shipped.',
+      q: 'Can NxGP work with our existing engineering team?',
+      a: 'Yes. NxGP can own a complete project or embed product, engineering, AI, data, QA, and DevOps resources alongside an existing team.',
     },
     {
-      q: 'Do we have to engage all three pillars?',
-      a: 'No. Engage one (AI & workflow automation, software & product delivery, or embedded engineering) or a cross-functional team across all three. We help you pick on the first call, based on what moves your numbers.',
+      q: 'Can NxGP support software after it launches?',
+      a: 'Yes. NxGP provides ongoing application support, monitoring, maintenance, optimization, and continued development for deployed systems.',
     },
   ],
 }
