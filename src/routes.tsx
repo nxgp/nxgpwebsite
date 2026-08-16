@@ -9,6 +9,9 @@ import { Reviews } from './components/Reviews'
 import { FAQ } from './components/FAQ'
 import { PageHeader, type Crumb } from './pages/PageHeader'
 import { ProductPage } from './pages/ProductPage'
+import { BlogIndex } from './pages/BlogIndex'
+import { BlogPostPage } from './pages/BlogPostPage'
+import { posts } from './data/blog.generated'
 
 /**
  * Standalone pages — every major section (and every portfolio product) gets
@@ -54,6 +57,31 @@ const productRoutes: Route[] = portfolio.products.map((p) => ({
       about: p.role,
       creator: { '@type': 'Organization', name: 'Nx Growth Partners', url: 'https://nxgp.io' },
       ...(p.builtFor ? { sourceOrganization: { '@type': 'Organization', name: p.builtFor } } : {}),
+    },
+  ],
+}))
+
+const blogCrumb: Crumb = { label: 'Blog', href: '/blog' }
+
+/** One prerendered page per Contentful post, generated at build time. */
+const blogRoutes: Route[] = posts.map((post) => ({
+  path: `/blog/${post.slug}`,
+  title: clip(post.seoTitle ?? `${post.title} | Nx Growth Partners`, 62),
+  description: clip(post.seoDescription ?? post.description),
+  crumbs: [home, blogCrumb, { label: post.title, href: `/blog/${post.slug}` }],
+  main: () => <BlogPostPage post={post} />,
+  jsonLd: () => [
+    {
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.description,
+      datePublished: post.publishedDate,
+      dateModified: post.updatedAt,
+      author: { '@type': 'Person', name: post.author },
+      publisher: { '@type': 'Organization', name: 'Nx Growth Partners', url: 'https://nxgp.io' },
+      mainEntityOfPage: `https://nxgp.io/blog/${post.slug}`,
+      ...(post.image ? { image: post.image } : {}),
+      ...(post.tags.length ? { keywords: post.tags.join(', ') } : {}),
     },
   ],
 }))
@@ -145,6 +173,40 @@ export const ROUTES: Route[] = [
       },
     ],
   },
+  {
+    path: '/blog',
+    title: 'Blog | Nx Growth Partners',
+    description: clip(
+      'Notes from the team on building custom software, AI automation and internal tools that people actually use.',
+    ),
+    crumbs: [home, blogCrumb],
+    main: () => (
+      <>
+        <PageHeader
+          crumbs={[home, blogCrumb]}
+          title="Blog"
+          sub="Notes from the team on building software, AI and automation that people actually use."
+        />
+        <BlogIndex />
+      </>
+    ),
+    jsonLd: () => [
+      {
+        '@type': 'Blog',
+        '@id': 'https://nxgp.io/blog#blog',
+        name: 'Nx Growth Partners Blog',
+        url: 'https://nxgp.io/blog',
+        blogPost: posts.map((p) => ({
+          '@type': 'BlogPosting',
+          headline: p.title,
+          url: `https://nxgp.io/blog/${p.slug}`,
+          datePublished: p.publishedDate,
+          author: { '@type': 'Person', name: p.author },
+        })),
+      },
+    ],
+  },
+  ...blogRoutes,
   ...productRoutes,
 ]
 
