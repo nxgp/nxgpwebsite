@@ -22,6 +22,7 @@ export const nav = {
     { label: 'Industries', id: 'industries' },
     { label: 'Products', id: 'work' },
     { label: 'About', id: 'about' },
+    { label: 'Blog', id: 'blog' },
   ],
   cta: 'Discuss a project',
 }
@@ -363,6 +364,7 @@ export const footer = {
         { label: 'Products', href: '/work' },
         { label: 'About', href: '/about' },
         { label: 'FAQ', href: '/faq' },
+        { label: 'Blog', href: '/blog' },
         { label: 'Discuss a project', href: '#cta' },
       ],
     },

@@ -5,13 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs",
+    "build": "node scripts/fetch-contentful.mjs && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
     "test:chat": "node scripts/test-chat-e2e.mjs",
-    "eval": "node scripts/eval-assistant.mjs"
+    "eval": "node scripts/eval-assistant.mjs",
+    "blog:fetch": "node scripts/fetch-contentful.mjs",
+    "blog:preview": "CONTENTFUL_PREVIEW=1 node scripts/fetch-contentful.mjs"
   },
   "dependencies": {
+    "@contentful/rich-text-html-renderer": "^17.2.3",
+    "@contentful/rich-text-types": "^17.2.7",
+    "contentful": "^11.12.9",
     "gsap": "^3.15.0",
     "lenis": "^1.3.24",
     "lucide-react": "^1.21.0",
