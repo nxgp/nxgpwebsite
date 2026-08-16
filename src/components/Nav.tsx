@@ -9,6 +9,17 @@ import { cn } from '../lib/cn'
 /** Maps a home-page section id to its standalone page URL. */
 const pageFor = (id: string) => `/${id}`
 
+/**
+ * On the home page a nav item scrolls to its section, but only when that
+ * section is actually on the page. Some nav targets have no home section at
+ * all (Blog) and others were moved off the home scroll (Services,
+ * Industries) — for those the link must navigate like any other link rather
+ * than being swallowed by a preventDefault.
+ */
+function sectionOnPage(id: string): boolean {
+  return typeof document !== 'undefined' && document.getElementById(id) !== null
+}
+
 export function Nav({ home = true }: { home?: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -52,6 +63,7 @@ export function Nav({ home = true }: { home?: boolean }) {
               onClick={
                 home
                   ? (e) => {
+                      if (!sectionOnPage(l.id)) return // let it navigate
                       e.preventDefault()
                       scrollToId(l.id)
                     }
@@ -96,7 +108,12 @@ export function Nav({ home = true }: { home?: boolean }) {
               href={pageFor(l.id)}
               onClick={
                 home
-                  ? (e) => { e.preventDefault(); scrollToId(l.id); setOpen(false) }
+                  ? (e) => {
+                      setOpen(false)
+                      if (!sectionOnPage(l.id)) return // let it navigate
+                      e.preventDefault()
+                      scrollToId(l.id)
+                    }
                   : () => setOpen(false)
               }
               className="rounded-inner px-2 py-3 text-left text-[1.05rem] font-600 text-ink"
