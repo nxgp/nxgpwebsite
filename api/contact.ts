@@ -74,11 +74,21 @@ async function overDailyLimit(ip: string): Promise<boolean> {
 async function notifySlack(f: Record<string, string>, emailed: string): Promise<boolean> {
   const url = process.env.SLACK_WEBHOOK_URL
   if (!url) return false
+  // mailto is a real link in Slack, so the lead can be answered from the
+  // notification instead of copying an address out of it
+  const footer =
+    emailed === 'sent'
+      ? 'they have a confirmation copy'
+      : emailed === 'skipped'
+        ? 'no confirmation sent (RESEND_API_KEY not set)'
+        : 'confirmation email FAILED to send'
   const text =
-    `:inbox_tray: *New project inquiry* (form)\n` +
-    `*Name:* ${f.name}\n*Email:* ${f.email}\n*Company:* ${f.company || '—'}\n` +
-    `*Looking for:* ${f.help || '—'}\n*Message:* ${f.message}\n` +
-    `*Page:* ${f.page || '—'}\n*Confirmation email:* ${emailed}`
+    `:inbox_tray: *New project inquiry* (website form)\n` +
+    `*${f.name}*${f.company ? ` · ${f.company}` : ''}\n` +
+    `<mailto:${f.email}|${f.email}>\n` +
+    `*Looking for:* ${f.help || '—'}\n` +
+    `*Message:* ${f.message}\n` +
+    `_from ${f.page || 'the site'} · ${footer}_`
   try {
     const r = await fetch(url, {
       method: 'POST',
