@@ -3,7 +3,6 @@ import { ArrowRight } from 'lucide-react'
 import { withMotion } from '../lib/motion'
 import { prefersReducedMotion, isSmallScreen } from '../lib/reducedMotion'
 import { scrollToId } from '../lib/useSmoothScroll'
-import { useBooking } from './BookingModal'
 import { hero } from '../data/content'
 import { Button } from './ui/Button'
 import { Aurora } from './ui/Aurora'
@@ -14,7 +13,6 @@ export function Hero() {
   const auroraRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const mockRef = useRef<HTMLDivElement>(null)
-  const openBooking = useBooking()
 
   useEffect(() => {
     const el = root.current
@@ -84,7 +82,7 @@ export function Hero() {
           <p data-hero-fade className="t-lead mt-6 max-w-[36rem]">{hero.sub}</p>
 
           <div data-hero-fade className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button variant="dark" onClick={openBooking}>
+            <Button variant="dark" href="/discuss-a-project">
               {hero.ctaPrimary}
               <ArrowRight className="size-4" />
             </Button>

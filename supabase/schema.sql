@@ -39,3 +39,17 @@ create index if not exists leads_created_idx on leads (created_at desc);
 alter table conversations enable row level security;
 alter table messages enable row level security;
 alter table leads enable row level security;
+
+-- Every inbound lead lands in `leads`, whatever produced it, so the team has
+-- one place to look. `source` says which surface it came from:
+--   'assistant'  the chat assistant's capture_lead tool
+--   'sketch'     "email me this sketch" on /sketch
+--   'form'       the /discuss-a-project form
+-- Applied to the live database on 2026-08-18.
+alter table leads add column if not exists source text not null default 'assistant';
+alter table leads add column if not exists page text;   -- page the form was sent from
+alter table leads add column if not exists ip text;     -- abuse throttling only
+-- form submissions have a message but no assistant-written summary
+alter table leads alter column summary drop not null;
+alter table leads alter column interest drop not null;
+create index if not exists leads_source_idx on leads (source, created_at desc);

@@ -89,3 +89,69 @@ export async function sendFollowupEmail(
     return 'failed'
   }
 }
+
+/* ---------------- "Discuss a project" form ---------------- */
+
+/**
+ * Confirmation to whoever filled in the form. Reassures them a human has it,
+ * repeats what they sent so they have a record, and offers the call as the
+ * next step rather than the only step.
+ */
+export async function sendInquiryEmail(
+  f: { name: string; email: string; company?: string; help?: string; message: string },
+  calendlyUrl: string,
+): Promise<FollowupResult> {
+  const key = process.env.RESEND_API_KEY
+  if (!key) return 'skipped'
+
+  const base = process.env.EMAIL_BASE_URL || 'https://api.resend.com'
+  const from = process.env.EMAIL_FROM || 'Gurjeet Nijjar <gurjeet@nxgp.io>'
+  const replyTo = process.env.EMAIL_REPLY_TO || 'gurjeet@nxgp.io'
+  const firstName = f.name.trim().split(/\s+/)[0] || 'there'
+
+  const text = [
+    `Hi ${firstName},`,
+    '',
+    'Thanks for reaching out. Your note is with our team and one of us will reply personally.',
+    '',
+    `What you sent us: ${f.message}`,
+    '',
+    'If it is easier to talk it through, you can grab a 30 minute slot here:',
+    calendlyUrl,
+    '',
+    'Talk soon,',
+    'Gurjeet Nijjar',
+    'Nx Growth Partners',
+    'https://nxgp.io · hello@nxgp.io',
+  ].join('\n')
+
+  const html = `<!doctype html><html><body style="margin:0;padding:32px 16px;background:#FDFDFC;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#14161F">
+  <div style="max-width:540px;margin:0 auto">
+    <p style="font-size:15px;line-height:1.6">Hi ${esc(firstName)},</p>
+    <p style="font-size:15px;line-height:1.6">Thanks for reaching out. Your note is with our team and one of us will reply personally.</p>
+    <p style="font-size:14px;line-height:1.6;background:#ECECFE;border-radius:12px;padding:12px 16px"><strong>What you sent us:</strong><br/>${esc(f.message).replace(/\n/g, '<br/>')}</p>
+    <p style="font-size:15px;line-height:1.6">If it is easier to talk it through, grab a 30 minute slot:</p>
+    <p style="margin:24px 0"><a href="${esc(calendlyUrl)}" style="background:#0000F4;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:12px 22px;border-radius:999px;display:inline-block">Book a 30-minute call</a></p>
+    <p style="font-size:15px;line-height:1.6">Talk soon,<br/>Gurjeet Nijjar<br/><span style="color:#8A8D96">Nx Growth Partners</span></p>
+    <p style="font-size:12px;color:#8A8D96">Nx Growth Partners · <a href="https://nxgp.io" style="color:#8A8D96">nxgp.io</a> · <a href="mailto:hello@nxgp.io" style="color:#8A8D96">hello@nxgp.io</a><br/>You are receiving this because you contacted us through nxgp.io.</p>
+  </div>
+</body></html>`
+
+  try {
+    const r = await fetch(`${base}/emails`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from,
+        to: [f.email],
+        reply_to: replyTo,
+        subject: 'Thanks for reaching out to Nx Growth Partners',
+        text,
+        html,
+      }),
+    })
+    return r.ok ? 'sent' : 'failed'
+  } catch {
+    return 'failed'
+  }
+}

@@ -3,7 +3,6 @@ import { Button } from './ui/Button'
 import { Logo } from './ui/Logo'
 import { nav } from '../data/content'
 import { scrollToId } from '../lib/useSmoothScroll'
-import { useBooking } from './BookingModal'
 import { cn } from '../lib/cn'
 
 /** Maps a home-page section id to its standalone page URL. */
@@ -23,7 +22,6 @@ function sectionOnPage(id: string): boolean {
 export function Nav({ home = true }: { home?: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const openBooking = useBooking()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -77,7 +75,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         </div>
 
         <div className="hidden items-center gap-2.5 md:flex">
-          <Button variant="dark" onClick={openBooking}>
+          <Button variant="dark" href="/discuss-a-project">
             {nav.cta}
           </Button>
         </div>
@@ -121,7 +119,13 @@ export function Nav({ home = true }: { home?: boolean }) {
               {l.label}
             </a>
           ))}
-          <Button variant="dark" magnetic={false} className="mt-2 w-full" onClick={() => { setOpen(false); openBooking() }}>
+          <Button
+            variant="dark"
+            magnetic={false}
+            className="mt-2 w-full"
+            href="/discuss-a-project"
+            onClick={() => setOpen(false)}
+          >
             {nav.cta}
           </Button>
         </div>
