@@ -77,14 +77,30 @@ const renderOptions = {
     [BLOCKS.HEADING_3]: (_n, next) =>
       `<h3 class="mt-8 font-display text-[1.15rem] font-800 tracking-[-0.01em]">${next(_n.content)}</h3>`,
     [BLOCKS.HEADING_4]: (_n, next) => `<h4 class="mt-6 font-700">${next(_n.content)}</h4>`,
-    [BLOCKS.UL_LIST]: (_n, next) => `<ul class="mt-5 flex flex-col gap-2 pl-5">${next(_n.content)}</ul>`,
+    // NB: no flex here. `display:flex` turns the <li>s into flex items, which
+    // removes their markers entirely, and Tailwind's preflight already sets
+    // list-style:none — so the bullets need list-disc/list-decimal spelled out.
+    [BLOCKS.UL_LIST]: (_n, next) =>
+      `<ul class="mt-5 list-disc space-y-2 pl-6 marker:text-ink-faint">${next(_n.content)}</ul>`,
     [BLOCKS.OL_LIST]: (_n, next) =>
-      `<ol class="mt-5 flex list-decimal flex-col gap-2 pl-5">${next(_n.content)}</ol>`,
+      `<ol class="mt-5 list-decimal space-y-2 pl-6 marker:text-ink-faint">${next(_n.content)}</ol>`,
     [BLOCKS.LIST_ITEM]: (_n, next) =>
-      `<li class="leading-relaxed text-ink-soft [&>p]:mt-0">${next(_n.content)}</li>`,
+      `<li class="leading-relaxed text-ink-soft [&>p]:mt-0 [&>ul]:mt-2 [&>ol]:mt-2">${next(_n.content)}</li>`,
     [BLOCKS.QUOTE]: (_n, next) =>
       `<blockquote class="mt-6 border-l-2 border-accent pl-4 text-ink [&>p]:mt-0">${next(_n.content)}</blockquote>`,
     [BLOCKS.HR]: () => `<hr class="mt-8 border-line" />`,
+    // Tables shipped as bare <table>/<td>, which preflight renders as
+    // squashed text. Style them, bold the header row, and let them scroll
+    // sideways on narrow screens instead of blowing out the column.
+    [BLOCKS.TABLE]: (_n, next) =>
+      `<div class="mt-6 overflow-x-auto rounded-inner border border-line">` +
+      `<table class="w-full border-collapse text-[0.92rem] [&_tr:first-child]:bg-bg [&_tr:first-child]:font-700 [&_tr:first-child]:text-ink">` +
+      `<tbody>${next(_n.content)}</tbody></table></div>`,
+    [BLOCKS.TABLE_ROW]: (_n, next) => `<tr class="border-b border-line last:border-0">${next(_n.content)}</tr>`,
+    [BLOCKS.TABLE_CELL]: (_n, next) =>
+      `<td class="border-r border-line px-3 py-2.5 align-top text-ink-soft last:border-0 [&>p]:mt-0 [&>p+p]:mt-2">${next(_n.content)}</td>`,
+    [BLOCKS.TABLE_HEADER_CELL]: (_n, next) =>
+      `<th class="border-r border-line bg-bg px-3 py-2.5 text-left align-top font-700 text-ink last:border-0 [&>p]:mt-0">${next(_n.content)}</th>`,
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
       const f = node.data?.target?.fields
       if (!f?.file?.url) return ''
@@ -112,7 +128,7 @@ const renderOptions = {
       const url = node.data?.uri ?? ''
       const ext = /^https?:\/\//.test(url) && !url.includes('nxgp.io')
       return (
-        `<a href="${esc(url)}" class="link-underline text-accent-deep"` +
+        `<a href="${esc(url)}" class="font-600 text-accent-deep underline underline-offset-2 hover:text-accent"` +
         (ext ? ' target="_blank" rel="noopener noreferrer"' : '') +
         `>${next(node.content)}</a>`
       )
