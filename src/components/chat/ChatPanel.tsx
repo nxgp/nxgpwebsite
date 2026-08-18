@@ -32,7 +32,15 @@ function load(): { id: string; messages: Msg[] } {
   return { id: crypto.randomUUID(), messages: [] }
 }
 
-export default function ChatPanel({ onClose }: { onClose: () => void }) {
+export default function ChatPanel({
+  onClose,
+  autoFocus = true,
+}: {
+  onClose: () => void
+  /** false when the panel opened by itself, so we don't yank focus (and the
+   *  viewport) away from someone who is mid-sentence on the page. */
+  autoFocus?: boolean
+}) {
   const [session, setSession] = useState<{ id: string; messages: Msg[] } | null>(null)
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
@@ -44,8 +52,8 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     setSession(load())
-    inputRef.current?.focus()
-  }, [])
+    if (autoFocus) inputRef.current?.focus()
+  }, [autoFocus])
 
   useEffect(() => {
     if (session) {
