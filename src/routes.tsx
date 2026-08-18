@@ -10,6 +10,7 @@ import { FAQ } from './components/FAQ'
 import { PageHeader, type Crumb } from './pages/PageHeader'
 import { ProductPage } from './pages/ProductPage'
 import { BlogIndex } from './pages/BlogIndex'
+import { DiscussProject } from './pages/DiscussProject'
 import { BlogPostPage } from './pages/BlogPostPage'
 import { posts } from './data/blog.generated'
 
@@ -203,6 +204,32 @@ export const ROUTES: Route[] = [
           datePublished: p.publishedDate,
           author: { '@type': 'Person', name: p.author },
         })),
+      },
+    ],
+  },
+  {
+    path: '/discuss-a-project',
+    title: 'Discuss a Project | Nx Growth Partners',
+    description: clip(
+      'Tell us what you are trying to build or fix and we will reply personally. Or book a 30-minute call if you would rather talk it through.',
+    ),
+    crumbs: [home, { label: 'Discuss a project', href: '/discuss-a-project' }],
+    main: () => (
+      <>
+        <PageHeader
+          crumbs={[home, { label: 'Discuss a project', href: '/discuss-a-project' }]}
+          title="Discuss a project"
+          sub="Tell us what you are trying to build or fix. We reply personally, usually the same day."
+        />
+        <DiscussProject />
+      </>
+    ),
+    jsonLd: () => [
+      {
+        '@type': 'ContactPage',
+        '@id': 'https://nxgp.io/discuss-a-project#contactpage',
+        name: 'Discuss a project with Nx Growth Partners',
+        about: { '@type': 'Organization', name: 'Nx Growth Partners', url: 'https://nxgp.io' },
       },
     ],
   },

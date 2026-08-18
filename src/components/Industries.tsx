@@ -5,7 +5,6 @@ import { industries } from '../data/content'
 import type { Industry } from '../data/content'
 import { SectionHeader } from './ui/SectionHeader'
 import { Button } from './ui/Button'
-import { scrollToId } from '../lib/useSmoothScroll'
 
 const icons: Record<Industry['visual'], LucideIcon> = { pe: Briefcase, enterprise: Building2, gov: Landmark }
 
@@ -43,7 +42,7 @@ export function Industries() {
           <p className="text-[0.95rem] font-600 text-ink-soft">
             Not sure where you fit? We map it on the first call.
           </p>
-          <Button variant="dark" onClick={() => scrollToId('cta')}>
+          <Button variant="dark" href="/discuss-a-project">
             Discuss a project
           </Button>
         </div>

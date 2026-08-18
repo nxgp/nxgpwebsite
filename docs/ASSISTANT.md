@@ -218,3 +218,21 @@ full cache rebuild of the base prompt.
   firing) against the real model and exits non-zero on any regression.
   Runs in CI on PRs touching `api/**` or site content when the
   `ANTHROPIC_API_KEY` repo secret is set.
+
+## Discuss a project form (/discuss-a-project)
+
+Every "Discuss a project" control on the site now points at this page rather
+than opening Calendly directly. Booking is still offered there, alongside the
+form and a plain mailto, because most visitors are not ready to put a meeting
+in their calendar and previously had nowhere else to go.
+
+`POST /api/contact` validates, emails the sender a copy (Resend), pings Slack,
+and writes to the shared `leads` table with `source='form'`. Spam is handled
+with a honeypot field plus 5 submissions per 10 minutes and 10 per day per IP;
+a honeypot hit returns 200 so the bot does not learn anything.
+
+All three lead surfaces (assistant, sketch, form) write to `leads`, so:
+
+```sql
+select source, count(*) from leads group by source order by 2 desc;
+```

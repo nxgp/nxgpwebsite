@@ -365,7 +365,7 @@ export const footer = {
         { label: 'About', href: '/about' },
         { label: 'FAQ', href: '/faq' },
         { label: 'Blog', href: '/blog' },
-        { label: 'Discuss a project', href: '#cta' },
+        { label: 'Discuss a project', href: '/discuss-a-project' },
       ],
     },
     {

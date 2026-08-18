@@ -6,12 +6,10 @@ import { cta } from '../data/content'
 import { Button } from './ui/Button'
 import { Aurora } from './ui/Aurora'
 import { scrollToId } from '../lib/useSmoothScroll'
-import { useBooking } from './BookingModal'
 
 export function CTA() {
   const root = useRef<HTMLDivElement>(null)
   const aurora = useRef<HTMLDivElement>(null)
-  const openBooking = useBooking()
 
   useEffect(() => {
     const el = root.current
@@ -55,7 +53,7 @@ export function CTA() {
             <p className="t-lead mx-auto mt-5 text-white/65">{cta.sub}</p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button variant="light" className="bg-white text-ink" onClick={openBooking}>
+              <Button variant="light" className="bg-white text-ink" href="/discuss-a-project">
                 {cta.ctaPrimary}
                 <ArrowRight className="size-4" />
               </Button>
