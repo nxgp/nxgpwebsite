@@ -145,7 +145,7 @@ export const engagement = {
   ] as Engagement[],
 }
 
-export type Industry = { name: string; buyer: string; frame: string; visual: 'pe' | 'enterprise' | 'gov'; accent: string; note?: string }
+export type Industry = { name: string; buyer: string; frame: string; visual: 'pe' | 'enterprise' | 'gov'; accent: string }
 
 export const industries = {
   h2: "Built for the buyers who can't wait.",
@@ -153,7 +153,7 @@ export const industries = {
   items: [
     { name: 'Private Equity', buyer: 'Operating partners & portfolio-company leadership', frame: 'Portfolio value creation, technical diligence and speed across portcos: one partner spanning GTM, AI and product, without standing up an in-house tech org.', visual: 'pe', accent: '#0000F4' },
     { name: 'Enterprise', buyer: 'Revenue, IT, product and data leaders', frame: 'Senior capacity and outcomes without long agency cycles or heavy hiring: an embedded team that ships inside your stack and displaces slow integrators and staff aug.', visual: 'enterprise', accent: '#5B5BD6' },
-    { name: 'Government', buyer: 'Procurement-driven buyers', frame: 'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly, and never claim posture we do not hold.', visual: 'gov', accent: '#8080FF', note: 'Capabilities & teaming' },
+    { name: 'Government', buyer: 'Procurement-driven buyers', frame: 'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly, and never claim posture we do not hold.', visual: 'gov', accent: '#8080FF' },
   ] as Industry[],
 }
 
