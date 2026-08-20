@@ -1,12 +1,15 @@
-import { Briefcase, Building2, Landmark, ArrowUpRight } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { useReveal } from '../hooks/useReveal'
 import { industries } from '../data/content'
 import type { Industry } from '../data/content'
 import { SectionHeader } from './ui/SectionHeader'
 import { Button } from './ui/Button'
 
-const icons: Record<Industry['visual'], LucideIcon> = { pe: Briefcase, enterprise: Building2, gov: Landmark }
+/** Photography per audience, keyed off the existing `visual` field. */
+const photos: Record<Industry['visual'], { src: string; alt: string }> = {
+  pe: { src: '/industries/private-equity.jpg', alt: '' },
+  enterprise: { src: '/industries/enterprise.jpg', alt: '' },
+  gov: { src: '/industries/government.jpg', alt: '' },
+}
 
 export function Industries() {
   const ref = useReveal<HTMLDivElement>()
@@ -17,22 +20,45 @@ export function Industries() {
 
         <div className="mt-14 grid gap-4 lg:grid-cols-3">
           {industries.items.map((ind) => {
-            const Icon = icons[ind.visual]
+            const photo = photos[ind.visual]
             return (
-              <article data-reveal key={ind.name} className="group flex flex-col rounded-card border border-line bg-surface p-7 shadow-sm transition-shadow duration-300 hover:shadow-lg">
-                <div className="flex items-start justify-between">
-                  <span className="flex size-11 items-center justify-center rounded-inner" style={{ background: `${ind.accent}16`, color: ind.accent }}>
-                    <Icon className="size-5" />
+              <article
+                data-reveal
+                key={ind.name}
+                className="group relative isolate flex min-h-[24rem] flex-col justify-end overflow-hidden rounded-card p-7 shadow-sm transition-shadow duration-300 hover:shadow-lg"
+              >
+                {/* the photograph. alt="" because the card's own words carry the
+                    meaning; a description here would just be read twice. */}
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 -z-20 size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                {/* Darkening scrim. Heavier at the bottom, where the text sits,
+                    so the copy keeps its contrast whatever the photo is doing
+                    behind it. */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10"
+                  style={{
+                    background:
+                      'linear-gradient(180deg, rgba(6,11,51,0.30) 0%, rgba(6,11,51,0.62) 45%, rgba(6,11,51,0.88) 100%)',
+                  }}
+                />
+
+                {ind.note && (
+                  <span className="absolute right-5 top-5 rounded-pill border border-white/20 bg-navy/60 px-2.5 py-1 text-[0.66rem] font-700 text-white backdrop-blur-sm">
+                    {ind.note}
                   </span>
-                  {ind.note ? (
-                    <span className="rounded-pill border border-line px-2.5 py-1 text-[0.66rem] font-700 text-ink-faint">{ind.note}</span>
-                  ) : (
-                    <ArrowUpRight className="size-5 text-ink-faint transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink" />
-                  )}
-                </div>
-                <h3 className="t-h3 mt-5 text-[1.5rem]">{ind.name}</h3>
-                <p className="mt-1.5 text-[0.78rem] font-700 uppercase tracking-[0.05em] text-ink-faint">{ind.buyer}</p>
-                <p className="mt-4 text-[0.98rem] leading-relaxed text-ink-soft">{ind.frame}</p>
+                )}
+
+                <h3 className="t-h3 text-[1.5rem] text-white">{ind.name}</h3>
+                <p className="mt-1.5 text-[0.78rem] font-700 uppercase tracking-[0.05em] text-white/60">
+                  {ind.buyer}
+                </p>
+                <p className="mt-4 text-[0.98rem] leading-relaxed text-white/85">{ind.frame}</p>
               </article>
             )
           })}
