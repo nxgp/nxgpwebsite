@@ -48,11 +48,6 @@ export function Industries() {
                   }}
                 />
 
-                {ind.note && (
-                  <span className="absolute right-5 top-5 rounded-pill border border-white/20 bg-navy/60 px-2.5 py-1 text-[0.66rem] font-700 text-white backdrop-blur-sm">
-                    {ind.note}
-                  </span>
-                )}
 
                 <h3 className="t-h3 text-[1.5rem] text-white">{ind.name}</h3>
                 <p className="mt-1.5 text-[0.78rem] font-700 uppercase tracking-[0.05em] text-white/60">
