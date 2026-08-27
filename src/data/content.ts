@@ -45,7 +45,6 @@ export const proof = {
     { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true, w: 184, h: 178 },
     { name: 'ecoATM', src: '/logos/ecoatm.png', big: false, w: 2033, h: 741 },
     { name: 'Kiotel', src: '/logos/kiotel.png', big: true, w: 1563, h: 1563 },
-    { name: 'TIAA', src: '/logos/tiaa.png', big: false, w: 598, h: 151 },
   ] as { name: string; src: string; big: boolean; w: number; h: number }[],
 }
 
