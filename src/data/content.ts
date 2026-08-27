@@ -62,13 +62,13 @@ export const reviews = {
     {
       quote:
         'NxGP revolutionized our digital operations with their exceptional logbook application for real time data tracking across our fleet. Their expertise in cloud solutions not only streamlined our processes but also saved us valuable time and resources, enabling greater efficiency and productivity.',
-      name: 'Raj Patel · Chief Executive Officer',
+      name: 'Jon Goodheart · Chief Technology Officer',
       context: 'Harbor Industrial',
     },
     {
       quote:
         'Their ability to combine strong software engineering with a practical understanding of our business. They operate like an extension of our team and remain focused on building technology that creates measurable value for our properties and guests.',
-      name: 'Jon Goodheart · Chief Technology Officer',
+      name: 'Raj Patel · Chief Executive Officer',
       context: 'Kiotel',
     },
   ],
