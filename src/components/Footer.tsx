@@ -27,7 +27,7 @@ export function Footer() {
                       {...(l.href.startsWith('http')
                         ? { target: '_blank', rel: 'noopener noreferrer' }
                         : {})}
-                      className="text-[15px] leading-[1.5] text-bg transition-colors duration-300 hover:text-peri"
+                      className="text-[15px] leading-[1.5] text-bg hover:text-peri"
                     >
                       {l.label}
                     </a>
@@ -40,7 +40,7 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col items-start justify-between gap-3 border-t border-bg/16 pt-6 text-[13px] text-mist sm:flex-row sm:items-center">
           <span>{footer.copyright}</span>
-          <a href="/privacy" className="transition-colors duration-300 hover:text-peri">
+          <a href="/privacy" className="hover:text-peri">
             Privacy
           </a>
         </div>

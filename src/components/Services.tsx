@@ -1,6 +1,5 @@
 import { TrendingUp, Sparkles, Boxes, Users, Check } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { useReveal } from '../hooks/useReveal'
 import { services } from '../data/content'
 import { SectionHeader } from './ui/SectionHeader'
 import { Card } from './ui/Card'
@@ -8,10 +7,9 @@ import { Card } from './ui/Card'
 const icons: Record<string, LucideIcon> = { TrendingUp, Sparkles, Boxes, Users }
 
 export function Services() {
-  const ref = useReveal<HTMLDivElement>()
   return (
     <section id="services" className="section bg-surface/40">
-      <div ref={ref} className="shell">
+      <div className="shell">
         <SectionHeader title={services.h2} sub={services.sub} />
 
         <div className="mt-10 grid gap-4 lg:grid-cols-3">

@@ -1,5 +1,4 @@
 import { industries } from '../data/content'
-import { useReveal } from '../hooks/useReveal'
 import { Button } from './ui/Button'
 
 /**
@@ -7,10 +6,9 @@ import { Button } from './ui/Button'
  * with the copy laid over a navy gradient, and a closing prompt.
  */
 export function Industries() {
-  const ref = useReveal<HTMLDivElement>()
   return (
     <section id="industries" aria-labelledby="industries-title" className="section-v2 bg-cloud text-navy">
-      <div ref={ref} className="shell-wide">
+      <div className="shell-wide">
         <div className="grid items-end gap-6 pb-16 lg:grid-cols-[740px_1fr] lg:gap-[72px]">
           <h2 id="industries-title" data-reveal className="t-h2">
             <span className="block">{industries.h2a}</span>
@@ -25,7 +23,7 @@ export function Industries() {
           {industries.items.map((it) => (
             <li
               key={it.name}
-              data-reveal
+              data-reveal="stagger"
               className="group chamfer relative flex aspect-[427/457] items-end overflow-hidden bg-navy text-bg max-md:aspect-[4/5]"
             >
               <img

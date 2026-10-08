@@ -1,5 +1,4 @@
 import { operatingModel } from '../data/content'
-import { useReveal } from '../hooks/useReveal'
 import { useActiveOnScroll } from '../hooks/useActiveOnScroll'
 import { cn } from '../lib/cn'
 
@@ -28,13 +27,12 @@ const CAPS = [
 ]
 
 export function OperatingModel() {
-  const ref = useReveal<HTMLDivElement>()
   const { steps } = operatingModel
   const { active, bind } = useActiveOnScroll(steps.length)
 
   return (
     <section id="approach" aria-labelledby="approach-title" className="section-v2 bg-bg text-navy">
-      <div ref={ref} className="shell-wide">
+      <div className="shell-wide">
         <div className="mx-auto flex max-w-[1224px] flex-col items-center gap-6 pb-16 text-center">
           <p data-reveal className="font-mono text-[12px] uppercase tracking-[0.14em] text-accent">
             {operatingModel.eyebrow}
@@ -58,13 +56,13 @@ export function OperatingModel() {
                 {...bind(i)}
                 tabIndex={0}
                 className={cn(
-                  'flex gap-6 border-l-2 px-6 py-7 transition-[background-color,border-color] duration-300 sm:px-8',
+                  'flex gap-6 border-l-2 px-6 py-7 transition-[background-color,border-color] duration-[320ms] ease-[ease] sm:px-8',
                   i === active ? 'border-accent bg-[#eeeefc]' : 'border-transparent bg-bg',
                 )}
               >
                 <span
                   className={cn(
-                    'w-14 shrink-0 whitespace-nowrap pt-1.5 font-mono text-[11.2px] tracking-[0.14em] transition-colors duration-300',
+                    'w-14 shrink-0 whitespace-nowrap pt-1.5 font-mono text-[11.2px] tracking-[0.14em]',
                     i === active ? 'text-accent' : 'text-grey',
                   )}
                 >
@@ -73,7 +71,7 @@ export function OperatingModel() {
                 <div className="min-w-0">
                   <h3
                     className={cn(
-                      'font-heading text-[clamp(1.4rem,2vw,1.75rem)] leading-[1.2] tracking-[-0.026em] transition-colors duration-300',
+                      'font-heading text-[clamp(1.4rem,2vw,1.75rem)] leading-[1.2] tracking-[-0.026em]',
                       i === active ? 'text-navy' : 'text-slate',
                     )}
                   >
@@ -124,7 +122,7 @@ function Orbit({ active }: { active: number }) {
           >
             <span
               className={cn(
-                'flex size-full items-center justify-center rounded-full border-[1.5px] font-mono text-[12px] transition-[background-color,border-color,color,opacity] duration-300',
+                'flex size-full items-center justify-center rounded-full border-[1.5px] font-mono text-[12px]',
                 on ? 'border-accent bg-accent text-bg' : 'border-hairline bg-cloud text-slate opacity-55',
               )}
             >
@@ -132,7 +130,7 @@ function Orbit({ active }: { active: number }) {
             </span>
             <span
               className={cn(
-                'absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[14px] transition-[color,opacity] duration-300',
+                'absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[14px] transition-colors duration-[320ms] ease-[ease]',
                 n.label === 'above' ? 'bottom-full mb-2.5' : 'top-full mt-2.5',
                 on ? 'text-navy' : 'text-slate opacity-55',
               )}

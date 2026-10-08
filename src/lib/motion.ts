@@ -1,8 +1,7 @@
 /**
- * Lazy motion runtime — gsap + ScrollTrigger + Lenis load as one async chunk
- * (~49kB gz) instead of blocking first paint. The prerendered page is fully
- * visible and interactive without it; when the chunk lands, entrances play
- * and smooth-scroll takes over.
+ * Lazy motion runtime — gsap loads as an async chunk instead of blocking
+ * first paint. The prerendered page is fully visible and interactive
+ * without it.
  */
 export type MotionModule = typeof import('./motionRuntime')
 

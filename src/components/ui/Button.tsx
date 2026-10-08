@@ -12,7 +12,7 @@ type Size = 'md' | 'sm'
 
 const base =
   'group relative inline-flex items-center justify-center gap-3 border font-500 leading-none ' +
-  'tracking-[-0.01em] transition-[background-color,border-color,color] duration-300 ' +
+  'tracking-[-0.01em] ' +
   'cursor-pointer select-none whitespace-nowrap'
 
 const sizes: Record<Size, string> = {
@@ -35,7 +35,7 @@ export function ArrowUpRight({ className }: { className?: string }) {
       fill="none"
       aria-hidden
       className={cn(
-        'size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+        'size-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
         className,
       )}
     >

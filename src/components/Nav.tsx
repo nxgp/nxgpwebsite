@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Button } from './ui/Button'
 import { LogoLockup } from './ui/Logo'
 import { nav } from '../data/content'
-import { scrollToId } from '../lib/useSmoothScroll'
+import { scrollToId } from '../lib/scrollToId'
 import { cn } from '../lib/cn'
 
 /**
@@ -53,7 +53,7 @@ export function Nav({ home = true }: { home?: boolean }) {
     <>
       <header
         className={cn(
-          'nav-enter fixed inset-x-0 top-0 z-[100] border-b transition-[border-color] duration-300',
+          'fixed inset-x-0 top-0 z-[100] border-b',
           light ? 'border-navy/10' : 'border-hairline/55',
         )}
       >
@@ -61,7 +61,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         <div
           aria-hidden
           className={cn(
-            'pointer-events-none absolute inset-0 bg-bg/[0.82] backdrop-blur-[16px] transition-opacity duration-300',
+            'pointer-events-none absolute inset-0 bg-bg/[0.82] backdrop-blur-[16px] transition-opacity duration-[320ms] ease-[ease]',
             light ? 'opacity-100' : 'opacity-0',
           )}
         />
@@ -77,7 +77,7 @@ export function Nav({ home = true }: { home?: boolean }) {
                 : undefined
             }
             aria-label="Nx Growth Partners home"
-            className={cn('transition-colors duration-300', light ? 'text-navy' : 'text-bg')}
+            className={cn('transition-colors duration-[320ms] ease-[ease]', light ? 'text-navy' : 'text-bg')}
           >
             <LogoLockup />
           </a>
@@ -89,7 +89,7 @@ export function Nav({ home = true }: { home?: boolean }) {
                   key={l.id}
                   {...linkProps(l.id)}
                   className={cn(
-                    'px-6 py-3 text-[15px] transition-colors duration-300',
+                    'px-6 py-3 text-[15px] transition-colors duration-[320ms] ease-[ease]',
                     light ? 'text-[#1a1a17] hover:text-accent' : 'text-bg',
                   )}
                 >
@@ -104,7 +104,7 @@ export function Nav({ home = true }: { home?: boolean }) {
 
           <button
             className={cn(
-              'relative z-[3] flex size-10 items-center justify-center border transition-colors duration-300 min-[992px]:hidden',
+              'relative z-[3] flex size-10 items-center justify-center border transition-colors duration-[320ms] ease-[ease] min-[992px]:hidden',
               open
                 ? 'border-bg/30 bg-bg/20 text-bg'
                 : light
@@ -132,7 +132,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         aria-hidden
         onClick={() => setOpen(false)}
         className={cn(
-          'fixed inset-0 z-[98] bg-navy/60 transition-[opacity,visibility] duration-300 min-[992px]:hidden',
+          'fixed inset-0 z-[98] bg-navy/60 transition-[opacity,visibility] duration-[320ms] ease-[ease] min-[992px]:hidden',
           open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0',
         )}
       />
@@ -140,7 +140,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         id="mobile-menu"
         aria-label="Menu"
         className={cn(
-          'fixed inset-y-0 right-0 z-[99] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] transition-[transform,visibility] duration-300 ease-[var(--ease-reveal)] min-[992px]:hidden',
+          'fixed inset-y-0 right-0 z-[99] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] transition-[transform,visibility] duration-[320ms] ease-[ease] min-[992px]:hidden',
           open ? 'visible translate-x-0' : 'invisible translate-x-full',
         )}
       >
@@ -148,7 +148,7 @@ export function Nav({ home = true }: { home?: boolean }) {
           <a
             key={l.id}
             {...linkProps(l.id, () => setOpen(false))}
-            className="border-b border-bg/10 py-4 font-heading text-[1.5rem] text-bg transition-colors hover:text-peri"
+            className="border-b border-bg/10 py-4 font-heading text-[1.5rem] text-bg hover:text-peri"
           >
             {l.label}
           </a>

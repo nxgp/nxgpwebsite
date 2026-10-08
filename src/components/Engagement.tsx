@@ -1,32 +1,21 @@
 import { engagement } from '../data/content'
-import { useReveal } from '../hooks/useReveal'
 import { useActiveOnScroll } from '../hooks/useActiveOnScroll'
 import { cn } from '../lib/cn'
 
 /**
- * The Nx Delivery System (Figma 212:387, behaviour and stack drawing from
- * the Webflow build): the four engagement models as stacked isometric
- * plates beside one card per model. The stack stays in view while the cards
- * scroll; the active card (nearest the viewport centre, or hovered/focused)
- * lifts its plate and turns it electric blue.
+ * The Nx Delivery System (Figma 212:387, card behaviour from the Webflow
+ * build): the five-plate capability stack beside one card per engagement
+ * model. The stack stays in view while the cards scroll; the active card
+ * (nearest the viewport centre, or hovered/focused) is highlighted.
  */
 
-// plate faces per layer, top (L01) to base (L04) — Webflow stack colours
-const PLATES = [
-  { left: '#11157E', right: '#14189C', top: '#1A1EC0', stroke: 'rgba(128,128,255,.6)' },
-  { left: '#0C1050', right: '#0F1362', top: '#131878', stroke: 'rgba(128,128,255,.45)' },
-  { left: '#090C40', right: '#0B0F50', top: '#0E1260', stroke: 'rgba(128,128,255,.45)' },
-  { left: '#070A2E', right: '#090D38', top: '#0B1042', stroke: 'rgba(128,128,255,.45)' },
-]
-
 export function Engagement() {
-  const ref = useReveal<HTMLDivElement>()
   const { items } = engagement
   const { active, bind } = useActiveOnScroll(items.length)
 
   return (
     <section id="system" aria-labelledby="system-title" className="section-v2 bg-navy text-bg">
-      <div ref={ref} className="shell">
+      <div className="shell">
         <div className="mx-auto flex max-w-[1022px] flex-col items-center pb-[72px] text-center">
           <p data-reveal className="pb-6 text-[12px] uppercase tracking-[0.14em] text-peri">
             {engagement.eyebrow}
@@ -42,7 +31,7 @@ export function Engagement() {
 
         <div className="grid items-start gap-12 lg:grid-cols-[641px_1fr] lg:gap-[101px]">
           <div className="lg:sticky lg:top-[102px]">
-            <Stack active={active} />
+            <Stack />
           </div>
 
           <ol data-reveal className="divide-y divide-bg/[0.09] border-y border-bg/[0.09]">
@@ -52,7 +41,7 @@ export function Engagement() {
                 {...bind(i)}
                 tabIndex={0}
                 className={cn(
-                  'border-l-[3px] p-6 transition-[background-color,border-color] duration-300 sm:p-[35px]',
+                  'border-l-[3px] p-6 transition-[background-color,border-color] duration-[320ms] ease-[ease] sm:p-[35px]',
                   i === active ? 'border-l-peri bg-accent/[0.24]' : 'border-l-transparent',
                 )}
               >
@@ -77,35 +66,51 @@ export function Engagement() {
   )
 }
 
-function Stack({ active }: { active: number }) {
-  const { items } = engagement
+// translucent electric-blue plates, top to base, fading as they go down
+const PLATE_ALPHA = [0.86, 0.46, 0.3, 0.18, 0.06]
+
+/** Figma's stack: five see-through plates, each ticked out to its label. */
+function Stack() {
+  const { stack } = engagement
+  const n = stack.length
   return (
     <svg
-      viewBox="50 80 1040 620"
+      viewBox="50 80 1160 700"
       role="img"
-      aria-label={`The Nx delivery system: ${items.length} engagement models as stacked plates, ${items[0].name} at the top to ${items[items.length - 1].name} at the base`}
+      aria-label={`The Nx delivery system as ${n} stacked layers, from ${stack[n - 1]} at the base up to ${stack[0]}`}
       className="h-auto w-full"
     >
       {/* draw from the base up so upper plates overlap lower ones */}
-      {items
-        .map((e, i) => ({ e, i }))
+      {stack
+        .map((name, i) => ({ name, i }))
         .reverse()
-        .map(({ e, i }) => {
+        .map(({ name, i }) => {
           const y = 100 + i * 96
-          const c = PLATES[i]
+          const a = PLATE_ALPHA[i]
+          const num = String(n - i).padStart(2, '0')
           return (
-            <g key={e.name} className="slab" data-state={i === active ? 'active' : 'idle'}>
-              <polygon fill={c.left} points={`70,${y + 135} 340,${y + 270} 340,${y + 286} 70,${y + 151}`} />
-              <polygon fill={c.right} points={`340,${y + 270} 610,${y + 135} 610,${y + 151} 340,${y + 286}`} />
+            <g key={name}>
               <polygon
-                className="slab-top"
-                fill={c.top}
-                stroke={c.stroke}
+                fill="#0000F4"
+                fillOpacity={a * 0.7}
+                points={`70,${y + 135} 340,${y + 270} 610,${y + 135} 610,${y + 145} 340,${y + 280} 70,${y + 145}`}
+              />
+              <polygon
+                fill="#0000F4"
+                fillOpacity={a}
+                stroke="#8080FF"
+                strokeOpacity={0.5}
+                strokeWidth={1.5}
                 points={`340,${y} 610,${y + 135} 340,${y + 270} 70,${y + 135}`}
               />
-              <line className="slab-tick" x1={610} y1={y + 135} x2={664} y2={y + 135} strokeWidth={1.5} />
-              <text className="slab-label" x={676} y={y + 142}>
-                {String(i + 1).padStart(2, '0')} · {e.name.toUpperCase()}
+              <line x1={610} y1={y + 135} x2={664} y2={y + 135} stroke="rgba(253,253,252,.26)" strokeWidth={1.5} />
+              <text
+                x={680}
+                y={y + 145}
+                className="font-mono text-[28px] tracking-[2.5px]"
+                fill={i === n - 1 ? '#FDFDFC' : '#8F93B8'}
+              >
+                {num} · {name.toUpperCase()}
               </text>
             </g>
           )

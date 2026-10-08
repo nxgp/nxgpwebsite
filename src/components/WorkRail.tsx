@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import type Lenis from 'lenis'
 import { portfolio, type Product } from '../data/content'
-import { useReveal } from '../hooks/useReveal'
-import { prefersReducedMotion, isCoarsePointer } from '../lib/reducedMotion'
+import { prefersReducedMotion } from '../lib/reducedMotion'
 import { cn } from '../lib/cn'
 
 const GAP = 24
@@ -12,12 +10,11 @@ const GAP = 24
  *
  * Desktop: the section pins and vertical scroll drives the track sideways,
  * with a progress bar; if the rail is taller than the viewport it is zoomed
- * down to fit. Prev/next move one card. Touch, small screens and reduced
- * motion get a native swipe row with scroll-snap instead — same markup,
- * nothing hidden before JS runs.
+ * down to fit. Prev/next move one card. As in the Webflow build this runs at
+ * every screen size; only reduced motion gets the native swipe row with
+ * scroll-snap instead — same markup, nothing hidden before JS runs.
  */
 export function WorkRail() {
-  const head = useReveal<HTMLDivElement>()
   const section = useRef<HTMLElement>(null)
   const rail = useRef<HTMLDivElement>(null)
   const viewport = useRef<HTMLDivElement>(null)
@@ -63,7 +60,7 @@ export function WorkRail() {
     }
 
     const measure = () => {
-      if (prefersReducedMotion() || isCoarsePointer() || window.innerWidth < 768) return unpin()
+      if (prefersReducedMotion()) return unpin()
       r.style.zoom = ''
       t.style.transform = ''
       state.current.pinned = true
@@ -112,9 +109,7 @@ export function WorkRail() {
     const k = s.offsetHeight - window.innerHeight
     const zoom = Number(rail.current?.style.zoom || 1)
     const delta = (dir * (step / zoom) / state.current.overflow) * k
-    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis
-    if (lenis) lenis.scrollTo(window.scrollY + delta, { duration: 0.6 })
-    else window.scrollBy({ top: delta, behavior: 'smooth' })
+    window.scrollBy({ top: delta, behavior: 'smooth' })
   }
 
   return (
@@ -130,7 +125,7 @@ export function WorkRail() {
         )}
       >
         <div ref={rail} className="shell-wide">
-          <div ref={head} className="flex items-end justify-between gap-6 pb-12">
+          <div className="flex items-end justify-between gap-6 pb-12">
             <h2 id="work-title" data-reveal className="t-h2 max-w-[833px]">
               <span className="block">{portfolio.h2a}</span>
               <span className="block text-peri">{portfolio.h2b}</span>
@@ -143,7 +138,7 @@ export function WorkRail() {
 
           <div
             ref={viewport}
-            className={cn(pinned && 'mr-[calc((100vw-var(--shell-wide))/-2)]')}
+            className={cn(pinned && 'overflow-hidden')}
           >
             <div
               ref={track}
@@ -151,7 +146,7 @@ export function WorkRail() {
                 'flex items-start gap-6',
                 pinned
                   ? 'will-change-transform'
-                  : 'swipe -mr-4 overflow-x-auto pb-2 pr-4 sm:mr-[calc((100vw-var(--shell-wide))/-2)]',
+                  : 'swipe -mr-4 overflow-x-auto pb-2 pr-4 sm:mr-0 sm:pr-0',
               )}
             >
               {portfolio.products.map((p) => (
@@ -176,7 +171,7 @@ function RailButton({ dir, disabled, onClick }: { dir: -1 | 1; disabled: boolean
       onClick={onClick}
       aria-disabled={disabled}
       aria-label={dir < 0 ? 'Previous project' : 'Next project'}
-      className="flex size-[46px] items-center justify-center rounded-full border border-bg/16 text-bg transition-[background-color,opacity] duration-300 hover:bg-bg/[0.12] aria-disabled:opacity-40"
+      className="flex size-[46px] items-center justify-center rounded-full border border-bg/16 text-bg hover:bg-bg/[0.12] aria-disabled:pointer-events-none aria-disabled:opacity-30"
     >
       <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-4">
         <path d={dir < 0 ? 'M10 3L5 8L10 13' : 'M6 3L11 8L6 13'} stroke="currentColor" strokeWidth="1.4" />
@@ -200,15 +195,7 @@ function WorkCard({ p }: { p: Product }) {
           decoding="async"
           className="absolute inset-0 size-full object-cover transition-transform duration-[620ms] ease-[var(--ease-reveal)] group-hover:scale-[1.04]"
         />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent from-45% to-black/75" />
-        <span
-          aria-hidden
-          className="absolute bottom-4 right-4 flex size-[38px] items-center justify-center rounded-full border border-bg/35 bg-black/45 transition-[background-color,transform] duration-300 ease-[var(--ease-reveal)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:bg-accent"
-        >
-          <svg viewBox="0 0 14 14" fill="none" className="size-3.5">
-            <path d="M3 11L11 3M11 9V3H5" stroke="currentColor" strokeWidth="1.4" />
-          </svg>
-        </span>
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-black/25" />
       </div>
       <div>
         <p className="t-kicker text-peri">

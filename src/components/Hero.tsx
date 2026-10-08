@@ -1,5 +1,5 @@
 import { hero, proof } from '../data/content'
-import { scrollToId } from '../lib/useSmoothScroll'
+import { scrollToId } from '../lib/scrollToId'
 import { Button } from './ui/Button'
 
 /**

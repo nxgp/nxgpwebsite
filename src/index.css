@@ -161,68 +161,59 @@
   }
 }
 
-/* Lenis smooth scroll plumbing */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-stopped {
-  overflow: clip;
-}
-
 /* ============================================================
    typography scale (sentence case everywhere)
    ============================================================ */
 
-.t-h1 {
-  font-family: var(--font-heading);
-  font-size: clamp(2.6rem, 5.2vw, 4.6875rem); /* 75px */
-  font-weight: 500;
-  line-height: 1.03;
-  letter-spacing: -0.055em;
-}
+/* in the components layer so utilities (font-normal, text-white/65…) override */
+@layer components {
+  .t-h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.6rem, 5.2vw, 4.6875rem); /* 75px */
+    font-weight: 500;
+    line-height: 1.03;
+    letter-spacing: -0.055em;
+  }
 
-.t-h2 {
-  font-family: var(--font-heading);
-  font-size: clamp(2.1rem, 4.2vw, 3.75rem); /* 60px */
-  font-weight: 500;
-  line-height: 1.04;
-  letter-spacing: -0.032em;
-}
+  .t-h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.1rem, 4.2vw, 3.75rem); /* 60px */
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.032em;
+  }
 
-.t-h3 {
-  font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 2vw, 1.75rem); /* 28px */
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.026em;
-}
+  .t-h3 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 2vw, 1.75rem); /* 28px */
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.026em;
+  }
 
-.t-lead {
-  font-size: clamp(1.08rem, 1.4vw, 1.25rem); /* 20px */
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--color-slate);
-}
+  .t-lead {
+    font-size: clamp(1.08rem, 1.4vw, 1.25rem); /* 20px */
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--color-slate);
+  }
 
-.t-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
+  .t-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
 
-/* small caps label used on cards and steps (11.2px, wide tracking) */
-.t-kicker {
-  font-size: 0.7rem;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  /* small caps label used on cards and steps (11.2px, wide tracking) */
+  .t-kicker {
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
 }
 
 /* ============================================================
@@ -280,11 +271,25 @@ html.lenis body {
   white-space: nowrap;
 }
 
-/* Deep links (#services, #work…) must clear the fixed nav — otherwise the
-   heading lands underneath it. Covers plain hash navigation, which the JS
-   smooth-scroll offset doesn't handle. */
-:where(section, footer)[id] {
-  scroll-margin-top: calc(var(--nav-h) + 12px);
+/* Native smooth scroll, as in the Webflow build. Deep links (#work…) clear
+   the fixed header. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);
+}
+
+/* Reveal on scroll (values from the Webflow build). `html.js` is set by the
+   inline script in index.html; useRevealOnScroll adds `.is-in`. */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.62s ease,
+    transform 0.62s var(--ease-reveal);
+}
+html.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
 }
 
 /* ============================================================
@@ -326,21 +331,6 @@ html.lenis body {
 }
 .link-underline:hover::after {
   transform: scaleX(1);
-}
-
-/* nav entrance — once, on load (CSS replaces the old motion/react header) */
-@keyframes nav-enter {
-  from {
-    transform: translateY(-24px);
-    opacity: 0;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
-}
-.nav-enter {
-  animation: nav-enter 0.7s var(--ease-out-expo) 0.1s both;
 }
 
 .win-dots span {
@@ -391,48 +381,6 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin,
   .orbit-spin-rev { animation: none !important; }
-}
-
-/* ============================================================
-   Delivery system stack — the plate for the active layer lifts and turns
-   electric blue; the others dim (values from the Webflow build).
-   ============================================================ */
-.slab {
-  transform-box: fill-box;
-  transition:
-    opacity 0.62s,
-    filter 0.62s,
-    transform 0.62s var(--ease-reveal);
-}
-.slab[data-state='idle'] {
-  opacity: 0.58;
-  filter: saturate(0.24) brightness(0.66);
-}
-.slab[data-state='active'] {
-  transform: translateY(-8px);
-}
-.slab-top {
-  transition: fill 0.62s;
-}
-.slab[data-state='active'] .slab-top {
-  fill: #0000f4;
-}
-.slab-label {
-  font-family: var(--font-mono);
-  font-size: 20px;
-  letter-spacing: 1.4px;
-  fill: var(--color-haze);
-  transition: fill 0.62s;
-}
-.slab[data-state='active'] .slab-label {
-  fill: var(--color-bg);
-}
-.slab-tick {
-  stroke: rgba(253, 253, 252, 0.26);
-  transition: stroke 0.62s;
-}
-.slab[data-state='active'] .slab-tick {
-  stroke: var(--color-peri);
 }
 
 /* ============================================================

@@ -68,6 +68,16 @@
     <meta name="twitter:image" content="https://nxgp.io/og.png" />
     <meta name="twitter:image:alt" content="Nx Growth Partners logo" />
 
+    <!-- reveal-on-scroll gate (as in the Webflow build): hide [data-reveal]
+         from first paint; if the app never marks the page ready, show
+         everything after 3s -->
+    <script>
+      document.documentElement.classList.add('js')
+      setTimeout(function () {
+        if (!document.documentElement.hasAttribute('data-ready'))
+          document.documentElement.classList.remove('js')
+      }, 3000)
+    </script>
     <link
       rel="preload"
       href="/fonts/GoogleSansFlex-Variable.woff2"

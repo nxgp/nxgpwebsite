@@ -137,7 +137,9 @@ export const engagement = {
   h2: 'Start with a blueprint. Scale as value lands.',
   h2a: 'Start with a blueprint.',
   h2b: 'Scale as value lands.',
-  sub: 'Four ways to work together, from a focused discovery sprint to a fully embedded senior team.',
+  sub: 'Every engagement is built the same way: on the stack you already run, up through automation, applications and the team that ships them, to a business result you can name. Each layer is a capability you can engage on its own.',
+  // the stack drawing, top plate first (Figma 212:387)
+  stack: ['Business outcome', 'Embedded team', 'Applications', 'AI & automation', 'Data & integration'],
   items: [
     {
       name: 'Nx Blueprint',
@@ -147,7 +149,7 @@ export const engagement = {
     {
       name: 'Nx Project Delivery',
       body: 'End-to-end design and development of a defined software, automation, data, or AI initiative. From solution design through production launch, in weekly increments with clear milestones.',
-      tags: ['Solution design', 'Production launch', 'Weekly increments', 'Clear milestones'],
+      tags: ['Solution design', 'Production launch', 'Weekly increments', 'Clear milestone'],
     },
     {
       name: 'Nx Managed Support',
@@ -431,19 +433,19 @@ export const footer = {
       heading: 'Platform',
       links: [
         { label: 'System overview', href: '/#system' },
-        { label: 'Nx Blueprint', href: '/#system' },
-        { label: 'Nx Project Delivery', href: '/#system' },
-        { label: 'Nx Managed Support', href: '/#system' },
-        { label: 'Nx Embedded Engineering', href: '/#system' },
+        { label: 'Data & integrations', href: '/#system' },
+        { label: 'AI & automation', href: '/#system' },
+        { label: 'Applications', href: '/#system' },
+        { label: 'Embedded team', href: '/#system' },
       ],
     },
     {
       heading: 'Services',
       links: [
-        { label: 'Our approach', href: '/#approach' },
         { label: 'AI & Workflow Automation', href: '/services' },
         { label: 'Software & Product Delivery', href: '/services' },
         { label: 'Embedded Engineering', href: '/services' },
+        { label: 'Engagement models', href: '/#system' },
       ],
     },
     {

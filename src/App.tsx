@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
-import { useSmoothScroll } from './lib/useSmoothScroll'
-import { withMotion } from './lib/motion'
+import { useRevealOnScroll } from './hooks/useReveal'
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
 import { OperatingModel } from './components/OperatingModel'
@@ -27,21 +25,7 @@ import { PageSeo } from './pages/PageSeo'
  * no client router to maintain.
  */
 export default function App({ path = '/' }: { path?: string }) {
-  useSmoothScroll()
-
-  // Scroll triggers measure layout up front — recompute once fonts settle.
-  useEffect(() => {
-    return withMotion(({ ScrollTrigger }) => {
-      const refresh = () => ScrollTrigger.refresh()
-      const t = setTimeout(refresh, 200)
-      if (document.fonts?.ready) document.fonts.ready.then(refresh)
-      window.addEventListener('load', refresh)
-      return () => {
-        clearTimeout(t)
-        window.removeEventListener('load', refresh)
-      }
-    })
-  }, [])
+  useRevealOnScroll()
 
   const route = matchRoute(path)
 

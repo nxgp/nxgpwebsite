@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { useReveal } from '../hooks/useReveal'
 import { about } from '../data/content'
 import { prefersReducedMotion } from '../lib/reducedMotion'
 
@@ -9,15 +8,14 @@ import { prefersReducedMotion } from '../lib/reducedMotion'
  * the Webflow build; the prerendered page already shows the final values.
  */
 export function About() {
-  const ref = useReveal<HTMLDivElement>()
   return (
     <section id="company" aria-labelledby="company-title" className="section-v2 bg-cloud text-navy">
-      <div ref={ref} className="shell">
+      <div className="shell">
         <div className="pb-[72px]">
           <p data-reveal className="t-eyebrow pb-6">
             {about.eyebrow}
           </p>
-          <h2 id="company-title" data-reveal className="t-h2 font-400">
+          <h2 id="company-title" data-reveal className="t-h2 font-normal">
             <span className="block">
               {about.h2a}
               <span className="text-accent">{about.h2Hi}</span>

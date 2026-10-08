@@ -6,13 +6,15 @@ business across AI engineering, custom software and embedded delivery, for priva
 enterprise and government.
 
 The v2 design comes from the Figma file "NxGP v2 Design" (page "Final Dev", frame
-`07-updated orders`). Interactions follow the Webflow reference build.
+`07-updated orders`), which is the source of truth for the look. Transitions and
+interactions follow the Webflow reference build.
 
 ## Stack
 
 - **Vite + React 19 + TypeScript**, **Tailwind CSS v4** (`@theme` tokens in `src/index.css`)
-- **Lenis** smooth scroll and **GSAP + ScrollTrigger** for batched reveals, sharing one ticker
-  (`src/lib/useSmoothScroll.ts`, loaded lazily via `src/lib/motion.ts`)
+- Motion follows the Webflow build: native smooth scroll, CSS reveal-on-scroll
+  (`src/hooks/useReveal.ts`, gated by the `html.js` script in `index.html`) and 0.32s state
+  transitions
 - Type: **Google Sans Flex** (body), **Poppins** 400/500 (headings), **JetBrains Mono**
   (labels), self-hosted in `public/fonts`
 - Every page is prerendered at build time (`src/entry-server.tsx`, `scripts/prerender.mjs`,

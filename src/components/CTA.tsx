@@ -1,5 +1,4 @@
 import { cta } from '../data/content'
-import { useReveal } from '../hooks/useReveal'
 import { Button } from './ui/Button'
 
 /**
@@ -8,7 +7,6 @@ import { Button } from './ui/Button'
  * (the Webflow build's drawing).
  */
 export function CTA() {
-  const ref = useReveal<HTMLDivElement>()
   return (
     <section id="contact" aria-labelledby="cta-title" className="section-v2 relative overflow-hidden bg-navy text-bg">
       <svg
@@ -23,9 +21,9 @@ export function CTA() {
         </g>
       </svg>
 
-      <div ref={ref} className="shell relative flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+      <div className="shell relative flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-[1021px]">
-          <h2 id="cta-title" data-reveal className="t-h2">
+          <h2 id="cta-title" data-reveal className="t-h2 font-normal">
             <span className="block">{cta.h2Lines[0]}</span>
             <span className="block text-peri">{cta.h2Lines[1]}</span>
           </h2>

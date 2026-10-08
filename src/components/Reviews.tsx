@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { reviews } from '../data/content'
-import { useReveal } from '../hooks/useReveal'
 import { prefersReducedMotion } from '../lib/reducedMotion'
 import { cn } from '../lib/cn'
 
@@ -13,7 +12,6 @@ const INTERVAL = 6000
  * auto-advances under reduced motion.
  */
 export function Reviews() {
-  const ref = useReveal<HTMLDivElement>()
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
   const count = reviews.items.length
@@ -27,7 +25,7 @@ export function Reviews() {
 
   return (
     <section aria-labelledby="reviews-title" className="section-v2 bg-bg text-navy">
-      <div ref={ref} className="shell">
+      <div className="shell">
         <div className="flex flex-col gap-6 pb-[72px] lg:flex-row lg:items-end lg:gap-[58px]">
           <h2 id="reviews-title" data-reveal className="t-h2 lg:shrink-0">
             <span className="block text-accent">{reviews.h2a}</span>
@@ -91,7 +89,7 @@ export function Reviews() {
                   onClick={() => setActive(i)}
                   className={cn(
                     // 4px pill, with a larger invisible hit area
-                    "relative h-1 rounded-sm transition-[background-color,width] duration-300 after:absolute after:-inset-x-1 after:-inset-y-3 after:content-['']",
+                    "relative h-1 rounded-sm transition-[background-color] duration-[320ms] ease-[ease] after:absolute after:-inset-x-1 after:-inset-y-3 after:content-['']",
                     i === active ? 'w-6 bg-peri' : 'w-1 bg-bg/30',
                   )}
                 />
