@@ -1,27 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Button } from './ui/Button'
-import { Logo } from './ui/Logo'
+import { LogoLockup } from './ui/Logo'
 import { nav } from '../data/content'
 import { scrollToId } from '../lib/useSmoothScroll'
 import { cn } from '../lib/cn'
 
-/** Maps a home-page section id to its standalone page URL. */
-const pageFor = (id: string) => `/${id}`
-
 /**
- * On the home page a nav item scrolls to its section, but only when that
- * section is actually on the page. Some nav targets have no home section at
- * all (Blog) and others were moved off the home scroll (Services,
- * Industries) — for those the link must navigate like any other link rather
- * than being swallowed by a preventDefault.
+ * v2 header (Figma 212:600, behaviour from the Webflow build):
+ * transparent over the navy hero, then a frosted light bar once the page
+ * scrolls 24px. Inner pages open on light surfaces, so there it starts in
+ * the light state. Below 992px the links move into a navy drawer.
  */
-function sectionOnPage(id: string): boolean {
-  return typeof document !== 'undefined' && document.getElementById(id) !== null
-}
-
 export function Nav({ home = true }: { home?: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const light = scrolled || !home
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -30,14 +23,48 @@ export function Nav({ home = true }: { home?: boolean }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // drawer: Esc closes, page scroll locks while open, desktop resize closes
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    const onResize = () => window.innerWidth > 991 && setOpen(false)
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('resize', onResize)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [open])
+
+  /** On the home page a link scrolls to its section; elsewhere it goes to /#id. */
+  const linkProps = (id: string, after?: () => void) => ({
+    href: home ? `#${id}` : `/#${id}`,
+    onClick: (e: React.MouseEvent) => {
+      after?.()
+      if (!home || !document.getElementById(id)) return
+      e.preventDefault()
+      scrollToId(id)
+    },
+  })
+
   return (
     <header
       className={cn(
-        'nav-enter fixed inset-x-0 top-0 z-[100] transition-[background,box-shadow] duration-300',
-        scrolled ? 'nav-frost' : 'bg-transparent',
+        'nav-enter fixed inset-x-0 top-0 z-[100] border-b transition-[border-color] duration-300',
+        light ? 'border-navy/10' : 'border-hairline/55',
       )}
     >
-      <nav className="shell flex h-[var(--nav-h)] items-center justify-between gap-6">
+      {/* frosted layer fades in rather than the header background snapping */}
+      <div
+        aria-hidden
+        className={cn(
+          'pointer-events-none absolute inset-0 bg-bg/[0.82] backdrop-blur-[16px] transition-opacity duration-300',
+          light ? 'opacity-100' : 'opacity-0',
+        )}
+      />
+      <nav className="shell relative flex h-[var(--nav-h)] items-center justify-between gap-6">
         <a
           href="/"
           onClick={
@@ -49,87 +76,82 @@ export function Nav({ home = true }: { home?: boolean }) {
               : undefined
           }
           aria-label="Nx Growth Partners home"
+          className={cn('transition-colors duration-300', light ? 'text-navy' : 'text-bg')}
         >
-          <Logo />
+          <LogoLockup />
         </a>
 
-        <div className="hidden items-center gap-7 md:flex">
-          {nav.links.map((l) => (
-            <a
-              key={l.id}
-              href={pageFor(l.id)}
-              onClick={
-                home
-                  ? (e) => {
-                      if (!sectionOnPage(l.id)) return // let it navigate
-                      e.preventDefault()
-                      scrollToId(l.id)
-                    }
-                  : undefined
-              }
-              className="link-underline text-[0.93rem] font-600 text-ink-soft transition-colors hover:text-ink"
-            >
-              {l.label}
-            </a>
-          ))}
-        </div>
-
-        <div className="hidden items-center gap-2.5 md:flex">
-          <Button variant="primary" href="/discuss-a-project">
+        <div className="hidden items-center gap-8 min-[992px]:flex">
+          <div className="flex items-center">
+            {nav.links.map((l) => (
+              <a
+                key={l.id}
+                {...linkProps(l.id)}
+                className={cn(
+                  'px-6 py-3 text-[15px] transition-colors duration-300',
+                  light ? 'text-[#1a1a17] hover:text-accent' : 'text-bg',
+                )}
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
+          <Button size="sm" href="/discuss-a-project">
             {nav.cta}
           </Button>
         </div>
 
         <button
-          className="flex size-10 items-center justify-center rounded-full border border-line bg-surface/70 md:hidden"
-          aria-label="Menu"
+          className={cn(
+            'relative z-[3] flex size-10 items-center justify-center border transition-colors duration-300 min-[992px]:hidden',
+            open
+              ? 'border-bg/30 bg-bg/20 text-bg'
+              : light
+                ? 'border-navy/20 bg-navy/[0.06] text-navy'
+                : 'border-bg/30 text-bg',
+          )}
+          aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
         >
           <span className="relative block h-3 w-4">
-            <span className={cn('absolute left-0 h-[1.5px] w-full bg-ink transition-all', open ? 'top-1.5 rotate-45' : 'top-0')} />
-            <span className={cn('absolute bottom-0 left-0 h-[1.5px] w-full bg-ink transition-all', open ? 'bottom-1.5 -rotate-45' : '')} />
+            <span className={cn('absolute left-0 h-[1.5px] w-full bg-current transition-all', open ? 'top-1.5 rotate-45' : 'top-0')} />
+            <span className={cn('absolute bottom-0 left-0 h-[1.5px] w-full bg-current transition-all', open ? 'bottom-1.5 -rotate-45' : '')} />
           </span>
         </button>
       </nav>
 
+      {/* drawer + backdrop */}
       <div
+        aria-hidden
+        onClick={() => setOpen(false)}
         className={cn(
-          'grid transition-[grid-template-rows,opacity] duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] md:hidden',
-          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+          'fixed inset-0 z-[1] bg-navy/60 transition-[opacity,visibility] duration-300 min-[992px]:hidden',
+          open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0',
+        )}
+      />
+      <nav
+        id="mobile-menu"
+        aria-label="Menu"
+        className={cn(
+          'fixed inset-y-0 right-0 z-[2] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] transition-[transform,visibility] duration-300 ease-[var(--ease-reveal)] min-[992px]:hidden',
+          open ? 'visible translate-x-0' : 'invisible translate-x-full',
         )}
       >
-        <div className="nav-sheet flex flex-col gap-1 overflow-hidden px-[4vw] pb-5 pt-2">
-          {nav.links.map((l) => (
-            <a
-              key={l.id}
-              href={pageFor(l.id)}
-              onClick={
-                home
-                  ? (e) => {
-                      setOpen(false)
-                      if (!sectionOnPage(l.id)) return // let it navigate
-                      e.preventDefault()
-                      scrollToId(l.id)
-                    }
-                  : () => setOpen(false)
-              }
-              className="rounded-inner px-2 py-3 text-left text-[1.05rem] font-600 text-ink"
-            >
-              {l.label}
-            </a>
-          ))}
-          <Button
-            variant="primary"
-            magnetic={false}
-            className="mt-2 w-full"
-            href="/discuss-a-project"
-            onClick={() => setOpen(false)}
+        {[...nav.links, { label: 'FAQ', id: 'faq' }].map((l) => (
+          <a
+            key={l.id}
+            {...linkProps(l.id, () => setOpen(false))}
+            className="border-b border-bg/10 py-4 font-heading text-[1.5rem] text-bg transition-colors hover:text-peri"
           >
-            {nav.cta}
-          </Button>
-        </div>
-      </div>
+            {l.label}
+          </a>
+        ))}
+        <Button className="mt-6 w-full" href="/discuss-a-project" onClick={() => setOpen(false)}>
+          {nav.cta}
+        </Button>
+      </nav>
     </header>
   )
 }
