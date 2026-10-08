@@ -51,7 +51,7 @@ type Props = {
   /** show the up-right arrow after the label */
   arrow?: boolean
   href?: string
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
   className?: string
   magnetic?: boolean
   type?: 'button' | 'submit'

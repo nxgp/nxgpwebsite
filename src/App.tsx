@@ -4,7 +4,6 @@ import { withMotion } from './lib/motion'
 import { TonalBackground } from './components/TonalBackground'
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
-import { Proof } from './components/Proof'
 import { OperatingModel } from './components/OperatingModel'
 import { Engagement } from './components/Engagement'
 import { Portfolio } from './components/portfolio/Portfolio'
@@ -62,7 +61,6 @@ export default function App({ path = '/' }: { path?: string }) {
         ) : (
           <>
             <Hero />
-            <Proof />
             <OperatingModel />
             <Engagement />
             <Portfolio />
