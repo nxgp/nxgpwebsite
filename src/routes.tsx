@@ -2,7 +2,7 @@ import { services, industries, portfolio, about, faq, operatingModel } from './d
 import { Services } from './components/Services'
 import { Engagement } from './components/Engagement'
 import { Industries } from './components/Industries'
-import { Portfolio } from './components/portfolio/Portfolio'
+import { WorkRail } from './components/WorkRail'
 import { OperatingModel } from './components/OperatingModel'
 import { About } from './components/About'
 import { Reviews } from './components/Reviews'
@@ -133,7 +133,7 @@ export const ROUTES: Route[] = [
     main: () => (
       <>
         <PageHeader crumbs={[home, workCrumb]} title="What we've built" />
-        <Portfolio />
+        <WorkRail />
       </>
     ),
   },

@@ -6,7 +6,8 @@ import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
 import { OperatingModel } from './components/OperatingModel'
 import { Engagement } from './components/Engagement'
-import { Portfolio } from './components/portfolio/Portfolio'
+import { WorkRail } from './components/WorkRail'
+import { Industries } from './components/Industries'
 import { Reviews } from './components/Reviews'
 import { About } from './components/About'
 import { FAQ } from './components/FAQ'
@@ -61,11 +62,12 @@ export default function App({ path = '/' }: { path?: string }) {
         ) : (
           <>
             <Hero />
-            <OperatingModel />
-            <Engagement />
-            <Portfolio />
+            <WorkRail />
+            <Industries />
             <Reviews />
             <About />
+            <OperatingModel />
+            <Engagement />
             <FAQ />
             <CTA />
           </>
