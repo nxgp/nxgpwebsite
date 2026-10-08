@@ -291,12 +291,6 @@ html.lenis body {
    motion utilities + reduced-motion guard
    ============================================================ */
 
-.reveal-init {
-  opacity: 0;
-  transform: translateY(24px);
-  will-change: transform, opacity;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -308,46 +302,6 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
-  }
-  .reveal-init {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .cursor-dot,
-  .cursor-ring {
-    display: none !important;
-  }
-}
-
-/* ============================================================
-   aurora drift — slow, alternating, independent of scroll
-   ============================================================ */
-@keyframes au-drift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(6%, -8%, 0) scale(1.12);
-  }
-  100% {
-    transform: translate3d(-4%, 5%, 0) scale(1.04);
-  }
-}
-.au-blob {
-  animation-name: au-drift;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-.au-blob:nth-child(even) {
-  animation-direction: alternate-reverse;
-}
-@media (prefers-reduced-motion: reduce) {
-  .au-blob {
-    animation: none !important;
   }
 }
 
@@ -389,57 +343,6 @@ html.lenis body {
   animation: nav-enter 0.7s var(--ease-out-expo) 0.1s both;
 }
 
-.nav-frost {
-  background: color-mix(in srgb, var(--color-bg) 72%, transparent);
-  backdrop-filter: saturate(140%) blur(14px);
-  -webkit-backdrop-filter: saturate(140%) blur(14px);
-  border-bottom: 1px solid var(--color-line);
-}
-
-/* Mobile menu panel — must be fully opaque. The translucent nav-frost works
-   for a thin bar, but page content read straight through the open menu. */
-.nav-sheet {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-line);
-  box-shadow: var(--shadow-soft);
-}
-
-.grid-faint {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 200;
-  pointer-events: none;
-  border-radius: 999px;
-  transform: translate3d(-50%, -50%, 0);
-  mix-blend-mode: difference;
-}
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: #fff;
-}
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  transition: width 0.25s var(--ease-out-expo),
-    height 0.25s var(--ease-out-expo), background 0.25s var(--ease-out-expo);
-}
-.cursor-ring.is-hot {
-  width: 52px;
-  height: 52px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
 .win-dots span {
   display: inline-block;
   width: 10px;
@@ -475,80 +378,6 @@ html.lenis body {
 :focus:not(:focus-visible) {
   outline: none;
 }
-
-/* ============================================================
-   "The Shift" section — animated friction visuals.
-   Pure CSS keyframes (no JS): cheap, and the global
-   prefers-reduced-motion clamp above freezes them for free.
-   ============================================================ */
-
-/* dot hopping across handoff nodes, dwelling at each stop */
-@keyframes sv-travel {
-  0%, 9% { transform: translateX(0); opacity: 1; }
-  18%, 27% { transform: translateX(68px); }
-  36%, 45% { transform: translateX(136px); }
-  54%, 63% { transform: translateX(204px); }
-  74%, 92% { transform: translateX(272px); opacity: 1; }
-  97%, 100% { transform: translateX(272px); opacity: 0; }
-}
-.sv-travel {
-  animation: sv-travel 8s cubic-bezier(0.6, 0, 0.4, 1) infinite;
-}
-
-/* handoff nodes light up as the work arrives */
-@keyframes sv-node {
-  0%, 6% { opacity: 0.25; }
-  10%, 22% { opacity: 1; }
-  30%, 100% { opacity: 0.25; }
-}
-.sv-node { animation: sv-node 8s ease infinite; }
-
-/* swapping caption — "5 minutes" becomes "3 days" */
-@keyframes sv-swap {
-  0%, 42% { opacity: 1; }
-  50%, 92% { opacity: 0; }
-  100% { opacity: 1; }
-}
-.sv-swap-a { animation: sv-swap 8s ease infinite; }
-.sv-swap-b { animation: sv-swap 8s ease infinite; animation-delay: -4s; }
-
-/* marching dashes — information dragged between systems by hand */
-@keyframes sv-dash {
-  to { stroke-dashoffset: -22; }
-}
-.sv-dash {
-  stroke-dasharray: 4 7;
-  animation: sv-dash 1.4s linear infinite;
-}
-
-/* pulse ring around the overloaded human in the middle */
-@keyframes sv-pulse {
-  0% { transform: scale(1); opacity: 0.55; }
-  80%, 100% { transform: scale(1.9); opacity: 0; }
-}
-.sv-pulse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sv-pulse 2.6s ease-out infinite;
-}
-
-/* value dots flowing through the pipe */
-@keyframes sv-flow {
-  0% { transform: translateX(0); opacity: 0; }
-  6% { opacity: 1; }
-  94% { opacity: 1; }
-  100% { transform: translateX(264px); opacity: 0; }
-}
-.sv-flow { animation: sv-flow 5.2s linear infinite; }
-
-/* ...and the ones that leak out of the crack */
-@keyframes sv-drip {
-  0%, 12% { transform: translateY(0); opacity: 0; }
-  22% { opacity: 1; }
-  82% { transform: translateY(38px); opacity: 0.9; }
-  100% { transform: translateY(44px); opacity: 0; }
-}
-.sv-drip { animation: sv-drip 2.6s ease-in infinite; }
 
 /* ============================================================
    Approach orbit — the two outer rings drift in opposite directions
@@ -693,19 +522,6 @@ html.lenis body {
   animation: pv-flash 1s ease forwards;
   animation-delay: var(--d, 0s);
 }
-/* Hero console failsafe: the wrapper ships opacity-0 for the GSAP entrance,
-   but this animation guarantees it becomes visible even with no JS, a slow
-   motion chunk, or reduced motion (the clamp jumps it to the end instantly —
-   which also fixes reduced-motion users never seeing the console at all).
-   CSS animations outrank inline styles, and `forwards` holds opacity at 1,
-   the same value the GSAP timeline lands on. */
-.hero-mock {
-  animation: hero-mock-in 0.5s ease 0.9s forwards;
-}
-@keyframes hero-mock-in {
-  to { opacity: 1; }
-}
-
 /* ---- device hardware motion (portfolio showcase scenes) ----
    Layered on separate wrappers so transforms never fight: entrance rise on
    one, idle float loop on the next, static 3D tilt innermost. */

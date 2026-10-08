@@ -38,8 +38,6 @@ export const hero = {
   note: 'AI engineering · custom software · embedded delivery. For private equity, enterprise and government.',
 }
 
-// Intrinsic pixel dimensions let the browser reserve the right aspect ratio
-// before each image loads — zero layout shift (CLS) from the logo strip.
 export const proof = {
   label: 'Trusted by',
   // v2 hero strip: alpha masks tinted lavender, sized as in Figma (212:37).
@@ -50,12 +48,6 @@ export const proof = {
     { name: 'Harbor Industrial', src: '/logos/strip/harbor-industrial.png', w: 68, h: 68 },
     { name: 'AMP', src: '/logos/strip/amp.png', w: 60, h: 60 },
   ],
-  logos: [
-    { name: 'Western Digital', src: '/logos/western-digital.png', big: false, w: 2048, h: 565 },
-    { name: 'Harbor Industrial', src: '/logos/harbor-industrial.png', big: true, w: 184, h: 178 },
-    { name: 'ecoATM', src: '/logos/ecoatm.png', big: false, w: 2033, h: 741 },
-    { name: 'Kiotel', src: '/logos/kiotel.png', big: true, w: 1563, h: 1563 },
-  ] as { name: string; src: string; big: boolean; w: number; h: number }[],
 }
 
 // CLIENT REVIEWS — real quotes and attributions from the company deck.

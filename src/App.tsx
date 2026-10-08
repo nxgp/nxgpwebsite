@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useSmoothScroll } from './lib/useSmoothScroll'
 import { withMotion } from './lib/motion'
-import { TonalBackground } from './components/TonalBackground'
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
 import { OperatingModel } from './components/OperatingModel'
@@ -51,7 +50,6 @@ export default function App({ path = '/' }: { path?: string }) {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <TonalBackground />
       <Nav home={!route} />
       <main id="main">
         {route ? (

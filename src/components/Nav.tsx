@@ -50,84 +50,89 @@ export function Nav({ home = true }: { home?: boolean }) {
   })
 
   return (
-    <header
-      className={cn(
-        'nav-enter fixed inset-x-0 top-0 z-[100] border-b transition-[border-color] duration-300',
-        light ? 'border-navy/10' : 'border-hairline/55',
-      )}
-    >
-      {/* frosted layer fades in rather than the header background snapping */}
-      <div
-        aria-hidden
+    <>
+      <header
         className={cn(
-          'pointer-events-none absolute inset-0 bg-bg/[0.82] backdrop-blur-[16px] transition-opacity duration-300',
-          light ? 'opacity-100' : 'opacity-0',
+          'nav-enter fixed inset-x-0 top-0 z-[100] border-b transition-[border-color] duration-300',
+          light ? 'border-navy/10' : 'border-hairline/55',
         )}
-      />
-      <nav className="shell relative flex h-[var(--nav-h)] items-center justify-between gap-6">
-        <a
-          href="/"
-          onClick={
-            home
-              ? (e) => {
-                  e.preventDefault()
-                  scrollToId('top')
-                }
-              : undefined
-          }
-          aria-label="Nx Growth Partners home"
-          className={cn('transition-colors duration-300', light ? 'text-navy' : 'text-bg')}
-        >
-          <LogoLockup />
-        </a>
-
-        <div className="hidden items-center gap-8 min-[992px]:flex">
-          <div className="flex items-center">
-            {nav.links.map((l) => (
-              <a
-                key={l.id}
-                {...linkProps(l.id)}
-                className={cn(
-                  'px-6 py-3 text-[15px] transition-colors duration-300',
-                  light ? 'text-[#1a1a17] hover:text-accent' : 'text-bg',
-                )}
-              >
-                {l.label}
-              </a>
-            ))}
-          </div>
-          <Button size="sm" href="/discuss-a-project">
-            {nav.cta}
-          </Button>
-        </div>
-
-        <button
+      >
+        {/* frosted layer fades in rather than the header background snapping */}
+        <div
+          aria-hidden
           className={cn(
-            'relative z-[3] flex size-10 items-center justify-center border transition-colors duration-300 min-[992px]:hidden',
-            open
-              ? 'border-bg/30 bg-bg/20 text-bg'
-              : light
-                ? 'border-navy/20 bg-navy/[0.06] text-navy'
-                : 'border-bg/30 text-bg',
+            'pointer-events-none absolute inset-0 bg-bg/[0.82] backdrop-blur-[16px] transition-opacity duration-300',
+            light ? 'opacity-100' : 'opacity-0',
           )}
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="relative block h-3 w-4">
-            <span className={cn('absolute left-0 h-[1.5px] w-full bg-current transition-all', open ? 'top-1.5 rotate-45' : 'top-0')} />
-            <span className={cn('absolute bottom-0 left-0 h-[1.5px] w-full bg-current transition-all', open ? 'bottom-1.5 -rotate-45' : '')} />
-          </span>
-        </button>
-      </nav>
+        />
+        <nav className="shell relative flex h-[var(--nav-h)] items-center justify-between gap-6">
+          <a
+            href="/"
+            onClick={
+              home
+                ? (e) => {
+                    e.preventDefault()
+                    scrollToId('top')
+                  }
+                : undefined
+            }
+            aria-label="Nx Growth Partners home"
+            className={cn('transition-colors duration-300', light ? 'text-navy' : 'text-bg')}
+          >
+            <LogoLockup />
+          </a>
 
-      {/* drawer + backdrop */}
+          <div className="hidden items-center gap-8 min-[992px]:flex">
+            <div className="flex items-center">
+              {nav.links.map((l) => (
+                <a
+                  key={l.id}
+                  {...linkProps(l.id)}
+                  className={cn(
+                    'px-6 py-3 text-[15px] transition-colors duration-300',
+                    light ? 'text-[#1a1a17] hover:text-accent' : 'text-bg',
+                  )}
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+            <Button size="sm" href="/discuss-a-project">
+              {nav.cta}
+            </Button>
+          </div>
+
+          <button
+            className={cn(
+              'relative z-[3] flex size-10 items-center justify-center border transition-colors duration-300 min-[992px]:hidden',
+              open
+                ? 'border-bg/30 bg-bg/20 text-bg'
+                : light
+                  ? 'border-navy/20 bg-navy/[0.06] text-navy'
+                  : 'border-bg/30 text-bg',
+            )}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="relative block h-3 w-4">
+              <span className={cn('absolute left-0 h-[1.5px] w-full bg-current transition-all', open ? 'top-1.5 rotate-45' : 'top-0')} />
+              <span className={cn('absolute bottom-0 left-0 h-[1.5px] w-full bg-current transition-all', open ? 'bottom-1.5 -rotate-45' : '')} />
+            </span>
+          </button>
+        </nav>
+
+      </header>
+
+      {/* drawer + backdrop live outside <header>: its entrance animation
+          animates transform, which would make it the containing block for
+          these fixed layers and clip them to the header strip */}
       <div
         aria-hidden
         onClick={() => setOpen(false)}
         className={cn(
-          'fixed inset-0 z-[1] bg-navy/60 transition-[opacity,visibility] duration-300 min-[992px]:hidden',
+          'fixed inset-0 z-[98] bg-navy/60 transition-[opacity,visibility] duration-300 min-[992px]:hidden',
           open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0',
         )}
       />
@@ -135,7 +140,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         id="mobile-menu"
         aria-label="Menu"
         className={cn(
-          'fixed inset-y-0 right-0 z-[2] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] transition-[transform,visibility] duration-300 ease-[var(--ease-reveal)] min-[992px]:hidden',
+          'fixed inset-y-0 right-0 z-[99] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] transition-[transform,visibility] duration-300 ease-[var(--ease-reveal)] min-[992px]:hidden',
           open ? 'visible translate-x-0' : 'invisible translate-x-full',
         )}
       >
@@ -152,6 +157,6 @@ export function Nav({ home = true }: { home?: boolean }) {
           {nav.cta}
         </Button>
       </nav>
-    </header>
+    </>
   )
 }
