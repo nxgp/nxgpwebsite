@@ -95,7 +95,7 @@ export function Nav({ home = true }: { home?: boolean }) {
                   {...linkProps(l.id)}
                   className={cn(
                     'px-6 py-3 text-[15px] transition-colors duration-[320ms] ease-[ease]',
-                    light ? 'text-[#1a1a17] hover:text-accent' : 'text-bg',
+                    light ? 'text-[#1a1a17] hover:text-accent' : 'text-bg/[0.82] hover:text-bg',
                   )}
                 >
                   {l.label}
