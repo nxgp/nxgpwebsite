@@ -4,7 +4,8 @@ import { prefersReducedMotion } from '../lib/reducedMotion'
 
 /**
  * Batched fade-up reveal — the consistent token used everywhere:
- *   y: 24 → 0, opacity 0 → 1, 0.8s, power3.out, stagger 0.08.
+ *   y: 18 → 0, opacity 0 → 1, 0.62s, expo-out, stagger 0.09 (matches the
+ *   Webflow reference build).
  * Put `data-reveal` on each child to stagger; attach the ref to an ancestor.
  *
  * The motion runtime loads lazily: until it arrives the prerendered content
@@ -31,17 +32,17 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
       )
       if (below.length === 0) return
 
-      gsap.set(below, { opacity: 0, y: 24 })
+      gsap.set(below, { opacity: 0, y: 18 })
       const batch = ScrollTrigger.batch(below, {
-        start: 'top 88%',
+        start: 'top 92%',
         once: true,
         onEnter: (els) =>
           gsap.to(els, {
             opacity: 1,
             y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            stagger: 0.08,
+            duration: 0.62,
+            ease: 'expo.out',
+            stagger: 0.09,
             overwrite: true,
             onComplete: () =>
               els.forEach((el) => ((el as HTMLElement).style.willChange = 'auto')),

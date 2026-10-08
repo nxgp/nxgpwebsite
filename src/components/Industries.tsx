@@ -63,7 +63,7 @@ export function Industries() {
           <p className="text-[0.95rem] font-600 text-ink-soft">
             Not sure where you fit? We map it on the first call.
           </p>
-          <Button variant="dark" href="/discuss-a-project">
+          <Button variant="primary" href="/discuss-a-project">
             Discuss a project
           </Button>
         </div>

@@ -75,7 +75,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         </div>
 
         <div className="hidden items-center gap-2.5 md:flex">
-          <Button variant="dark" href="/discuss-a-project">
+          <Button variant="primary" href="/discuss-a-project">
             {nav.cta}
           </Button>
         </div>
@@ -120,7 +120,7 @@ export function Nav({ home = true }: { home?: boolean }) {
             </a>
           ))}
           <Button
-            variant="dark"
+            variant="primary"
             magnetic={false}
             className="mt-2 w-full"
             href="/discuss-a-project"

@@ -82,7 +82,7 @@ export function Hero() {
           <p data-hero-fade className="t-lead mt-6 max-w-[36rem]">{hero.sub}</p>
 
           <div data-hero-fade className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button variant="dark" href="/discuss-a-project">
+            <Button variant="primary" href="/discuss-a-project">
               {hero.ctaPrimary}
               <ArrowRight className="size-4" />
             </Button>
