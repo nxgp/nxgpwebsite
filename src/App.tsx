@@ -1,13 +1,10 @@
-import { useEffect } from 'react'
-import { useSmoothScroll } from './lib/useSmoothScroll'
-import { withMotion } from './lib/motion'
-import { TonalBackground } from './components/TonalBackground'
+import { useRevealOnScroll } from './hooks/useReveal'
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
-import { Proof } from './components/Proof'
 import { OperatingModel } from './components/OperatingModel'
 import { Engagement } from './components/Engagement'
-import { Portfolio } from './components/portfolio/Portfolio'
+import { WorkRail } from './components/WorkRail'
+import { Industries } from './components/Industries'
 import { Reviews } from './components/Reviews'
 import { About } from './components/About'
 import { FAQ } from './components/FAQ'
@@ -28,21 +25,7 @@ import { PageSeo } from './pages/PageSeo'
  * no client router to maintain.
  */
 export default function App({ path = '/' }: { path?: string }) {
-  useSmoothScroll()
-
-  // Scroll triggers measure layout up front — recompute once fonts settle.
-  useEffect(() => {
-    return withMotion(({ ScrollTrigger }) => {
-      const refresh = () => ScrollTrigger.refresh()
-      const t = setTimeout(refresh, 200)
-      if (document.fonts?.ready) document.fonts.ready.then(refresh)
-      window.addEventListener('load', refresh)
-      return () => {
-        clearTimeout(t)
-        window.removeEventListener('load', refresh)
-      }
-    })
-  }, [])
+  useRevealOnScroll()
 
   const route = matchRoute(path)
 
@@ -51,7 +34,6 @@ export default function App({ path = '/' }: { path?: string }) {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <TonalBackground />
       <Nav home={!route} />
       <main id="main">
         {route ? (
@@ -62,12 +44,12 @@ export default function App({ path = '/' }: { path?: string }) {
         ) : (
           <>
             <Hero />
-            <Proof />
-            <OperatingModel />
-            <Engagement />
-            <Portfolio />
+            <WorkRail />
+            <Industries />
             <Reviews />
             <About />
+            <OperatingModel />
+            <Engagement />
             <FAQ />
             <CTA />
           </>

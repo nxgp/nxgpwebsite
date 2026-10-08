@@ -74,7 +74,7 @@ export function ChatWidget() {
         aria-label={open ? 'Close chat' : 'Chat with the Nx Assistant'}
         aria-expanded={open}
         className={cn(
-          'fixed bottom-5 right-5 z-[220] flex size-14 items-center justify-center rounded-full',
+          'chat-fab fixed bottom-5 right-5 z-[220] flex size-14 items-center justify-center rounded-full',
           'bg-accent text-white shadow-lg transition-transform duration-200 ease-[cubic-bezier(.22,1,.36,1)]',
           'hover:scale-105 active:scale-95',
         )}

@@ -8,32 +8,33 @@
    Midnight Navy 060B33. One source of truth for tokens.
    ============================================================ */
 
+/* Body: Google Sans Flex (variable, 400–600). Headings: Poppins 400/500.
+   Labels and step numbers: JetBrains Mono. Latin subsets, self-hosted. */
 @font-face {
-  font-family: 'Google Sans';
-  src: url('/fonts/GoogleSans-Regular.woff2') format('woff2');
-  font-weight: 300 400;
+  font-family: 'Google Sans Flex';
+  src: url('/fonts/GoogleSansFlex-Variable.woff2') format('woff2');
+  font-weight: 400 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Google Sans';
-  src: url('/fonts/GoogleSans-Medium.woff2') format('woff2');
-  font-weight: 500;
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-@font-face {
-  font-family: 'Google Sans';
-  src: url('/fonts/GoogleSans-SemiBold.woff2') format('woff2');
-  font-weight: 600 900;
-  font-style: normal;
-  font-display: swap;
-}
-/* Poppins Medium is reserved for the logo wordmark, per brand guidelines. */
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Medium.woff2') format('woff2');
   font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -52,6 +53,16 @@
   --color-accent-deep: #0000c9; /* AA on light */
   --color-accent-wash: #ececfe;
 
+  /* v2 editorial palette (Figma "NxGP v2 Design") */
+  --color-cloud: #f9fafb; /* light alt section */
+  --color-hairline: #d1d5db; /* light borders */
+  --color-slate: #76736c; /* Slate Grey — body copy on light */
+  --color-grey: #5c6068; /* color/grey/38 — inactive step labels */
+  --color-hero-hi: #6565ff; /* hero headline highlight */
+  --color-mist: #a3a8cc; /* muted copy on navy */
+  --color-haze: #c3c7e0; /* hero lead on navy */
+  --color-rail-copy: #9a9aa4; /* card body on black */
+  --color-rail: #000000; /* work rail surface */
   /* aurora pastels (blurred, low-opacity, drifting) */
   --color-au-peri: #c3c6ff;
   --color-au-mint: #a9aeff; /* light periwinkle — also the accent on dark */
@@ -60,10 +71,12 @@
 
   /* ---- type ---- */
   --font-sans:
-    'Google Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
-  --font-display: 'Google Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-logo: 'Poppins', 'Google Sans', ui-sans-serif, system-ui, sans-serif;
+    'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Google Sans Flex', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-logo: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* numeric weight utilities (font-500 … font-800) */
   --font-weight-500: 500;
@@ -88,14 +101,18 @@
 
   /* ---- motion ---- */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ---- section rhythm ---- */
   --space-section: clamp(52px, 6.5vw, 88px);
 }
 
 :root {
-  --shell: min(1200px, 92vw);
-  --nav-h: 72px;
+  /* Figma: 1312 container − 2×48 padding = 1216 content; wide rows 1344. */
+  --shell: min(1216px, calc(100vw - 32px));
+  --shell-wide: min(1344px, calc(100vw - 32px));
+  --nav-h: 78px;
+  --chamfer: 26px;
   color-scheme: light;
 }
 
@@ -118,10 +135,9 @@
     background: var(--color-bg);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 1.05rem;
+    font-weight: 400;
+    font-size: 1rem;
     line-height: 1.6;
-    letter-spacing: -0.011em;
     overflow-x: clip;
   }
 
@@ -145,59 +161,59 @@
   }
 }
 
-/* Lenis smooth scroll plumbing */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-stopped {
-  overflow: clip;
-}
-
 /* ============================================================
    typography scale (sentence case everywhere)
    ============================================================ */
 
-.t-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6.6vw, 5rem);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.025em;
-}
+/* in the components layer so utilities (font-normal, text-white/65…) override */
+@layer components {
+  .t-h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.6rem, 5.2vw, 4.6875rem); /* 75px */
+    font-weight: 500;
+    line-height: 1.03;
+    letter-spacing: -0.055em;
+  }
 
-.t-h2 {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4.4vw, 3.3rem);
-  font-weight: 800;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-}
+  .t-h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.1rem, 4.2vw, 3.75rem); /* 60px */
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.032em;
+  }
 
-.t-h3 {
-  font-family: var(--font-display);
-  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.012em;
-}
+  .t-h3 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 2vw, 1.75rem); /* 28px */
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.026em;
+  }
 
-.t-lead {
-  font-size: clamp(1.1rem, 1.5vw, 1.32rem);
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--color-ink-soft);
-  letter-spacing: -0.014em;
-}
+  .t-lead {
+    font-size: clamp(1.08rem, 1.4vw, 1.25rem); /* 20px */
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--color-slate);
+  }
 
-.t-eyebrow {
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--color-accent-deep);
+  .t-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* small caps label used on cards and steps (11.2px, wide tracking) */
+  .t-kicker {
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
 }
 
 /* ============================================================
@@ -209,27 +225,76 @@ html.lenis body {
   margin-inline: auto;
 }
 
+.shell-wide {
+  width: var(--shell-wide);
+  margin-inline: auto;
+}
+
 .section {
   padding-block: var(--space-section);
   position: relative;
 }
 
-/* Deep links (#services, #work…) must clear the fixed nav — otherwise the
-   heading lands underneath it. Covers plain hash navigation, which the JS
-   smooth-scroll offset doesn't handle. */
-:where(section, footer)[id] {
-  scroll-margin-top: calc(var(--nav-h) + 12px);
+/* v2 sections: 130px rhythm on desktop */
+.section-v2 {
+  padding-block: clamp(72px, 9vw, 130px);
+  position: relative;
+}
+
+/* Chamfered corners — the v2 signature shape. Top-right and bottom-left are
+   clipped on a diagonal; 26px on desktop, 18px on phones. */
+.chamfer {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer))
+  );
+}
+@media (max-width: 767px) {
+  :root {
+    --chamfer: 18px;
+  }
+}
+
+/* pill tag chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  padding: 3.5px 10px;
+  font-size: 0.7rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Native smooth scroll, as in the Webflow build. Deep links (#work…) clear
+   the fixed header. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);
+}
+
+/* Reveal on scroll (values from the Webflow build). `html.js` is set by the
+   inline script in index.html; useRevealOnScroll adds `.is-in`. */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.62s ease,
+    transform 0.62s var(--ease-reveal);
+}
+html.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
 }
 
 /* ============================================================
    motion utilities + reduced-motion guard
    ============================================================ */
-
-.reveal-init {
-  opacity: 0;
-  transform: translateY(24px);
-  will-change: transform, opacity;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -242,46 +307,6 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
-  }
-  .reveal-init {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .cursor-dot,
-  .cursor-ring {
-    display: none !important;
-  }
-}
-
-/* ============================================================
-   aurora drift — slow, alternating, independent of scroll
-   ============================================================ */
-@keyframes au-drift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(6%, -8%, 0) scale(1.12);
-  }
-  100% {
-    transform: translate3d(-4%, 5%, 0) scale(1.04);
-  }
-}
-.au-blob {
-  animation-name: au-drift;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-.au-blob:nth-child(even) {
-  animation-direction: alternate-reverse;
-}
-@media (prefers-reduced-motion: reduce) {
-  .au-blob {
-    animation: none !important;
   }
 }
 
@@ -306,72 +331,6 @@ html.lenis body {
 }
 .link-underline:hover::after {
   transform: scaleX(1);
-}
-
-/* nav entrance — once, on load (CSS replaces the old motion/react header) */
-@keyframes nav-enter {
-  from {
-    transform: translateY(-24px);
-    opacity: 0;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
-}
-.nav-enter {
-  animation: nav-enter 0.7s var(--ease-out-expo) 0.1s both;
-}
-
-.nav-frost {
-  background: color-mix(in srgb, var(--color-bg) 72%, transparent);
-  backdrop-filter: saturate(140%) blur(14px);
-  -webkit-backdrop-filter: saturate(140%) blur(14px);
-  border-bottom: 1px solid var(--color-line);
-}
-
-/* Mobile menu panel — must be fully opaque. The translucent nav-frost works
-   for a thin bar, but page content read straight through the open menu. */
-.nav-sheet {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-line);
-  box-shadow: var(--shadow-soft);
-}
-
-.grid-faint {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 200;
-  pointer-events: none;
-  border-radius: 999px;
-  transform: translate3d(-50%, -50%, 0);
-  mix-blend-mode: difference;
-}
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: #fff;
-}
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  transition: width 0.25s var(--ease-out-expo),
-    height 0.25s var(--ease-out-expo), background 0.25s var(--ease-out-expo);
-}
-.cursor-ring.is-hot {
-  width: 52px;
-  height: 52px;
-  background: rgba(255, 255, 255, 0.12);
 }
 
 .win-dots span {
@@ -411,78 +370,25 @@ html.lenis body {
 }
 
 /* ============================================================
-   "The Shift" section — animated friction visuals.
-   Pure CSS keyframes (no JS): cheap, and the global
-   prefers-reduced-motion clamp above freezes them for free.
+   Approach orbit — the two outer rings drift in opposite directions
+   (52s / 74s per turn, as in the Webflow build). Frozen under reduced motion.
    ============================================================ */
-
-/* dot hopping across handoff nodes, dwelling at each stop */
-@keyframes sv-travel {
-  0%, 9% { transform: translateX(0); opacity: 1; }
-  18%, 27% { transform: translateX(68px); }
-  36%, 45% { transform: translateX(136px); }
-  54%, 63% { transform: translateX(204px); }
-  74%, 92% { transform: translateX(272px); opacity: 1; }
-  97%, 100% { transform: translateX(272px); opacity: 0; }
+@keyframes nx-spin {
+  to { transform: rotate(360deg); }
 }
-.sv-travel {
-  animation: sv-travel 8s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+.orbit-spin { animation: nx-spin 52s linear infinite; }
+.orbit-spin-rev { animation: nx-spin 74s linear infinite reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .orbit-spin,
+  .orbit-spin-rev { animation: none !important; }
 }
 
-/* handoff nodes light up as the work arrives */
-@keyframes sv-node {
-  0%, 6% { opacity: 0.25; }
-  10%, 22% { opacity: 1; }
-  30%, 100% { opacity: 0.25; }
+/* the mobile menu is open (set by Nav) — the chat button would sit on top
+   of the drawer's "Discuss a project" button */
+html[data-menu-open] .chat-fab {
+  opacity: 0;
+  pointer-events: none;
 }
-.sv-node { animation: sv-node 8s ease infinite; }
-
-/* swapping caption — "5 minutes" becomes "3 days" */
-@keyframes sv-swap {
-  0%, 42% { opacity: 1; }
-  50%, 92% { opacity: 0; }
-  100% { opacity: 1; }
-}
-.sv-swap-a { animation: sv-swap 8s ease infinite; }
-.sv-swap-b { animation: sv-swap 8s ease infinite; animation-delay: -4s; }
-
-/* marching dashes — information dragged between systems by hand */
-@keyframes sv-dash {
-  to { stroke-dashoffset: -22; }
-}
-.sv-dash {
-  stroke-dasharray: 4 7;
-  animation: sv-dash 1.4s linear infinite;
-}
-
-/* pulse ring around the overloaded human in the middle */
-@keyframes sv-pulse {
-  0% { transform: scale(1); opacity: 0.55; }
-  80%, 100% { transform: scale(1.9); opacity: 0; }
-}
-.sv-pulse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sv-pulse 2.6s ease-out infinite;
-}
-
-/* value dots flowing through the pipe */
-@keyframes sv-flow {
-  0% { transform: translateX(0); opacity: 0; }
-  6% { opacity: 1; }
-  94% { opacity: 1; }
-  100% { transform: translateX(264px); opacity: 0; }
-}
-.sv-flow { animation: sv-flow 5.2s linear infinite; }
-
-/* ...and the ones that leak out of the crack */
-@keyframes sv-drip {
-  0%, 12% { transform: translateY(0); opacity: 0; }
-  22% { opacity: 1; }
-  82% { transform: translateY(38px); opacity: 0.9; }
-  100% { transform: translateY(44px); opacity: 0; }
-}
-.sv-drip { animation: sv-drip 2.6s ease-in infinite; }
 
 /* ============================================================
    Nx Assistant chat — typing indicator
@@ -571,19 +477,6 @@ html.lenis body {
   animation: pv-flash 1s ease forwards;
   animation-delay: var(--d, 0s);
 }
-/* Hero console failsafe: the wrapper ships opacity-0 for the GSAP entrance,
-   but this animation guarantees it becomes visible even with no JS, a slow
-   motion chunk, or reduced motion (the clamp jumps it to the end instantly —
-   which also fixes reduced-motion users never seeing the console at all).
-   CSS animations outrank inline styles, and `forwards` holds opacity at 1,
-   the same value the GSAP timeline lands on. */
-.hero-mock {
-  animation: hero-mock-in 0.5s ease 0.9s forwards;
-}
-@keyframes hero-mock-in {
-  to { opacity: 1; }
-}
-
 /* ---- device hardware motion (portfolio showcase scenes) ----
    Layered on separate wrappers so transforms never fight: entrance rise on
    one, idle float loop on the next, static 3D tilt innermost. */
