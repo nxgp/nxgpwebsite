@@ -551,6 +551,20 @@ html.lenis body {
 .sv-drip { animation: sv-drip 2.6s ease-in infinite; }
 
 /* ============================================================
+   Approach orbit — the two outer rings drift in opposite directions
+   (52s / 74s per turn, as in the Webflow build). Frozen under reduced motion.
+   ============================================================ */
+@keyframes nx-spin {
+  to { transform: rotate(360deg); }
+}
+.orbit-spin { animation: nx-spin 52s linear infinite; }
+.orbit-spin-rev { animation: nx-spin 74s linear infinite reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .orbit-spin,
+  .orbit-spin-rev { animation: none !important; }
+}
+
+/* ============================================================
    Nx Assistant chat — typing indicator
    ============================================================ */
 @keyframes chat-blink {

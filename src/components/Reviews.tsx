@@ -29,11 +29,11 @@ export function Reviews() {
     <section aria-labelledby="reviews-title" className="section-v2 bg-bg text-navy">
       <div ref={ref} className="shell">
         <div className="flex flex-col gap-6 pb-[72px] lg:flex-row lg:items-end lg:gap-[58px]">
-          <h2 id="reviews-title" data-reveal className="t-h2">
+          <h2 id="reviews-title" data-reveal className="t-h2 lg:shrink-0">
             <span className="block text-accent">{reviews.h2a}</span>
             <span className="block">{reviews.h2b}</span>
           </h2>
-          <p data-reveal className="max-w-[418px] text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-slate">
+          <p data-reveal className="max-w-[418px] lg:min-w-0 lg:flex-1 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-slate">
             {reviews.sub}
           </p>
         </div>
