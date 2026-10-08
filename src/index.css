@@ -565,6 +565,48 @@ html.lenis body {
 }
 
 /* ============================================================
+   Delivery system stack — the plate for the active layer lifts and turns
+   electric blue; the others dim (values from the Webflow build).
+   ============================================================ */
+.slab {
+  transform-box: fill-box;
+  transition:
+    opacity 0.62s,
+    filter 0.62s,
+    transform 0.62s var(--ease-reveal);
+}
+.slab[data-state='idle'] {
+  opacity: 0.58;
+  filter: saturate(0.24) brightness(0.66);
+}
+.slab[data-state='active'] {
+  transform: translateY(-8px);
+}
+.slab-top {
+  transition: fill 0.62s;
+}
+.slab[data-state='active'] .slab-top {
+  fill: #0000f4;
+}
+.slab-label {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  letter-spacing: 1.4px;
+  fill: var(--color-haze);
+  transition: fill 0.62s;
+}
+.slab[data-state='active'] .slab-label {
+  fill: var(--color-bg);
+}
+.slab-tick {
+  stroke: rgba(253, 253, 252, 0.26);
+  transition: stroke 0.62s;
+}
+.slab[data-state='active'] .slab-tick {
+  stroke: var(--color-peri);
+}
+
+/* ============================================================
    Nx Assistant chat — typing indicator
    ============================================================ */
 @keyframes chat-blink {
