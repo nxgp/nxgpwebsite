@@ -8,8 +8,8 @@ export function Footer() {
       <div className="shell">
         {/* two columns on phones — four stacked link lists made the footer
             an endless scroll */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[302px_repeat(4,1fr)] md:gap-10">
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-10 lg:grid-cols-[302px_repeat(4,1fr)]">
+          <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <a href="/" aria-label="Nx Growth Partners home" className="inline-block text-bg">
               <LogoLockup />
             </a>

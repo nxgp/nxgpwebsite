@@ -24,11 +24,24 @@ export function WorkRail() {
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd] = useState(false)
   // live values for the scroll handler, without re-subscribing
-  const state = useRef({ pinned: false, overflow: 0 })
+  const state = useRef({ pinned: false, overflow: 0, vh: 0, width: 0 })
 
   useEffect(() => {
     const s = section.current, r = rail.current, v = viewport.current, t = track.current
     if (!s || !r || !v || !t) return
+
+    // The pinned layout is sized to the *small* viewport height (100svh),
+    // which stays put while mobile Safari's address bar collapses and
+    // expands. Sizing to innerHeight made the rail re-zoom mid-scroll — it
+    // visibly shrank and grew back on iPhone.
+    const stableVh = () => {
+      const probe = document.createElement('div')
+      probe.style.cssText = 'position:fixed;top:0;height:100svh;visibility:hidden;pointer-events:none'
+      document.body.appendChild(probe)
+      const h = probe.offsetHeight || window.innerHeight
+      probe.remove()
+      return h
+    }
 
     const edges = (start: boolean, end: boolean) => {
       setAtStart(start)
@@ -45,6 +58,8 @@ export function WorkRail() {
       setPinned(false)
       s.style.height = ''
       r.style.zoom = ''
+      v.style.margin = ''
+      t.style.paddingInline = ''
       t.style.transform = ''
       if (bar.current) bar.current.style.transform = ''
       native()
@@ -52,7 +67,7 @@ export function WorkRail() {
 
     const update = () => {
       if (!state.current.pinned) return
-      const k = s.offsetHeight - window.innerHeight
+      const k = s.offsetHeight - state.current.vh
       const p = k <= 0 ? 0 : Math.min(1, Math.max(0, -s.getBoundingClientRect().top / k))
       t.style.transform = `translate3d(${-p * state.current.overflow}px,0,0)`
       if (bar.current) bar.current.style.transform = `scaleX(${p})`
@@ -64,19 +79,42 @@ export function WorkRail() {
       r.style.zoom = ''
       t.style.transform = ''
       state.current.pinned = true
+      state.current.vh = stableVh()
+      state.current.width = window.innerWidth
       setPinned(true)
       // fit the whole rail (head + cards) inside the viewport
-      const z = Math.min(1, (window.innerHeight - 8) / (r.offsetHeight + 138))
+      const z = Math.min(1, (state.current.vh - 8) / (r.offsetHeight + 138))
       if (z < 1) r.style.zoom = String(z)
-      const overflow = Math.max(0, t.scrollWidth - v.clientWidth)
+      // phones: the strip runs edge to edge with equal padding either side,
+      // so a card at rest sits centred under the heading (cards are the
+      // content width there) and its neighbours peek in symmetrically
+      v.style.margin = ''
+      t.style.paddingInline = ''
+      if (window.innerWidth < 640) {
+        const gap = (window.innerWidth - r.getBoundingClientRect().width) / 2 / (z < 1 ? z : 1)
+        v.style.margin = `0 ${-gap}px`
+        t.style.paddingInline = `${gap}px`
+      }
+      // distance the track travels: until the last card (plus the track's
+      // end padding) meets the viewport's right edge. Measured from the
+      // card itself — scrollWidth leaves out end padding on a flex row.
+      const last = t.lastElementChild as HTMLElement | null
+      const zf = z < 1 ? z : 1
+      const overflow = last
+        ? Math.max(0, (last.getBoundingClientRect().right - v.getBoundingClientRect().right) / zf + parseFloat(getComputedStyle(t).paddingRight))
+        : 0
       if (overflow < 40) return unpin()
       state.current.overflow = overflow
-      s.style.height = `${window.innerHeight + overflow}px`
+      s.style.height = `${state.current.vh + overflow}px`
       update()
     }
 
     let timer = 0
     const onResize = () => {
+      // the mobile address bar moving changes innerHeight but not 100svh —
+      // nothing to re-fit (a real window resize changes one or the other)
+      const st = state.current
+      if (st.pinned && window.innerWidth === st.width && stableVh() === st.vh) return
       window.clearTimeout(timer)
       timer = window.setTimeout(measure, 150)
     }
@@ -106,7 +144,7 @@ export function WorkRail() {
       return
     }
     // pinned: translate the card step back into page scroll distance
-    const k = s.offsetHeight - window.innerHeight
+    const k = s.offsetHeight - state.current.vh
     const zoom = Number(rail.current?.style.zoom || 1)
     const delta = (dir * (step / zoom) / state.current.overflow) * k
     window.scrollBy({ top: delta, behavior: 'smooth' })
@@ -185,9 +223,9 @@ function WorkCard({ p }: { p: Product }) {
     <a
       data-card
       href={`/work/${p.slug}`}
-      className="swipe-item group flex w-[min(340px,78vw)] shrink-0 flex-col gap-6"
+      className="swipe-item group flex w-[min(340px,78vw)] shrink-0 flex-col gap-6 max-sm:w-[var(--shell-wide)]"
     >
-      <div className="chamfer relative aspect-[340/425] overflow-hidden bg-navy">
+      <div className="chamfer relative aspect-[340/425] overflow-hidden bg-navy max-sm:aspect-[4/3]">
         <img
           src={p.card.image}
           alt=""

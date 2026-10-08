@@ -19,12 +19,12 @@ export function Industries() {
           </p>
         </div>
 
-        <ul className="grid gap-8 md:grid-cols-3">
+        <ul className="grid gap-8 lg:grid-cols-3">
           {industries.items.map((it) => (
             <li
               key={it.name}
               data-reveal="stagger"
-              className="group chamfer relative flex aspect-[427/457] items-end overflow-hidden bg-navy text-bg max-md:aspect-[4/5]"
+              className="group chamfer relative flex aspect-[4/5] items-end overflow-hidden bg-navy text-bg md:aspect-[16/9] lg:aspect-[427/457]"
             >
               <img
                 src={it.image}

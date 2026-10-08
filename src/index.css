@@ -383,6 +383,13 @@ html.js [data-reveal].is-in {
   .orbit-spin-rev { animation: none !important; }
 }
 
+/* the mobile menu is open (set by Nav) — the chat button would sit on top
+   of the drawer's "Discuss a project" button */
+html[data-menu-open] .chat-fab {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ============================================================
    Nx Assistant chat — typing indicator
    ============================================================ */

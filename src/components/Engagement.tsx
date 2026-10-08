@@ -29,7 +29,7 @@ export function Engagement() {
           </p>
         </div>
 
-        <div className="grid items-start gap-12 lg:grid-cols-[641px_1fr] lg:gap-[101px]">
+        <div className="grid items-start gap-12 lg:grid-cols-[641fr_474fr] lg:gap-[101px]">
           <div className="lg:sticky lg:top-[102px]">
             <Stack />
           </div>
@@ -107,7 +107,7 @@ function Stack() {
               <text
                 x={680}
                 y={y + 145}
-                className="font-mono text-[28px] tracking-[2.5px]"
+                className="font-mono text-[28px] tracking-[2.5px] max-sm:text-[36px] max-sm:tracking-[1px]"
                 fill={i === n - 1 ? '#FDFDFC' : '#8F93B8'}
               >
                 {num} · {name.toUpperCase()}

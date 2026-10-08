@@ -56,7 +56,7 @@ export function OperatingModel() {
                 {...bind(i)}
                 tabIndex={0}
                 className={cn(
-                  'flex gap-6 border-l-2 px-6 py-7 transition-[background-color,border-color] duration-[320ms] ease-[ease] sm:px-8',
+                  'flex gap-2 border-l-2 px-6 py-7 max-sm:flex-col sm:gap-6 transition-[background-color,border-color] duration-[320ms] ease-[ease] sm:px-8',
                   i === active ? 'border-accent bg-[#eeeefc]' : 'border-transparent bg-bg',
                 )}
               >

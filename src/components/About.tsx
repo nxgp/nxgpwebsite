@@ -16,11 +16,15 @@ export function About() {
             {about.eyebrow}
           </p>
           <h2 id="company-title" data-reveal className="t-h2 font-normal">
-            <span className="block">
+            <span className="sm:block">
               {about.h2a}
               <span className="text-accent">{about.h2Hi}</span>
             </span>
-            <span className="block text-accent">{about.h2b}</span>
+            {/* on phones the second line flows on, so "want" isn't left alone */}
+            <span className="text-accent max-sm:inline sm:block">
+              <span className="sm:hidden"> </span>
+              {about.h2b}
+            </span>
           </h2>
         </div>
 
@@ -29,7 +33,7 @@ export function About() {
             <p className="text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.65] text-slate">{about.sub}</p>
             <dl className="grid grid-cols-3 gap-6 pt-8">
               {about.stats.map((s) => (
-                <div key={s.label} className="flex flex-col-reverse gap-3">
+                <div key={s.label} className="flex flex-col-reverse justify-end gap-3">
                   <dt className="text-[15px] leading-[1.5] text-slate">{s.label}</dt>
                   <dd className="m-0 text-[clamp(2.4rem,4vw,3.25rem)] font-500 leading-none tracking-[-0.035em]">
                     <CountUp value={s.value} />

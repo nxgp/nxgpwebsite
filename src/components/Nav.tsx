@@ -14,7 +14,9 @@ import { cn } from '../lib/cn'
 export function Nav({ home = true }: { home?: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const light = scrolled || !home
+  // the open drawer sits under the header, so the header goes back to its
+  // dark state over it (otherwise the white close button vanishes)
+  const light = (scrolled || !home) && !open
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -29,10 +31,13 @@ export function Nav({ home = true }: { home?: boolean }) {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     const onResize = () => window.innerWidth > 991 && setOpen(false)
     document.body.style.overflow = 'hidden'
+    // lets the chat button step aside so it doesn't cover the drawer's CTA
+    document.documentElement.setAttribute('data-menu-open', '')
     window.addEventListener('keydown', onKey)
     window.addEventListener('resize', onResize)
     return () => {
       document.body.style.overflow = ''
+      document.documentElement.removeAttribute('data-menu-open')
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('resize', onResize)
     }
@@ -140,7 +145,7 @@ export function Nav({ home = true }: { home?: boolean }) {
         id="mobile-menu"
         aria-label="Menu"
         className={cn(
-          'fixed inset-y-0 right-0 z-[99] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] transition-[transform,visibility] duration-[320ms] ease-[ease] min-[992px]:hidden',
+          'fixed inset-y-0 right-0 z-[99] flex w-[360px] max-w-[88vw] flex-col gap-1 border-l border-bg/16 bg-navy px-6 pb-8 pt-[104px] max-sm:w-full max-sm:max-w-none max-sm:border-l-0 max-sm:px-4 transition-[transform,visibility] duration-[320ms] ease-[ease] min-[992px]:hidden',
           open ? 'visible translate-x-0' : 'invisible translate-x-full',
         )}
       >
