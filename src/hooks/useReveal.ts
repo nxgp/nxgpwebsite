@@ -16,7 +16,9 @@ export function useRevealOnScroll() {
     const html = document.documentElement
     html.setAttribute('data-ready', '')
     const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-    const show = (el: Element) => el.classList.add('is-in')
+    // an attribute, not a class: React owns className and would drop a class
+    // added here the next time it re-renders the element
+    const show = (el: HTMLElement) => el.setAttribute('data-in', '')
 
     if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
       els.forEach(show)
@@ -29,13 +31,20 @@ export function useRevealOnScroll() {
         (c) => (c as HTMLElement).dataset.reveal === 'stagger',
       )
       el.style.transitionDelay = `${group.indexOf(el) * 90}ms`
+      // the stagger is for the entrance only; don't leave it on hover etc.
+      const clear = (e: TransitionEvent) => {
+        if (e.target !== el) return
+        el.style.transitionDelay = ''
+        el.removeEventListener('transitionend', clear)
+      }
+      el.addEventListener('transitionend', clear)
     }
 
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue
-          show(e.target)
+          show(e.target as HTMLElement)
           io.unobserve(e.target)
         }
       },

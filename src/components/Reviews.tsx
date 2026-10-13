@@ -6,16 +6,21 @@ import { cn } from '../lib/cn'
 const INTERVAL = 6000
 
 /**
- * Testimonial (Figma 212:270): a navy chamfered card with one quote at a
- * time. With more than one quote it behaves like the Webflow slider —
- * crossfades every 6s, dots to jump, pauses on hover or focus, and never
- * auto-advances under reduced motion.
+ * Testimonial slider, built to the Webflow build: a navy chamfered card with
+ * one centred quote at a time — crossfades every 6s, dots to jump, pauses on
+ * mouse hover or focus, never auto-advances under reduced motion. Webflow's
+ * slides 2 and 3 are placeholders, so ours carry the real client quotes.
+ * Beyond Webflow: a pause button stops it for good (WCAG 2.2.2), the dots
+ * have 24px targets, and touch never sets the hover pause.
  */
 export function Reviews() {
   const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const [stopped, setStopped] = useState(false)
   const count = reviews.items.length
   const timer = useRef(0)
+  const paused = hovered || focused || stopped
 
   useEffect(() => {
     if (count < 2 || paused || prefersReducedMotion()) return
@@ -24,28 +29,26 @@ export function Reviews() {
   }, [active, paused, count])
 
   return (
-    <section aria-labelledby="reviews-title" className="section-v2 bg-bg text-navy">
+    <section aria-labelledby="reviews-title" className="section-v2 bg-bg text-ink">
       <div className="shell">
-        <div className="flex flex-col gap-6 pb-[72px] lg:flex-row lg:items-end lg:gap-[58px]">
-          <h2 id="reviews-title" data-reveal className="t-h2 lg:shrink-0">
+        <div data-reveal className="mb-16 grid gap-6 min-[992px]:grid-cols-[1fr_0.7fr] min-[992px]:items-end min-[992px]:gap-x-20">
+          <h2 id="reviews-title" className="t-h2 text-navy">
             <span className="block text-accent">{reviews.h2a}</span>
             <span className="block">{reviews.h2b}</span>
           </h2>
-          <p data-reveal className="max-w-[418px] lg:min-w-0 lg:flex-1 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-slate">
-            {reviews.sub}
-          </p>
+          <p className="t-lead max-w-[74ch]">{reviews.sub}</p>
         </div>
 
         <div
           data-reveal
-          className="chamfer flex min-h-[466px] flex-col items-center justify-center bg-navy px-6 py-10 text-bg sm:px-[72px] sm:py-[72px]"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocus={() => setPaused(true)}
-          onBlur={() => setPaused(false)}
+          className="chamfer flex flex-col items-center justify-center gap-8 bg-navy px-24 py-16 text-bg max-md:px-6 max-md:py-10"
+          onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         >
           {/* every slide shares one grid cell so the card keeps the tallest height */}
-          <div className="grid w-full max-w-[616px]">
+          <div className="grid w-full">
             {reviews.items.map((r, i) => {
               const [name, title] = r.name.split(' · ')
               return (
@@ -53,23 +56,16 @@ export function Reviews() {
                   key={r.context}
                   aria-hidden={i !== active}
                   className={cn(
-                    'relative col-start-1 row-start-1 transition-opacity duration-[620ms]',
+                    'col-start-1 row-start-1 flex flex-col items-center justify-between gap-8 transition-opacity duration-[620ms]',
                     i === active ? 'opacity-100' : 'pointer-events-none opacity-0',
                   )}
                 >
-                  <span
-                    aria-hidden
-                    className="absolute -left-14 -top-4 hidden text-[80px] leading-none text-accent sm:block"
-                  >
-                    “
-                  </span>
-                  <blockquote className="text-[clamp(1.2rem,1.9vw,1.62rem)] leading-[1.42]">
-                    <span className="sm:hidden">“</span>
-                    {r.quote}”
+                  <blockquote className="mt-6 max-w-[44ch] text-center text-[length:var(--fs-h6)] leading-[1.45] tracking-[-0.02em]">
+                    {r.quote}
                   </blockquote>
-                  <figcaption className="mt-10 border-t border-bg/[0.18] pt-4 text-[13px] leading-[1.7]">
-                    <span className="block font-500">{name}</span>
-                    <span className="block text-mist">
+                  <figcaption className="mt-10 flex w-full max-w-[44ch] flex-col items-center gap-1 border-t border-bg/20 pt-6 text-center text-[14px] text-mist">
+                    <span className="font-500 text-bg">{name}</span>
+                    <span>
                       {title}, {r.context}
                     </span>
                   </figcaption>
@@ -79,21 +75,38 @@ export function Reviews() {
           </div>
 
           {count > 1 && (
-            <div className="mt-8 flex gap-2" role="group" aria-label="Testimonials">
-              {reviews.items.map((r, i) => (
-                <button
-                  key={r.context}
-                  type="button"
-                  aria-label={`Show testimonial ${i + 1}`}
-                  aria-current={i === active}
-                  onClick={() => setActive(i)}
-                  className={cn(
-                    // 4px pill, with a larger invisible hit area
-                    "relative h-1 rounded-sm transition-[background-color] duration-[320ms] ease-[ease] after:absolute after:-inset-x-1 after:-inset-y-3 after:content-['']",
-                    i === active ? 'w-6 bg-peri' : 'w-1 bg-bg/30',
-                  )}
-                />
-              ))}
+            <div className="flex items-center gap-1">
+              <div className="flex" role="group" aria-label="Testimonials">
+                {reviews.items.map((r, i) => (
+                  <button
+                    key={r.context}
+                    type="button"
+                    aria-label={`Show testimonial ${i + 1}`}
+                    aria-current={i === active}
+                    onClick={() => setActive(i)}
+                    // 24px target around the 4px pill
+                    className="flex h-6 min-w-6 items-center justify-center"
+                  >
+                    <span
+                      aria-hidden
+                      className={cn(
+                        'block h-1 rounded-sm transition-[width,background-color] duration-[320ms] ease-[ease]',
+                        i === active ? 'w-6 bg-peri' : 'w-1 bg-bg/30',
+                      )}
+                    />
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                aria-label={stopped ? 'Play testimonials' : 'Pause testimonials'}
+                onClick={() => setStopped((v) => !v)}
+                className="flex size-6 items-center justify-center text-bg/60 hover:text-bg"
+              >
+                <svg viewBox="0 0 12 12" aria-hidden className="size-3 fill-current">
+                  {stopped ? <path d="M3 1.5v9l7.5-4.5z" /> : <path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" />}
+                </svg>
+              </button>
             </div>
           )}
         </div>

@@ -4,15 +4,21 @@ import { prefersReducedMotion } from '../lib/reducedMotion'
 import { cn } from '../lib/cn'
 
 const GAP = 24
+/** card images shrink no further than this (px) */
+const MIN_IMG = 160
+/** the rail never zooms below this, so copy stays readable */
+const MIN_ZOOM = 0.9
 
 /**
- * "What we've built" rail (Figma 212:58; behaviour from the Webflow build).
+ * "What we've built" rail, built to the Webflow build.
  *
- * Desktop: the section pins and vertical scroll drives the track sideways,
- * with a progress bar; if the rail is taller than the viewport it is zoomed
- * down to fit. Prev/next move one card. As in the Webflow build this runs at
- * every screen size; only reduced motion gets the native swipe row with
- * scroll-snap instead — same markup, nothing hidden before JS runs.
+ * The section pins and vertical scroll drives the track sideways, with a
+ * progress bar; the track bleeds off the right edge. If the rail is taller
+ * than the viewport it zooms down to fit, but no further than 0.9 (Webflow
+ * has no floor); past that the card images get shorter instead, so copy
+ * stays readable. Prev/next move one card. This runs at every screen size;
+ * only reduced motion gets the native swipe row with scroll-snap instead —
+ * same markup, nothing hidden before JS runs.
  */
 export function WorkRail() {
   const section = useRef<HTMLElement>(null)
@@ -24,7 +30,7 @@ export function WorkRail() {
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd] = useState(false)
   // live values for the scroll handler, without re-subscribing
-  const state = useRef({ pinned: false, overflow: 0, vh: 0, width: 0 })
+  const state = useRef({ pinned: false, overflow: 0, vh: 0, width: 0, zoom: 1, x: 0 })
 
   useEffect(() => {
     const s = section.current, r = rail.current, v = viewport.current, t = track.current
@@ -55,11 +61,11 @@ export function WorkRail() {
 
     const unpin = () => {
       state.current.pinned = false
+      state.current.zoom = 1
       setPinned(false)
       s.style.height = ''
       r.style.zoom = ''
-      v.style.margin = ''
-      t.style.paddingInline = ''
+      r.style.removeProperty('--card-img-h')
       t.style.transform = ''
       if (bar.current) bar.current.style.transform = ''
       native()
@@ -69,44 +75,89 @@ export function WorkRail() {
       if (!state.current.pinned) return
       const k = s.offsetHeight - state.current.vh
       const p = k <= 0 ? 0 : Math.min(1, Math.max(0, -s.getBoundingClientRect().top / k))
-      t.style.transform = `translate3d(${-p * state.current.overflow}px,0,0)`
+      state.current.x = p * state.current.overflow
+      t.style.transform = `translate3d(${-state.current.x}px,0,0)`
       if (bar.current) bar.current.style.transform = `scaleX(${p})`
       edges(p <= 0, p >= 1)
     }
 
-    const measure = () => {
-      if (prefersReducedMotion()) return unpin()
+    const fit = () => {
+      // start from a clean slate so a re-fit (e.g. phone → desktop resize)
+      // lands where a fresh load would
       r.style.zoom = ''
+      r.style.removeProperty('--card-img-h')
       t.style.transform = ''
+      if (prefersReducedMotion()) return unpin()
       state.current.pinned = true
       state.current.vh = stableVh()
       state.current.width = window.innerWidth
       setPinned(true)
-      // fit the whole rail (head + cards) inside the viewport
-      const z = Math.min(1, (state.current.vh - 8) / (r.offsetHeight + 138))
-      if (z < 1) r.style.zoom = String(z)
-      // phones: the strip runs edge to edge with equal padding either side,
-      // so a card at rest sits centred under the heading (cards are the
-      // content width there) and its neighbours peek in symmetrically
-      v.style.margin = ''
-      t.style.paddingInline = ''
-      if (window.innerWidth < 640) {
-        const gap = (window.innerWidth - r.getBoundingClientRect().width) / 2 / (z < 1 ? z : 1)
-        v.style.margin = `0 ${-gap}px`
-        t.style.paddingInline = `${gap}px`
+      // fit the whole rail (head + cards) inside the viewport: zoom, but
+      // never below 0.9 so copy and chips stay legible; past that, shorten
+      // the card images rather than the text
+      const room = state.current.vh - 8 - 138
+      let need = r.offsetHeight - parseFloat(getComputedStyle(t).paddingBottom)
+      const img = t.querySelector<HTMLElement>('[data-card-img]')
+      if (need > room / MIN_ZOOM && img) {
+        const cut = Math.min(need - room / MIN_ZOOM, img.offsetHeight - MIN_IMG)
+        if (cut > 0) {
+          r.style.setProperty('--card-img-h', `${img.offsetHeight - cut}px`)
+          need -= cut
+        }
       }
+      const z = Math.max(MIN_ZOOM, Math.min(1, room / need))
+      if (z < 1) r.style.zoom = String(z)
+      state.current.zoom = z
       // distance the track travels: until the last card (plus the track's
       // end padding) meets the viewport's right edge. Measured from the
       // card itself — scrollWidth leaves out end padding on a flex row.
       const last = t.lastElementChild as HTMLElement | null
-      const zf = z < 1 ? z : 1
       const overflow = last
-        ? Math.max(0, (last.getBoundingClientRect().right - v.getBoundingClientRect().right) / zf + parseFloat(getComputedStyle(t).paddingRight))
+        ? Math.max(0, (last.getBoundingClientRect().right - v.getBoundingClientRect().right) / z + parseFloat(getComputedStyle(t).paddingRight))
         : 0
       if (overflow < 40) return unpin()
       state.current.overflow = overflow
       s.style.height = `${state.current.vh + overflow}px`
       update()
+    }
+
+    const measure = () => {
+      // Pinning changes the section's height (the CSS estimate in index.css
+      // gets close, not exact). If the reader is already past the rail — a
+      // deep link to /#faq, or a resize further down — keep what they are
+      // looking at in place instead of letting it slide. Measured on the
+      // next section rather than from the height change: where the browser's
+      // own scroll anchoring has already corrected, there's nothing left to do.
+      const next = s.nextElementSibling
+      const past = s.getBoundingClientRect().bottom <= 0
+      const before = next?.getBoundingClientRect().top ?? 0
+      fit()
+      s.style.minHeight = '0px'
+      const d = (next?.getBoundingClientRect().top ?? 0) - before
+      if (past && d) window.scrollBy({ top: d, behavior: 'instant' })
+    }
+
+    // Keyboard focus on a card: the viewport clips rather than scrolls
+    // (overflow: clip), so bring the card into view by scrolling the page —
+    // the same way the wheel moves the track.
+    const onFocus = (e: FocusEvent) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>('[data-card]')
+      const st = state.current
+      if (!card || !st.pinned) return
+      v.scrollLeft = 0
+      const z = st.zoom
+      const vr = v.getBoundingClientRect(), cr = card.getBoundingClientRect()
+      const left = (cr.left - vr.left) / z + st.x
+      const right = left + cr.width / z
+      const width = vr.width / z
+      let x = st.x
+      if (left < st.x) x = left - parseFloat(getComputedStyle(t).paddingLeft)
+      else if (right > st.x + width) x = right - width + parseFloat(getComputedStyle(t).paddingRight)
+      else return
+      x = Math.min(st.overflow, Math.max(0, x))
+      const k = s.offsetHeight - st.vh
+      const top = window.scrollY + s.getBoundingClientRect().top + (x / st.overflow) * k
+      window.scrollTo({ top, behavior: 'instant' })
     }
 
     let timer = 0
@@ -120,6 +171,7 @@ export function WorkRail() {
     }
 
     t.addEventListener('scroll', native, { passive: true })
+    t.addEventListener('focusin', onFocus)
     window.addEventListener('scroll', update, { passive: true })
     window.addEventListener('resize', onResize)
     window.addEventListener('load', measure)
@@ -127,6 +179,7 @@ export function WorkRail() {
     return () => {
       window.clearTimeout(timer)
       t.removeEventListener('scroll', native)
+      t.removeEventListener('focusin', onFocus)
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('load', measure)
@@ -145,9 +198,10 @@ export function WorkRail() {
     }
     // pinned: translate the card step back into page scroll distance
     const k = s.offsetHeight - state.current.vh
-    const zoom = Number(rail.current?.style.zoom || 1)
-    const delta = (dir * (step / zoom) / state.current.overflow) * k
-    window.scrollBy({ top: delta, behavior: 'smooth' })
+    const delta = (dir * (step / state.current.zoom) / state.current.overflow) * k
+    const start = window.scrollY + s.getBoundingClientRect().top
+    const top = Math.min(start + k, Math.max(start, window.scrollY + delta))
+    window.scrollTo({ top, behavior: 'smooth' })
   }
 
   return (
@@ -155,36 +209,35 @@ export function WorkRail() {
       id="work"
       ref={section}
       aria-labelledby="work-title"
-      className={cn('relative bg-rail text-bg', !pinned && 'section-v2')}
+      className={cn('rail-est relative bg-rail text-bg', !pinned && 'section-v2')}
+      style={{ '--cards': portfolio.products.length } as React.CSSProperties}
     >
       <div
         className={cn(
-          pinned && 'sticky top-0 grid h-svh content-center overflow-hidden pb-10 pt-[98px]',
+          pinned && 'sticky top-0 grid h-svh content-center overflow-clip pb-10 pt-[98px]',
         )}
       >
-        <div ref={rail} className="shell-wide">
-          <div className="flex items-end justify-between gap-6 pb-12">
-            <h2 id="work-title" data-reveal className="t-h2 max-w-[833px]">
+        <div ref={rail} className="shell">
+          <div data-reveal className="mb-12 flex flex-wrap items-end gap-6">
+            <h2 id="work-title" className="t-h2 flex-[1_1_22ch]">
               <span className="block">{portfolio.h2a}</span>
               <span className="block text-peri">{portfolio.h2b}</span>
             </h2>
-            <div data-reveal className="hidden shrink-0 gap-3 sm:flex">
+            <div className="ml-auto flex gap-3 max-md:hidden">
               <RailButton dir={-1} disabled={atStart} onClick={() => page(-1)} />
               <RailButton dir={1} disabled={atEnd} onClick={() => page(1)} />
             </div>
           </div>
 
-          <div
-            ref={viewport}
-            className={cn(pinned && 'overflow-hidden')}
-          >
+          {/* the viewport runs on into the right-hand gutter. Unconditional, so
+              the first fit (measured before React re-renders as pinned) sees
+              the same geometry as every later one */}
+          <div ref={viewport} className={cn('mr-[calc(var(--gutter)*-1)]', pinned && 'overflow-clip')}>
             <div
               ref={track}
               className={cn(
-                'flex items-start gap-6',
-                pinned
-                  ? 'will-change-transform'
-                  : 'swipe -mr-4 overflow-x-auto pb-2 pr-4 sm:mr-0 sm:pr-0',
+                'flex items-start gap-6 max-[991px]:pr-[var(--gutter)]',
+                pinned ? 'will-change-transform' : 'swipe overflow-x-auto pb-4',
               )}
             >
               {portfolio.products.map((p) => (
@@ -193,7 +246,7 @@ export function WorkRail() {
             </div>
           </div>
 
-          <div className={cn('mt-8 h-0.5 bg-bg/16', !pinned && 'hidden')}>
+          <div className={cn('mt-6 h-0.5 bg-bg/16', !pinned && 'hidden')}>
             <div ref={bar} className="h-full origin-left scale-x-0 bg-peri" />
           </div>
         </div>
@@ -206,13 +259,13 @@ function RailButton({ dir, disabled, onClick }: { dir: -1 | 1; disabled: boolean
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={() => !disabled && onClick()}
       aria-disabled={disabled}
       aria-label={dir < 0 ? 'Previous project' : 'Next project'}
-      className="flex size-[46px] items-center justify-center rounded-full border border-bg/16 text-bg hover:bg-bg/[0.12] aria-disabled:pointer-events-none aria-disabled:opacity-30"
+      className="grid size-[46px] place-items-center rounded-full border border-bg/16 text-bg hover:bg-bg/[0.12] aria-disabled:pointer-events-none aria-disabled:opacity-30"
     >
       <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-4">
-        <path d={dir < 0 ? 'M10 3L5 8L10 13' : 'M6 3L11 8L6 13'} stroke="currentColor" strokeWidth="1.4" />
+        <path d={dir < 0 ? 'M10 2 4 8l6 6' : 'M6 2l6 6-6 6'} stroke="currentColor" strokeWidth="1.5" />
       </svg>
     </button>
   )
@@ -223,9 +276,9 @@ function WorkCard({ p }: { p: Product }) {
     <a
       data-card
       href={`/work/${p.slug}`}
-      className="swipe-item group flex w-[min(340px,78vw)] shrink-0 flex-col gap-6 max-sm:w-[var(--shell-wide)]"
+      className="swipe-item group grid w-[318px] shrink-0 content-start gap-6 max-md:w-[78vw]"
     >
-      <div className="chamfer relative aspect-[340/425] overflow-hidden bg-navy max-sm:aspect-[4/3]">
+      <div data-card-img className="chamfer relative aspect-square overflow-hidden bg-navy [height:var(--card-img-h)]">
         <img
           src={p.card.image}
           alt=""
@@ -233,15 +286,14 @@ function WorkCard({ p }: { p: Product }) {
           decoding="async"
           className="absolute inset-0 size-full object-cover transition-transform duration-[620ms] ease-[var(--ease-reveal)] group-hover:scale-[1.04]"
         />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-black/25" />
       </div>
       <div>
         <p className="t-kicker text-peri">
           {p.builtFor ?? p.client} · {p.role}
         </p>
-        <h3 className="pt-2 font-heading text-[20px] leading-[1.2] tracking-[-0.026em]">{p.outcome}</h3>
-        <p className="pt-3 text-[15px] leading-[1.6] text-rail-copy">{p.card.blurb}</p>
-        <ul className="flex flex-wrap gap-2 pt-4">
+        <h3 className="mt-2 text-[length:var(--fs-large)] font-500 leading-[1.25] tracking-[-0.02em]">{p.outcome}</h3>
+        <p className="mt-3 text-[14px] text-mist">{p.card.blurb}</p>
+        <ul className="mt-4 flex flex-wrap gap-2">
           {p.card.tags.map((tag) => (
             <li key={tag} className="chip border-bg/16 text-bg">
               {tag}

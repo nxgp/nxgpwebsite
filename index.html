@@ -9,6 +9,9 @@
             are off, so this stays analytics and never becomes ad tracking
             (what /privacy promises). Turn them on only if NxGP ever runs
             Google Ads remarketing.
+         3. The gtag.js fetch waits for the page to load and go idle, so it
+            never competes with the hero, fonts or app bundle. Calls made
+            before then queue in dataLayer and are sent once it arrives.
          `gtag` is defined either way, so event calls elsewhere in the app are
          no-ops off production rather than errors. Navigation is full page
          loads (no client router), so page_view fires naturally per page. -->
@@ -18,10 +21,16 @@
         dataLayer.push(arguments)
       }
       if (location.hostname === 'nxgp.io' || location.hostname === 'www.nxgp.io') {
-        var gaScript = document.createElement('script')
-        gaScript.async = true
-        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-NXKF7HCKNV'
-        document.head.appendChild(gaScript)
+        var loadGa = function () {
+          var gaScript = document.createElement('script')
+          gaScript.async = true
+          gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-NXKF7HCKNV'
+          document.head.appendChild(gaScript)
+        }
+        addEventListener('load', function () {
+          if ('requestIdleCallback' in window) requestIdleCallback(loadGa, { timeout: 4000 })
+          else setTimeout(loadGa, 1500)
+        })
         gtag('js', new Date())
         gtag('config', 'G-NXKF7HCKNV', {
           allow_google_signals: false,
@@ -78,13 +87,6 @@
           document.documentElement.classList.remove('js')
       }, 3000)
     </script>
-    <link
-      rel="preload"
-      href="/fonts/GoogleSansFlex-Variable.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
     <link
       rel="preload"
       href="/fonts/Poppins-Medium.woff2"

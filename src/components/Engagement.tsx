@@ -3,10 +3,11 @@ import { useActiveOnScroll } from '../hooks/useActiveOnScroll'
 import { cn } from '../lib/cn'
 
 /**
- * The Nx Delivery System (Figma 212:387, card behaviour from the Webflow
- * build): the five-plate capability stack beside one card per engagement
- * model. The stack stays in view while the cards scroll; the active card
- * (nearest the viewport centre, or hovered/focused) is highlighted.
+ * The Nx delivery system, built to the Webflow section (#system): one
+ * isometric slab per engagement model in a chamfered panel beside the
+ * model cards. The panel stays in view while the cards scroll; the active
+ * card (nearest the viewport centre, or hovered/focused) is highlighted
+ * and its slab lifts and fills blue while the others grey out.
  */
 
 export function Engagement() {
@@ -16,43 +17,40 @@ export function Engagement() {
   return (
     <section id="system" aria-labelledby="system-title" className="section-v2 bg-navy text-bg">
       <div className="shell">
-        <div className="mx-auto flex max-w-[1022px] flex-col items-center pb-[72px] text-center">
-          <p data-reveal className="pb-6 text-[12px] uppercase tracking-[0.14em] text-peri">
-            {engagement.eyebrow}
-          </p>
-          <h2 id="system-title" data-reveal className="t-h2">
+        <div data-reveal className="mb-16 flex flex-col items-center gap-6 text-center">
+          <p className="t-eyebrow text-peri">{engagement.eyebrow}</p>
+          <h2 id="system-title" className="t-h2">
             <span className="block">{engagement.h2a}</span>
             <span className="block text-peri">{engagement.h2b}</span>
           </h2>
-          <p data-reveal className="pt-6 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-mist">
-            {engagement.sub}
-          </p>
+          <p className="t-lead max-w-[74ch] text-mist">{engagement.sub}</p>
         </div>
 
-        <div className="grid items-start gap-12 lg:grid-cols-[641fr_474fr] lg:gap-[101px]">
-          <div className="lg:sticky lg:top-[102px]">
-            <Stack />
+        <div className="grid items-start gap-8 min-[992px]:grid-cols-[1fr_0.92fr] min-[992px]:gap-14">
+          <div className="min-[992px]:sticky min-[992px]:top-[102px]">
+            <div className="grid aspect-[4/3] place-items-center border border-bg/[0.09] bg-bg/[0.03] p-3 [clip-path:polygon(0_0,calc(100%-26px)_0,100%_26px,100%_100%,26px_100%,0_calc(100%-26px))] md:p-6 min-[992px]:aspect-[1312/1000]">
+              <Stack active={active} />
+            </div>
           </div>
 
-          <ol data-reveal className="divide-y divide-bg/[0.09] border-y border-bg/[0.09]">
+          <ol className="grid border border-bg/[0.09]">
             {items.map((e, i) => (
               <li
                 key={e.name}
                 {...bind(i)}
-                tabIndex={0}
                 className={cn(
-                  'border-l-[3px] p-6 transition-[background-color,border-color] duration-[320ms] ease-[ease] sm:p-[35px]',
+                  'grid content-start gap-3 border-b border-l-[3px] border-b-bg/[0.09] px-5 py-7 transition-[background-color,border-color] duration-[320ms] md:px-7',
                   i === active ? 'border-l-peri bg-accent/[0.24]' : 'border-l-transparent',
                 )}
               >
-                <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-peri">
+                <span className="font-mono text-[12px] uppercase leading-[1.65] tracking-[0.14em] text-peri">
                   Layer {String(i + 1).padStart(2, '0')}
-                </p>
-                <h3 className="pt-4 font-heading text-[24px] font-500 leading-[1.2] tracking-[-0.02em]">{e.name}</h3>
-                <p className="pt-4 text-[15px] leading-[1.65] text-mist">{e.body}</p>
-                <ul className="flex flex-wrap gap-2 pt-4">
+                </span>
+                <h3 className="t-h3">{e.name}</h3>
+                <p className="text-[14px] leading-[1.65] text-mist">{e.body}</p>
+                <ul className="mt-2 flex flex-wrap gap-2">
                   {e.tags.map((t) => (
-                    <li key={t} className="border border-bg/24 px-[9px] py-1 text-[12px] leading-[1.15] text-[#d3d6ec]">
+                    <li key={t} className="border border-bg/24 px-[9px] py-1 text-[12px] leading-[1.65] text-[#d3d6ec]">
                       {t}
                     </li>
                   ))}
@@ -66,51 +64,65 @@ export function Engagement() {
   )
 }
 
-// translucent electric-blue plates, top to base, fading as they go down
-const PLATE_ALPHA = [0.86, 0.46, 0.3, 0.18, 0.06]
+// Webflow slab fills, top slab first: left face, right face, top face
+const SLAB_FILLS = [
+  ['#11157E', '#14189C', '#1A1EC0'],
+  ['#0C1050', '#0F1362', '#131878'],
+  ['#090C40', '#0B0F50', '#0E1260'],
+  ['#070A2E', '#090D38', '#0B1042'],
+]
 
-/** Figma's stack: five see-through plates, each ticked out to its label. */
-function Stack() {
-  const { stack } = engagement
-  const n = stack.length
+// Webflow slab motion: idle slabs fade and grey out, the active one lifts
+// 8 units on a spring-out curve, everything over 0.62s
+const SLAB_EASE =
+  '[transition:opacity_.62s,filter_.62s,translate_.62s_cubic-bezier(0.16,1,0.3,1)]'
+const SLAB_IDLE = 'opacity-[0.58] [filter:saturate(0.24)_brightness(0.66)]'
+const FADE = 'transition-[fill,stroke] duration-[620ms]'
+
+/** One isometric slab per engagement model, first model on top. */
+function Stack({ active }: { active: number }) {
+  const { items } = engagement
   return (
     <svg
-      viewBox="50 80 1160 700"
+      viewBox="0 0 1000 780"
       role="img"
-      aria-label={`The Nx delivery system as ${n} stacked layers, from ${stack[n - 1]} at the base up to ${stack[0]}`}
-      className="h-auto w-full"
+      aria-label={`The Nx delivery system: ${items.length} engagement models as stacked isometric plates, ${items[0].name} at the top to ${items[items.length - 1].name} at the base`}
+      className="size-full overflow-visible"
     >
-      {/* draw from the base up so upper plates overlap lower ones */}
-      {stack
-        .map((name, i) => ({ name, i }))
+      {/* draw from the base up so upper slabs overlap lower ones */}
+      {items
+        .map((e, i) => ({ name: e.name, i }))
         .reverse()
         .map(({ name, i }) => {
           const y = 100 + i * 96
-          const a = PLATE_ALPHA[i]
-          const num = String(n - i).padStart(2, '0')
+          const [left, right, top] = SLAB_FILLS[i] ?? SLAB_FILLS[SLAB_FILLS.length - 1]
+          const on = i === active
           return (
-            <g key={name}>
+            <g key={name} className={cn(SLAB_EASE, on ? '-translate-y-2' : SLAB_IDLE)}>
+              <polygon fill={left} points={`70,${y + 135} 340,${y + 270} 340,${y + 286} 70,${y + 151}`} />
+              <polygon fill={right} points={`340,${y + 270} 610,${y + 135} 610,${y + 151} 340,${y + 286}`} />
               <polygon
-                fill="#0000F4"
-                fillOpacity={a * 0.7}
-                points={`70,${y + 135} 340,${y + 270} 610,${y + 135} 610,${y + 145} 340,${y + 280} 70,${y + 145}`}
-              />
-              <polygon
-                fill="#0000F4"
-                fillOpacity={a}
-                stroke="#8080FF"
-                strokeOpacity={0.5}
-                strokeWidth={1.5}
+                stroke="rgba(128,128,255,.45)"
+                className={FADE}
+                style={{ fill: on ? '#0000F4' : top }}
                 points={`340,${y} 610,${y + 135} 340,${y + 270} 70,${y + 135}`}
               />
-              <line x1={610} y1={y + 135} x2={664} y2={y + 135} stroke="rgba(253,253,252,.26)" strokeWidth={1.5} />
+              <line
+                x1={610}
+                y1={y + 135}
+                x2={664}
+                y2={y + 135}
+                strokeWidth={1.5}
+                className={FADE}
+                style={{ stroke: on ? '#8080FF' : 'rgba(253,253,252,.26)' }}
+              />
               <text
-                x={680}
-                y={y + 145}
-                className="font-mono text-[28px] tracking-[2.5px] max-sm:text-[36px] max-sm:tracking-[1px]"
-                fill={i === n - 1 ? '#FDFDFC' : '#8F93B8'}
+                x={676}
+                y={y + 140}
+                className={cn('font-mono text-[15px] tracking-[1.4px]', FADE)}
+                style={{ fill: on ? '#FDFDFC' : '#C3C7E0' }}
               >
-                {num} · {name.toUpperCase()}
+                {String(i + 1).padStart(2, '0')} · {name.toUpperCase()}
               </text>
             </g>
           )

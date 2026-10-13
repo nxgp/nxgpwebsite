@@ -25,6 +25,15 @@ export const nav = {
     { label: 'Industries', id: 'industries' },
     { label: 'Company', id: 'company' },
   ],
+  // the mobile drawer spells Platform out and adds FAQ (Webflow build)
+  drawer: [
+    { label: 'Approach', id: 'approach' },
+    { label: 'The Nx delivery system', id: 'system' },
+    { label: 'Work', id: 'work' },
+    { label: 'Industries', id: 'industries' },
+    { label: 'Company', id: 'company' },
+    { label: 'FAQ', id: 'faq' },
+  ],
   cta: 'Discuss a project',
 }
 
@@ -40,13 +49,15 @@ export const hero = {
 
 export const proof = {
   label: 'Trusted by',
-  // v2 hero strip: alpha masks tinted lavender, sized as in Figma (212:37).
+  // hero strip, shown white at 62% as in the Webflow build: 26px tall, 42px
+  // for the two stacked marks. `w` crops a file with empty space above and
+  // below the mark to Webflow's displayed width.
   strip: [
-    { name: 'Kiotel', src: '/logos/strip/kiotel.png', w: 119, h: 28 },
-    { name: 'Western Digital', src: '/logos/strip/western-digital.png', w: 103, h: 58 },
-    { name: 'ecoATM', src: '/logos/strip/ecoatm.png', w: 138, h: 50 },
-    { name: 'Harbor Industrial', src: '/logos/strip/harbor-industrial.png', w: 68, h: 68 },
-    { name: 'AMP', src: '/logos/strip/amp.png', w: 60, h: 60 },
+    { name: 'Kiotel', src: '/logos/strip/kiotel.webp', tall: false },
+    { name: 'Western Digital', src: '/logos/strip/western-digital.webp', tall: false, w: 97 },
+    { name: 'ecoATM', src: '/logos/strip/ecoatm.webp', tall: false },
+    { name: 'Harbor Industrial', src: '/logos/strip/harbor-industrial.webp', tall: true },
+    { name: 'Advanced Medaesthetic Partners', src: '/logos/strip/amp.webp', tall: true },
   ],
 }
 
@@ -137,9 +148,7 @@ export const engagement = {
   h2: 'Start with a blueprint. Scale as value lands.',
   h2a: 'Start with a blueprint.',
   h2b: 'Scale as value lands.',
-  sub: 'Every engagement is built the same way: on the stack you already run, up through automation, applications and the team that ships them, to a business result you can name. Each layer is a capability you can engage on its own.',
-  // the stack drawing, top plate first (Figma 212:387)
-  stack: ['Business outcome', 'Embedded team', 'Applications', 'AI & automation', 'Data & integration'],
+  sub: 'Four ways to work together, from a focused discovery sprint to a fully embedded senior team. Each one stands alone, and each one builds on the last.',
   items: [
     {
       name: 'Nx Blueprint',
@@ -149,7 +158,7 @@ export const engagement = {
     {
       name: 'Nx Project Delivery',
       body: 'End-to-end design and development of a defined software, automation, data, or AI initiative. From solution design through production launch, in weekly increments with clear milestones.',
-      tags: ['Solution design', 'Production launch', 'Weekly increments', 'Clear milestone'],
+      tags: ['Solution design', 'Production launch', 'Weekly increments', 'Clear milestones'],
     },
     {
       name: 'Nx Managed Support',
@@ -159,7 +168,7 @@ export const engagement = {
     {
       name: 'Nx Embedded Engineering',
       body: 'Operation, monitoring, and continuous improvement of deployed systems, so business value keeps compounding after launch.',
-      tags: ['Operation', 'Monitoring', 'Continuous improvement', 'Cloud Delivery & Support'],
+      tags: ['Operation', 'Monitoring', 'Continuous improvement'],
     },
   ] as Engagement[],
 }
@@ -170,7 +179,9 @@ export type Industry = {
   eyebrow: string
   /** card copy on the v2 card */
   body: string
+  /** card photo, ~960px wide, with a 480px version for small cards */
   image: string
+  imageSm: string
   // buyer + frame stay as the fuller positioning the Nx Assistant draws on
   buyer: string
   frame: string
@@ -185,9 +196,9 @@ export const industries = {
   sub: 'We partner with businesses that want to put AI to work, from organizations across telecom, media, financial services, manufacturing, software, and healthcare. We bring together AI, data, cloud engineering, and user experience design to build solutions around how your business operates.',
   foot: 'Not sure where you fit? We map it on the first call.',
   items: [
-    { name: 'Private Equity', eyebrow: 'Operating partners & portfolio leadership', body: 'We help investors assess technology opportunities and turn growth plans into action, working across AI, product development, and go-to-market execution to build value across the portfolio.', image: '/industries/private-equity-v2.webp', buyer: 'Operating partners & portfolio-company leadership', frame: 'Portfolio value creation, technical diligence and speed across portcos: one partner spanning GTM, AI and product, without standing up an in-house tech org.', visual: 'pe', accent: '#0000F4' },
-    { name: 'Enterprise', eyebrow: 'Innovation, product, and technology leaders', body: 'Move priority projects forward with experienced engineers who work alongside your team, fit into your existing systems, and take ownership from planning through delivery.', image: '/industries/enterprise-v2.webp', buyer: 'Revenue, IT, product and data leaders', frame: 'Senior capacity and outcomes without long agency cycles or heavy hiring: an embedded team that ships inside your stack and displaces slow integrators and staff aug.', visual: 'enterprise', accent: '#5B5BD6' },
-    { name: 'Government', eyebrow: 'Agency leaders & contracting partners', body: 'We work with government contractors and agency teams to address technology needs through focused delivery and teaming partnerships, with a clear understanding of project requirements and our role.', image: '/industries/government-v2.webp', buyer: 'Procurement-driven buyers', frame: 'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly, and never claim posture we do not hold.', visual: 'gov', accent: '#8080FF' },
+    { name: 'Private Equity', eyebrow: 'Operating partners & portfolio leadership', body: 'We help investors assess technology opportunities and turn growth plans into action, working across AI, product development, and go-to-market execution to build value across the portfolio.', image: '/industries/private-equity-960.webp', imageSm: '/industries/private-equity-480.webp', buyer: 'Operating partners & portfolio-company leadership', frame: 'Portfolio value creation, technical diligence and speed across portcos: one partner spanning GTM, AI and product, without standing up an in-house tech org.', visual: 'pe', accent: '#0000F4' },
+    { name: 'Enterprise', eyebrow: 'Innovation, product, and technology leaders', body: 'Move priority projects forward with experienced engineers who work alongside your team, fit into your existing systems, and take ownership from planning through delivery.', image: '/industries/enterprise-960.webp', imageSm: '/industries/enterprise-480.webp', buyer: 'Revenue, IT, product and data leaders', frame: 'Senior capacity and outcomes without long agency cycles or heavy hiring: an embedded team that ships inside your stack and displaces slow integrators and staff aug.', visual: 'enterprise', accent: '#5B5BD6' },
+    { name: 'Government', eyebrow: 'Agency leaders & contracting partners', body: 'We work with government contractors and agency teams to address technology needs through focused delivery and teaming partnerships, with a clear understanding of project requirements and our role.', image: '/industries/government-960.webp', imageSm: '/industries/government-480.webp', buyer: 'Procurement-driven buyers', frame: 'Capabilities and teaming today, building toward past performance and contract vehicles. We frame this honestly, and never claim posture we do not hold.', visual: 'gov', accent: '#8080FF' },
   ] as Industry[],
 }
 
@@ -423,7 +434,10 @@ export const cta = {
   ctaSecondary: 'See the pillars',
 }
 
-// Footer columns follow the Webflow reference build (newer than Figma).
+// Footer columns follow the Webflow build. Unlike Webflow (and the nav), the
+// links go to the standalone pages (/about, /faq…): the footer is the one
+// place every page links to them, so they aren't orphaned. Blog stays, as it
+// is on nxgp.io.
 export const footer = {
   blurb:
     'Embedded. Senior. Accountable. An AI engineering and custom software partner for private equity, enterprise and government.',
@@ -433,35 +447,35 @@ export const footer = {
       heading: 'Platform',
       links: [
         { label: 'System overview', href: '/#system' },
-        { label: 'Data & integrations', href: '/#system' },
-        { label: 'AI & automation', href: '/#system' },
-        { label: 'Applications', href: '/#system' },
-        { label: 'Embedded team', href: '/#system' },
+        { label: 'Nx Blueprint', href: '/services' },
+        { label: 'Nx Project Delivery', href: '/services' },
+        { label: 'Nx Managed Support', href: '/services' },
+        { label: 'Nx Embedded Engineering', href: '/services' },
       ],
     },
     {
       heading: 'Services',
       links: [
+        { label: 'Our approach', href: '/what-we-build' },
         { label: 'AI & Workflow Automation', href: '/services' },
         { label: 'Software & Product Delivery', href: '/services' },
         { label: 'Embedded Engineering', href: '/services' },
-        { label: 'Engagement models', href: '/#system' },
       ],
     },
     {
       heading: 'Industries',
       links: [
-        { label: 'Private Equity', href: '/#industries' },
-        { label: 'Enterprise', href: '/#industries' },
-        { label: 'Government', href: '/#industries' },
+        { label: 'Private Equity', href: '/industries' },
+        { label: 'Enterprise', href: '/industries' },
+        { label: 'Government', href: '/industries' },
       ],
     },
     {
       heading: 'Company',
       links: [
-        { label: 'About', href: '/#company' },
-        { label: 'Work', href: '/#work' },
-        { label: 'FAQ', href: '/#faq' },
+        { label: 'About', href: '/about' },
+        { label: 'Work', href: '/work' },
+        { label: 'FAQ', href: '/faq' },
         { label: 'Blog', href: '/blog' },
         { label: 'hello@nxgp.io', href: 'mailto:hello@nxgp.io' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/company/nx-growth-parnters' },

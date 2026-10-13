@@ -2,59 +2,42 @@ import { cta } from '../data/content'
 import { Button } from './ui/Button'
 
 /**
- * Closing CTA (Figma 212:511): navy band with the headline and intro on the
- * left, the button on the right, and the outlined N-mark drawing behind.
+ * Closing CTA, built to the Webflow build: navy band with the headline,
+ * intro and email on the left, the button on the right, and Webflow's thin
+ * periwinkle line drawing stretched behind.
  */
-
-// Figma's background drawing: four parallelograms of the N mark, stroked on
-// the inside (a 2px stroke masked to its own shape), at 30% opacity
-const SHAPES = [
-  { stroke: '#8080FF', d: 'M872 -70.7666V455.891L1085.11 655.775V129.19L872 -70.7666Z' },
-  { stroke: '#8080FF', d: 'M642.004 522.873L872.003 738.6V455.92L642.004 240.192V522.873Z' },
-  { stroke: '#0000F4', d: 'M355.736 399.975L568.845 599.931V73.2736L355.736 -126.61V399.975Z' },
-  { stroke: '#0000F4', d: 'M798.844 6.32678L568.844 -209.4V73.2802L798.844 289.007V6.32678Z' },
-]
-
 export function CTA() {
   return (
     <section id="contact" aria-labelledby="cta-title" className="section-v2 relative overflow-hidden bg-navy text-bg">
       <svg
         aria-hidden
-        viewBox="0 0 1440 529"
-        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1440 400"
+        preserveAspectRatio="none"
         fill="none"
-        className="pointer-events-none absolute inset-0 size-full"
+        className="pointer-events-none absolute inset-0 size-full opacity-50"
       >
-        <g opacity={0.3}>
-          {SHAPES.map((s, i) => (
-            <g key={s.d}>
-              <mask id={`cta-shape-${i}`} fill="white">
-                <path d={s.d} />
-              </mask>
-              <path d={s.d} stroke={s.stroke} strokeWidth={2} mask={`url(#cta-shape-${i})`} />
-            </g>
-          ))}
+        <g stroke="#8080FF" strokeOpacity={0.22}>
+          <path d="M300 0v400M520 0v400M700 0v400M880 0v400" />
+          <path d="M300 120 420 0M520 400 760 120M700 0 880 200M880 400 1100 140" />
         </g>
       </svg>
 
-      <div className="shell relative flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-        <div className="max-w-[1021px]">
-          <h2 id="cta-title" data-reveal className="t-h2 font-normal">
+      <div className="shell relative grid items-center gap-x-16 gap-y-8 min-[992px]:grid-cols-[1fr_auto]">
+        <div data-reveal>
+          <h2 id="cta-title" className="t-h2">
             <span className="block">{cta.h2Lines[0]}</span>
-            <span className="block text-peri">{cta.h2Lines[1]}</span>
+            <span className="text-peri">{cta.h2Lines[1]}</span>
           </h2>
-          <p data-reveal className="pt-8 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-haze">
-            {cta.sub}
-          </p>
-          <p data-reveal className="pt-8 text-[15px] text-mist">
+          <p className="mt-8 max-w-[54ch] text-bg/80">{cta.sub}</p>
+          <p className="mt-8 text-[14px] text-bg/[0.65]">
             {cta.emailLead}{' '}
-            <a href={`mailto:${cta.email}`} className="text-bg underline-offset-2 hover:underline">
+            <a href={`mailto:${cta.email}`} className="text-bg underline hover:text-peri">
               {cta.email}
             </a>
           </p>
         </div>
-        <div data-reveal className="shrink-0 lg:pt-10">
-          <Button variant="light" arrow href="/discuss-a-project">
+        <div data-reveal className="justify-self-start">
+          <Button variant="light" href="/discuss-a-project">
             {cta.ctaPrimary}
           </Button>
         </div>

@@ -3,39 +3,32 @@ import { about } from '../data/content'
 import { prefersReducedMotion } from '../lib/reducedMotion'
 
 /**
- * Company (Figma 212:288): founding story with headline figures beside the
- * two leader cards. Figures count up once when they scroll into view, as in
- * the Webflow build; the prerendered page already shows the final values.
+ * Company, built to the Webflow build: founding story with headline figures
+ * beside two chamfered leader cards. Figures count up once when they scroll
+ * into view; the prerendered page already shows the final values.
  */
 export function About() {
   return (
-    <section id="company" aria-labelledby="company-title" className="section-v2 bg-cloud text-navy">
+    <section id="company" aria-labelledby="company-title" className="section-v2 bg-cloud text-ink">
       <div className="shell">
-        <div className="pb-[72px]">
-          <p data-reveal className="t-eyebrow pb-6">
-            {about.eyebrow}
-          </p>
-          <h2 id="company-title" data-reveal className="t-h2 font-normal">
-            <span className="sm:block">
-              {about.h2a}
-              <span className="text-accent">{about.h2Hi}</span>
-            </span>
-            {/* on phones the second line flows on, so "want" isn't left alone */}
-            <span className="text-accent max-sm:inline sm:block">
-              <span className="sm:hidden"> </span>
-              {about.h2b}
+        <div data-reveal className="mb-16 flex flex-col items-start gap-6">
+          <p className="t-eyebrow">{about.eyebrow}</p>
+          <h2 id="company-title" className="t-h2 text-navy">
+            {about.h2a}
+            <span className="text-accent">
+              {about.h2Hi} {about.h2b}
             </span>
           </h2>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-[440px_1fr] lg:gap-[115px]">
+        <div className="grid items-start gap-12 min-[992px]:grid-cols-[0.85fr_1fr] min-[992px]:gap-[72px]">
           <div data-reveal>
-            <p className="text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.65] text-slate">{about.sub}</p>
-            <dl className="grid grid-cols-3 gap-6 pt-8">
+            <p className="max-w-[40ch] text-slate">{about.sub}</p>
+            <dl className="mt-12 flex flex-wrap gap-x-12 gap-y-6">
               {about.stats.map((s) => (
-                <div key={s.label} className="flex flex-col-reverse justify-end gap-3">
-                  <dt className="text-[15px] leading-[1.5] text-slate">{s.label}</dt>
-                  <dd className="m-0 text-[clamp(2.4rem,4vw,3.25rem)] font-500 leading-none tracking-[-0.035em]">
+                <div key={s.label} className="flex flex-col-reverse justify-end">
+                  <dt className="mt-3 text-[14px] text-slate">{s.label}</dt>
+                  <dd className="m-0 text-[length:var(--fs-h2)] font-500 leading-none tracking-[-0.03em] text-navy">
                     <CountUp value={s.value} />
                   </dd>
                 </div>
@@ -43,22 +36,25 @@ export function About() {
             </dl>
           </div>
 
-          <ul data-reveal className="flex flex-col gap-6">
+          <ul data-reveal className="grid auto-rows-fr gap-6">
             {about.team.map((t) => (
-              <li key={t.name} className="flex gap-6 border border-hairline bg-bg p-6 max-sm:flex-col">
-                <img
-                  src={t.photo}
-                  alt={t.name}
-                  width={109}
-                  height={109}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-[109px] shrink-0 object-cover"
-                />
-                <div className="flex min-w-0 flex-col gap-0.5">
-                  <h3 className="text-[17px] font-500 leading-[1.4]">{t.name}</h3>
-                  <p className="text-[11.2px] uppercase tracking-[0.12em] text-accent">{t.role}</p>
-                  <p className="pt-2.5 text-[13px] leading-[1.65] text-slate">{t.bio}</p>
+              <li
+                key={t.name}
+                className="chamfer grid grid-cols-[132px_1fr] gap-6 bg-bg p-6 max-md:grid-cols-1 max-md:items-start"
+              >
+                <div className="chamfer h-full min-h-[148px] overflow-hidden bg-cloud max-md:aspect-[9/10] max-md:h-auto max-md:min-h-0 max-md:w-[132px]">
+                  <img
+                    src={t.photo}
+                    alt={`${t.name}, ${t.role} at Nx Growth Partners`}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover object-[50%_22%]"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-[16px] font-500 leading-[1.25] text-navy">{t.name}</h3>
+                  <p className="mt-[3px] text-[12px] uppercase leading-[1.25] tracking-[0.14em] text-accent">{t.role}</p>
+                  <p className="mt-3 text-[14px] text-slate">{t.bio}</p>
                 </div>
               </li>
             ))}

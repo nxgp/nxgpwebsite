@@ -8,15 +8,9 @@
    Midnight Navy 060B33. One source of truth for tokens.
    ============================================================ */
 
-/* Body: Google Sans Flex (variable, 400–600). Headings: Poppins 400/500.
-   Labels and step numbers: JetBrains Mono. Latin subsets, self-hosted. */
-@font-face {
-  font-family: 'Google Sans Flex';
-  src: url('/fonts/GoogleSansFlex-Variable.woff2') format('woff2');
-  font-weight: 400 600;
-  font-style: normal;
-  font-display: swap;
-}
+/* Poppins for everything, as in the Webflow build (400 and 500; 600 is
+   synthesised from the medium cut). Labels and step numbers use the system
+   monospace stack, like Webflow, so no mono web font is downloaded. */
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Regular.woff2') format('woff2');
@@ -31,21 +25,26 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* Metric-matched Arial stand-in, shown until Poppins arrives, so the swap
+   doesn't reflow the nav and headings (overrides computed from the font
+   file's hhea metrics and average glyph width). */
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-family: 'Poppins Fallback';
+  src: local('Arial'), local('ArialMT');
+  size-adjust: 111.3%;
+  ascent-override: 94.3%;
+  descent-override: 31.4%;
+  line-gap-override: 9%;
 }
 
 @theme {
   /* ---- color ---- */
   --color-bg: #fdfdfc; /* Soft White canvas */
   --color-surface: #ffffff; /* cards */
-  --color-ink: #14161f; /* text + dark pill buttons (ink black ↔ navy) */
+  --color-ink: #1a1a17; /* Ink Black — default text (Webflow --color--text--default) */
   --color-ink-soft: #565963;
-  --color-ink-faint: #8a8d96;
+  --color-ink-faint: #6b6e78; /* 5:1 on white (AA for small labels) */
   --color-line: #e8e6df; /* warm-ivory hairline */
   --color-navy: #060b33; /* Midnight Navy — dark surfaces, logotype */
   --color-peri: #8080ff; /* Periwinkle Blue — secondary accent */
@@ -58,10 +57,8 @@
   --color-hairline: #d1d5db; /* light borders */
   --color-slate: #76736c; /* Slate Grey — body copy on light */
   --color-grey: #5c6068; /* color/grey/38 — inactive step labels */
-  --color-hero-hi: #6565ff; /* hero headline highlight */
   --color-mist: #a3a8cc; /* muted copy on navy */
   --color-haze: #c3c7e0; /* hero lead on navy */
-  --color-rail-copy: #9a9aa4; /* card body on black */
   --color-rail: #000000; /* work rail surface */
   /* aurora pastels (blurred, low-opacity, drifting) */
   --color-au-peri: #c3c6ff;
@@ -70,13 +67,11 @@
   --color-au-lilac: #dcd6ff;
 
   /* ---- type ---- */
-  --font-sans:
-    'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
-    Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Google Sans Flex', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
-  --font-logo: 'Poppins', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'Poppins', 'Poppins Fallback', Arial, sans-serif;
+  --font-display: 'Poppins', 'Poppins Fallback', Arial, sans-serif;
+  --font-heading: 'Poppins', 'Poppins Fallback', Arial, sans-serif;
+  --font-logo: 'Poppins', 'Poppins Fallback', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'Roboto Mono', Menlo, monospace;
 
   /* numeric weight utilities (font-500 … font-800) */
   --font-weight-500: 500;
@@ -108,12 +103,37 @@
 }
 
 :root {
-  /* Figma: 1312 container − 2×48 padding = 1216 content; wide rows 1344. */
-  --shell: min(1216px, calc(100vw - 32px));
-  --shell-wide: min(1344px, calc(100vw - 32px));
+  /* Webflow tokens: a 1280px container with 48px gutters (20px on small
+     phones), 112px section rhythm (56px), and a type scale that steps down
+     at 991px and 479px. */
+  --gutter: 48px;
+  --shell: min(1184px, calc(100vw - 2 * var(--gutter)));
+  --shell-wide: var(--shell);
+  --section-y: 112px;
+  --fs-display: 64px;
+  --fs-h2: 48px;
+  --fs-h6: 28px;
+  --fs-large: 20px;
   --nav-h: 78px;
   --chamfer: 26px;
   color-scheme: light;
+}
+@media (max-width: 991px) {
+  :root {
+    --fs-display: 48px;
+    --fs-h2: 38px;
+    --fs-h6: 24px;
+    --fs-large: 18px;
+  }
+}
+@media (max-width: 479px) {
+  :root {
+    --gutter: 20px;
+    --section-y: 56px;
+    --fs-display: 36px;
+    --fs-h2: 30px;
+    --fs-h6: 22px;
+  }
 }
 
 /* ============================================================
@@ -137,7 +157,7 @@
     font-family: var(--font-sans);
     font-weight: 400;
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.65;
     overflow-x: clip;
   }
 
@@ -167,50 +187,54 @@
 
 /* in the components layer so utilities (font-normal, text-white/65…) override */
 @layer components {
+  /* Webflow .hero-title — 64 / 48 / 36px */
   .t-h1 {
     font-family: var(--font-heading);
-    font-size: clamp(2.6rem, 5.2vw, 4.6875rem); /* 75px */
+    font-size: var(--fs-display);
     font-weight: 500;
-    line-height: 1.03;
-    letter-spacing: -0.055em;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
   }
 
+  /* Webflow .section-title — 48 / 38 / 30px */
   .t-h2 {
     font-family: var(--font-heading);
-    font-size: clamp(2.1rem, 4.2vw, 3.75rem); /* 60px */
+    font-size: var(--fs-h2);
     font-weight: 500;
-    line-height: 1.04;
-    letter-spacing: -0.032em;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
   }
 
+  /* Webflow h6 card titles — 28 / 24 / 22px */
   .t-h3 {
     font-family: var(--font-heading);
-    font-size: clamp(1.4rem, 2vw, 1.75rem); /* 28px */
+    font-size: var(--fs-h6);
     font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: -0.026em;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
   }
 
+  /* Webflow .section-intro — 20 / 18px */
   .t-lead {
-    font-size: clamp(1.08rem, 1.4vw, 1.25rem); /* 20px */
+    font-size: var(--fs-large);
     font-weight: 400;
-    line-height: 1.55;
+    line-height: 1.65;
     color: var(--color-slate);
   }
 
   .t-eyebrow {
-    font-size: 0.75rem;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-accent);
   }
 
-  /* small caps label used on cards and steps (11.2px, wide tracking) */
+  /* 12px caps label on cards (Webflow .story-client, .industry-who) */
   .t-kicker {
-    font-size: 0.7rem;
+    font-size: 12px;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.65;
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
@@ -235,9 +259,9 @@
   position: relative;
 }
 
-/* v2 sections: 130px rhythm on desktop */
+/* v2 sections: Webflow's 112px rhythm (56px on small phones) */
 .section-v2 {
-  padding-block: clamp(72px, 9vw, 130px);
+  padding-block: var(--section-y);
   position: relative;
 }
 
@@ -259,16 +283,14 @@
   }
 }
 
-/* pill tag chip */
+/* square tag chip (Webflow .story-tag / .layer-tag) */
 .chip {
   display: inline-flex;
   align-items: center;
   border: 1px solid currentColor;
-  border-radius: var(--radius-pill);
-  padding: 3.5px 10px;
-  font-size: 0.7rem;
-  line-height: 1;
-  white-space: nowrap;
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 1.65;
 }
 
 /* Native smooth scroll, as in the Webflow build. Deep links (#work…) clear
@@ -279,7 +301,7 @@ html {
 }
 
 /* Reveal on scroll (values from the Webflow build). `html.js` is set by the
-   inline script in index.html; useRevealOnScroll adds `.is-in`. */
+   inline script in index.html; useRevealOnScroll adds `data-in`. */
 html.js [data-reveal] {
   opacity: 0;
   transform: translateY(18px);
@@ -287,7 +309,7 @@ html.js [data-reveal] {
     opacity 0.62s ease,
     transform 0.62s var(--ease-reveal);
 }
-html.js [data-reveal].is-in {
+html.js [data-reveal][data-in] {
   opacity: 1;
   transform: none;
 }
@@ -370,7 +392,7 @@ html.js [data-reveal].is-in {
 }
 
 /* ============================================================
-   Approach orbit — the two outer rings drift in opposite directions
+   Approach orbit — the two dashed rings drift in opposite directions
    (52s / 74s per turn, as in the Webflow build). Frozen under reduced motion.
    ============================================================ */
 @keyframes nx-spin {
@@ -381,6 +403,11 @@ html.js [data-reveal].is-in {
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin,
   .orbit-spin-rev { animation: none !important; }
+}
+
+/* Webflow orbit centre plate: a chamfered tab */
+.orbit-tab {
+  clip-path: polygon(0 0, 91.5% 0, 100% 25%, 100% 100%, 8.5% 100%, 0 75%);
 }
 
 /* the mobile menu is open (set by Nav) — the chat button would sit on top
@@ -563,4 +590,25 @@ html[data-menu-open] .chat-fab {
 }
 .swipe-item {
   scroll-snap-align: start;
+}
+
+/* Work rail: before JS pins it, reserve the height the pinned rail will
+   take — one screen plus the track's travel (cards 318px apart by 24px; the
+   viewport runs into the right gutter, and from 991px down the track ends
+   with a gutter of padding) — so hydration doesn't push the rest of the page
+   down. WorkRail sets the exact height and clears this. */
+@media (prefers-reduced-motion: no-preference) {
+  .rail-est {
+    min-height: calc(100svh + var(--cards) * 342px - 24px - var(--shell) - var(--gutter));
+  }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 991px) {
+  .rail-est {
+    min-height: calc(100svh + var(--cards) * 342px - 24px - var(--shell));
+  }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+  .rail-est {
+    min-height: calc(100svh + var(--cards) * (78vw + 24px) - 24px - var(--shell));
+  }
 }

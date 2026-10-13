@@ -3,81 +3,59 @@ import { useActiveOnScroll } from '../hooks/useActiveOnScroll'
 import { cn } from '../lib/cn'
 
 /**
- * Our approach (Figma 212:322): the four-step operating loop as an orbit
- * diagram beside the step list. The active step follows scroll position and
- * hover/focus (Webflow behaviour); the matching orbit node fills blue and
- * the two outer rings drift slowly. The orbit is a fixed 599px drawing,
- * shown from tablet up — on phones the step list carries the content.
+ * Our approach, built to the Webflow build: the four-step operating loop as
+ * a CSS orbit beside the step list. The orbit scales with its column; the
+ * two dashed rings drift slowly. The active step follows scroll position and
+ * hover/focus; the matching orbit node fills blue.
  */
 
-// node centres on the 599px artwork, clockwise from the top (Figma 212:330)
+// node boxes on the orbit, as % of its width (Webflow .orbit-node-1…4)
 const NODES = [
-  { x: 299.5, y: 121.67, label: 'above' },
-  { x: 477.33, y: 299.5, label: 'below' },
-  { x: 299.5, y: 477.33, label: 'below' },
-  { x: 121.67, y: 299.5, label: 'below' },
+  { left: 45.3125, top: 15.625, above: true },
+  { left: 75, top: 45.3125 },
+  { left: 45.3125, top: 75 },
+  { left: 15.625, top: 45.3125 },
 ] as const
-
-// capability labels around the outer ring: centre x, top y
-const CAPS = [
-  { x: 299.5, y: 38 },
-  { x: 541, y: 294 },
-  { x: 299, y: 536 },
-  { x: 58, y: 294 },
-]
 
 export function OperatingModel() {
   const { steps } = operatingModel
   const { active, bind } = useActiveOnScroll(steps.length)
 
   return (
-    <section id="approach" aria-labelledby="approach-title" className="section-v2 bg-bg text-navy">
-      <div className="shell-wide">
-        <div className="mx-auto flex max-w-[1224px] flex-col items-center gap-6 pb-16 text-center">
-          <p data-reveal className="font-mono text-[12px] uppercase tracking-[0.14em] text-accent">
-            {operatingModel.eyebrow}
-          </p>
-          <h2 id="approach-title" data-reveal className="t-h2">
+    <section id="approach" aria-labelledby="approach-title" className="section-v2 bg-bg text-ink">
+      <div className="shell">
+        <div data-reveal className="mb-16 flex flex-col items-center gap-6 text-center">
+          <p className="t-eyebrow">{operatingModel.eyebrow}</p>
+          <h2 id="approach-title" className="t-h2 text-navy">
             {operatingModel.h2a}
             <span className="text-accent">{operatingModel.h2b}</span>
           </h2>
-          <p data-reveal className="text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.6] text-slate">
-            {operatingModel.sub}
-          </p>
+          <p className="t-lead max-w-[74ch]">{operatingModel.sub}</p>
         </div>
 
-        <div className="flex flex-col items-center gap-12 xl:flex-row xl:gap-20">
-          <Orbit active={active} />
+        <div className="grid items-start gap-10 min-[992px]:grid-cols-[0.92fr_1fr] min-[992px]:gap-[72px]">
+          <figure className="m-0 min-[992px]:sticky min-[992px]:top-[102px]">
+            <Orbit active={active} />
+          </figure>
 
-          <ol data-reveal className="flex w-full flex-col gap-px border border-hairline bg-hairline xl:flex-1">
+          <ol data-reveal className="grid border border-hairline">
             {steps.map((s, i) => (
               <li
                 key={s.n}
                 {...bind(i)}
-                tabIndex={0}
                 className={cn(
-                  'flex gap-2 border-l-2 px-6 py-7 max-sm:flex-col sm:gap-6 transition-[background-color,border-color] duration-[320ms] ease-[ease] sm:px-8',
-                  i === active ? 'border-accent bg-[#eeeefc]' : 'border-transparent bg-bg',
+                  'grid grid-cols-[74px_1fr] gap-x-4 border-b border-l-[3px] border-b-hairline px-8 py-[30px] transition-[background-color,border-color] duration-[320ms] ease-[ease] last:border-b-0 max-md:grid-cols-1 max-md:gap-y-2 max-md:px-5',
+                  i === active ? 'border-l-accent bg-peri/[0.26]' : 'border-l-transparent',
                 )}
               >
-                <span
-                  className={cn(
-                    'w-14 shrink-0 whitespace-nowrap pt-1.5 font-mono text-[11.2px] tracking-[0.14em]',
-                    i === active ? 'text-accent' : 'text-grey',
-                  )}
-                >
+                <span className="whitespace-nowrap pt-[7px] font-mono text-[12px] tracking-[0.14em] text-accent">
                   STEP {s.n}
                 </span>
-                <div className="min-w-0">
-                  <h3
-                    className={cn(
-                      'font-heading text-[clamp(1.4rem,2vw,1.75rem)] leading-[1.2] tracking-[-0.026em]',
-                      i === active ? 'text-navy' : 'text-slate',
-                    )}
-                  >
+                <div>
+                  <h3 className="text-[length:var(--fs-h6)] font-500 leading-[1.25] tracking-[-0.02em] text-navy">
                     {s.title}
                   </h3>
-                  <p className="pt-3 text-[15px] leading-[1.6] text-slate">{s.body}</p>
+                  <p className={cn('mt-3 text-[14px]', i === active ? 'text-ink' : 'text-slate')}>{s.body}</p>
                 </div>
               </li>
             ))}
@@ -88,51 +66,60 @@ export function OperatingModel() {
   )
 }
 
+const LABEL = 'absolute font-mono text-[12px] uppercase tracking-[0.14em] text-slate max-[479px]:text-[10px]'
+
 function Orbit({ active }: { active: number }) {
   const { steps, orbit, center } = operatingModel
+  // side labels break onto two lines, as in Figma, so they clear the nodes
+  const twoLines = (s: string) => s.replace(/ (\S+)$/, '\n$1')
   return (
-    <div data-reveal aria-hidden className="relative hidden size-[599px] shrink-0 md:block">
-      <img src="/approach/ring-outer.svg" alt="" className="orbit-spin absolute left-[58px] top-[58px] size-[483px]" />
-      <img src="/approach/ring-mid.svg" alt="" className="orbit-spin-rev absolute left-[121.7px] top-[121.7px] size-[355.7px]" />
-      <img src="/approach/ring-inner.svg" alt="" className="absolute left-[187.2px] top-[187.2px] size-[224.6px]" />
+    <div
+      data-reveal
+      role="img"
+      aria-label="The Nx delivery loop: discover, prioritize, deliver and optimize"
+      className="relative aspect-square w-full"
+    >
+      <div className="orbit-spin absolute left-[9.6875%] top-[9.6875%] aspect-square w-[80.625%] rounded-full border border-dashed border-hairline" />
+      <div className="orbit-spin-rev absolute left-[20.3125%] top-[20.3125%] aspect-square w-[59.375%] rounded-full border border-dashed border-hairline" />
+      <div className="absolute left-[31.25%] top-[31.25%] aspect-square w-[37.5%] rounded-full border border-hairline" />
 
-      <div className="absolute left-[212px] top-[262px] flex h-[75px] w-[174px] flex-col items-center justify-center gap-1">
-        <img src="/approach/center.svg" alt="" className="absolute inset-0 size-full" />
-        <span className="relative font-mono text-[10px] uppercase text-accent">{center.label}</span>
-        <span className="relative text-[15px] text-navy">{center.title}</span>
+      <div className="orbit-tab absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 whitespace-nowrap bg-peri/[0.28] px-2.5 py-1">
+        <span className="font-mono text-[12px] uppercase tracking-[0.14em] text-accent">{center.label}</span>
+        <span className="text-[12px] text-navy">{center.title}</span>
       </div>
 
-      {CAPS.map((c, i) => (
-        <span
-          key={orbit[i]}
-          className="absolute w-[60px] -translate-x-1/2 text-center font-mono text-[10px] uppercase leading-[1.3] text-slate"
-          style={{ left: c.x, top: c.y }}
-        >
-          {orbit[i]}
-        </span>
-      ))}
+      {/* on small phones the top/bottom labels move out to the edge so the
+          step names above and below the nodes don't run into them */}
+      <span className={cn(LABEL, 'left-1/2 top-[3%] -translate-x-1/2 whitespace-nowrap max-[479px]:top-[1%]')}>{orbit[0]}</span>
+      <span className={cn(LABEL, 'left-[92%] top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-pre-line text-center')}>
+        {twoLines(orbit[1])}
+      </span>
+      <span className={cn(LABEL, 'bottom-[3%] left-1/2 -translate-x-1/2 whitespace-nowrap max-[479px]:bottom-[1%]')}>{orbit[2]}</span>
+      <span className={cn(LABEL, 'left-[8%] top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-pre-line text-center')}>
+        {twoLines(orbit[3])}
+      </span>
 
       {NODES.map((n, i) => {
         const on = i === active
         return (
           <div
             key={steps[i].n}
-            className="absolute size-[56px] -translate-x-1/2 -translate-y-1/2"
-            style={{ left: n.x, top: n.y }}
+            className="absolute aspect-square w-[9.375%]"
+            style={{ left: `${n.left}%`, top: `${n.top}%` }}
           >
             <span
               className={cn(
-                'flex size-full items-center justify-center rounded-full border-[1.5px] font-mono text-[12px]',
-                on ? 'border-accent bg-accent text-bg' : 'border-hairline bg-cloud text-slate opacity-55',
+                'flex size-full items-center justify-center rounded-full border font-mono text-[12px] transition-[background-color] duration-[320ms] ease-[ease]',
+                on ? 'border-accent bg-accent text-white' : 'border-hairline bg-white text-slate',
               )}
             >
               {steps[i].n}
             </span>
             <span
               className={cn(
-                'absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[14px] transition-colors duration-[320ms] ease-[ease]',
-                n.label === 'above' ? 'bottom-full mb-2.5' : 'top-full mt-2.5',
-                on ? 'text-navy' : 'text-slate opacity-55',
+                'absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[14px] transition-colors duration-[320ms] max-[479px]:text-[12px]',
+                'above' in n ? 'bottom-full mb-2.5 max-[479px]:mb-1.5' : 'top-full mt-2.5 max-[479px]:mt-1.5',
+                on ? 'text-navy' : 'text-slate',
               )}
             >
               {steps[i].title}

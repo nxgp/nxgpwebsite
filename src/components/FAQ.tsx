@@ -3,24 +3,24 @@ import { faq } from '../data/content'
 import { cn } from '../lib/cn'
 
 /**
- * FAQ (Figma 212:479): heading and email prompt beside a one-open-at-a-time
- * accordion. The plus closes to a minus and the answer opens over 0.32s, as
- * in the Webflow build.
+ * FAQ, built to the Webflow build: heading and email prompt beside a
+ * one-open-at-a-time accordion. The plus closes to a minus and the answer
+ * opens over 0.32s.
  */
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section id="faq" aria-labelledby="faq-title" className="section-v2 bg-bg text-navy">
-      <div className="shell grid gap-10 lg:grid-cols-[1fr_697px] lg:gap-[60px]">
-        <div>
-          <h2 id="faq-title" data-reveal className="t-h2 max-w-[459px] font-normal">
-            {faq.h2a}
-            <span className="text-accent">{faq.h2Hi}</span>.
+    <section id="faq" aria-labelledby="faq-title" className="section-v2 bg-bg text-ink">
+      <div className="shell grid items-start gap-x-[72px] gap-y-8 min-[992px]:grid-cols-[0.62fr_1fr]">
+        <div data-reveal>
+          <h2 id="faq-title" className="t-h2 text-navy">
+            <span className="block">{faq.h2a.trim()}</span>
+            <span className="text-accent">{faq.h2Hi}.</span>
           </h2>
-          <p data-reveal className="pt-6 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-slate">
+          <p className="t-lead mt-6 max-w-[58ch]">
             {faq.sub}{' '}
-            <a href={`mailto:${faq.email}`} className="text-accent hover:underline">
+            <a href={`mailto:${faq.email}`} className="underline hover:text-accent">
               {faq.email}
             </a>
           </p>
@@ -39,7 +39,7 @@ export function FAQ() {
                     aria-expanded={isOpen}
                     aria-controls={`${id}-a`}
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="flex w-full items-center justify-between gap-6 py-8 text-left text-[18px] font-500 leading-[1.4] hover:text-accent"
+                    className="flex w-full items-center justify-between gap-6 py-6 text-left font-500 text-navy hover:text-accent"
                   >
                     {item.q}
                     <span aria-hidden className="relative size-3.5 shrink-0">
@@ -63,7 +63,7 @@ export function FAQ() {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-[66ch] pb-8 text-[15px] leading-[1.65] text-slate">{item.a}</p>
+                    <p className="max-w-[66ch] pb-6 text-[14px] text-slate">{item.a}</p>
                   </div>
                 </div>
               </div>
