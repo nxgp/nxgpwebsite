@@ -9,6 +9,9 @@
             are off, so this stays analytics and never becomes ad tracking
             (what /privacy promises). Turn them on only if NxGP ever runs
             Google Ads remarketing.
+         3. The gtag.js fetch waits for the page to load and go idle, so it
+            never competes with the hero, fonts or app bundle. Calls made
+            before then queue in dataLayer and are sent once it arrives.
          `gtag` is defined either way, so event calls elsewhere in the app are
          no-ops off production rather than errors. Navigation is full page
          loads (no client router), so page_view fires naturally per page. -->
@@ -18,10 +21,16 @@
         dataLayer.push(arguments)
       }
       if (location.hostname === 'nxgp.io' || location.hostname === 'www.nxgp.io') {
-        var gaScript = document.createElement('script')
-        gaScript.async = true
-        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-NXKF7HCKNV'
-        document.head.appendChild(gaScript)
+        var loadGa = function () {
+          var gaScript = document.createElement('script')
+          gaScript.async = true
+          gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-NXKF7HCKNV'
+          document.head.appendChild(gaScript)
+        }
+        addEventListener('load', function () {
+          if ('requestIdleCallback' in window) requestIdleCallback(loadGa, { timeout: 4000 })
+          else setTimeout(loadGa, 1500)
+        })
         gtag('js', new Date())
         gtag('config', 'G-NXKF7HCKNV', {
           allow_google_signals: false,
@@ -35,7 +44,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FDFDFC" />
+    <meta name="theme-color" content="#060B33" />
 
     <title>Nx Growth Partners | Your team, extended. From idea to production.</title>
     <meta
@@ -68,23 +77,26 @@
     <meta name="twitter:image" content="https://nxgp.io/og.png" />
     <meta name="twitter:image:alt" content="Nx Growth Partners logo" />
 
+    <!-- reveal-on-scroll gate (as in the Webflow build): hide [data-reveal]
+         from first paint; if the app never marks the page ready, show
+         everything after 3s -->
+    <script>
+      document.documentElement.classList.add('js')
+      setTimeout(function () {
+        if (!document.documentElement.hasAttribute('data-ready'))
+          document.documentElement.classList.remove('js')
+      }, 3000)
+    </script>
     <link
       rel="preload"
-      href="/fonts/GoogleSans-Regular.woff2"
+      href="/fonts/Poppins-Medium.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/GoogleSans-Medium.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/GoogleSans-SemiBold.woff2"
+      href="/fonts/Poppins-Regular.woff2"
       as="font"
       type="font/woff2"
       crossorigin

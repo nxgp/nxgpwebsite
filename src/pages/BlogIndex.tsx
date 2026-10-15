@@ -1,6 +1,5 @@
 import { ArrowRight } from 'lucide-react'
 import { posts } from '../data/blog.generated'
-import { useReveal } from '../hooks/useReveal'
 import { formatPostDate } from '../lib/blog'
 
 /**
@@ -9,7 +8,6 @@ import { formatPostDate } from '../lib/blog'
  * client-side fetching.
  */
 export function BlogIndex() {
-  const ref = useReveal<HTMLDivElement>()
   const [lead, ...rest] = posts
 
   if (posts.length === 0) {
@@ -30,7 +28,7 @@ export function BlogIndex() {
 
   return (
     <section className="section">
-      <div ref={ref} className="shell">
+      <div className="shell">
         {/* lead post */}
         <a
           data-reveal

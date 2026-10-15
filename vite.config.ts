@@ -24,7 +24,6 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
-            { name: 'animation', test: /node_modules[\\/](gsap|lenis)[\\/]/ },
           ],
         },
       },

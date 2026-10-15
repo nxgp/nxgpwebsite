@@ -160,11 +160,6 @@ export default function ChatPanel({
 
   return (
     <div
-      // data-lenis-prevent: this site runs a global Lenis smooth-scroll that
-      // hijacks wheel/touch events on the whole page. Without this attribute
-      // Lenis intercepts scrolling meant for the message list and scrolls
-      // the page behind the panel instead — the panel looks frozen.
-      data-lenis-prevent
       className={cn(
         'fixed z-[210] flex flex-col overflow-hidden bg-surface shadow-lg',
         'inset-x-0 bottom-0 rounded-t-card border-t border-line',

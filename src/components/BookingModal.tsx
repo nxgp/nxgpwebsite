@@ -34,10 +34,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!open) return
     closeRef.current?.focus()
-    // lock the page behind the overlay — pause Lenis AND clamp native scroll
-    // (data-lenis-prevent alone lets the document keep scrolling natively)
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis
-    lenis?.stop()
+    // lock the page behind the overlay
     const prevOverflow = document.documentElement.style.overflow
     document.documentElement.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
@@ -47,7 +44,6 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     return () => {
       window.removeEventListener('keydown', onKey)
       document.documentElement.style.overflow = prevOverflow
-      lenis?.start()
     }
   }, [open, close])
 
@@ -63,9 +59,6 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       {children}
       {open && (
         <div
-          // Lenis hijacks wheel/touch on the page — without this the calendar
-          // can't scroll and the page moves behind the overlay instead.
-          data-lenis-prevent
           className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-6"
           role="dialog"
           aria-modal="true"

@@ -1,71 +1,54 @@
-import { useReveal } from '../hooks/useReveal'
 import { industries } from '../data/content'
-import type { Industry } from '../data/content'
-import { SectionHeader } from './ui/SectionHeader'
 import { Button } from './ui/Button'
 
-/** Photography per audience, keyed off the existing `visual` field. */
-const photos: Record<Industry['visual'], { src: string; alt: string }> = {
-  pe: { src: '/industries/private-equity.jpg', alt: '' },
-  enterprise: { src: '/industries/enterprise.jpg', alt: '' },
-  gov: { src: '/industries/government.jpg', alt: '' },
-}
-
+/**
+ * "Who we serve", built to the Webflow build: split head, three chamfered
+ * 4:5 photo cards with the copy over a navy scrim, and a closing prompt.
+ */
 export function Industries() {
-  const ref = useReveal<HTMLDivElement>()
   return (
-    <section id="industries" className="section bg-surface/40">
-      <div ref={ref} className="shell">
-        <SectionHeader title={industries.h2} sub={industries.sub} />
-
-        <div className="mt-14 grid gap-4 lg:grid-cols-3">
-          {industries.items.map((ind) => {
-            const photo = photos[ind.visual]
-            return (
-              <article
-                data-reveal
-                key={ind.name}
-                className="group relative isolate flex min-h-[24rem] flex-col justify-end overflow-hidden rounded-card p-7 shadow-sm transition-shadow duration-300 hover:shadow-lg"
-              >
-                {/* the photograph. alt="" because the card's own words carry the
-                    meaning; a description here would just be read twice. */}
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 -z-20 size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                {/* Darkening scrim. Heavier at the bottom, where the text sits,
-                    so the copy keeps its contrast whatever the photo is doing
-                    behind it. */}
-                <div
-                  aria-hidden
-                  className="absolute inset-0 -z-10"
-                  style={{
-                    background:
-                      'linear-gradient(180deg, rgba(6,11,51,0.30) 0%, rgba(6,11,51,0.62) 45%, rgba(6,11,51,0.88) 100%)',
-                  }}
-                />
-
-
-                <h3 className="t-h3 text-[1.5rem] text-white">{ind.name}</h3>
-                <p className="mt-1.5 text-[0.78rem] font-700 uppercase tracking-[0.05em] text-white/60">
-                  {ind.buyer}
-                </p>
-                <p className="mt-4 text-[0.98rem] leading-relaxed text-white/85">{ind.frame}</p>
-              </article>
-            )
-          })}
+    <section id="industries" aria-labelledby="industries-title" className="section-v2 bg-cloud text-ink">
+      <div className="shell">
+        <div data-reveal className="mb-16 grid gap-6 min-[992px]:grid-cols-[1fr_0.7fr] min-[992px]:items-end min-[992px]:gap-x-20">
+          <h2 id="industries-title" className="t-h2 text-navy">
+            <span className="block">{industries.h2a}</span>
+            <span className="text-accent">{industries.h2b}</span>
+          </h2>
+          <p className="t-lead max-w-[74ch]">{industries.sub}</p>
         </div>
 
-        <div data-reveal className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <p className="text-[0.95rem] font-600 text-ink-soft">
-            Not sure where you fit? We map it on the first call.
-          </p>
-          <Button variant="dark" href="/discuss-a-project">
-            Discuss a project
-          </Button>
+        <ul className="grid gap-7 min-[992px]:grid-cols-3">
+          {industries.items.map((it) => (
+            <li
+              key={it.name}
+              data-reveal="stagger"
+              className="group chamfer relative flex aspect-[4/5] items-end overflow-hidden text-bg"
+            >
+              <img
+                src={it.image}
+                srcSet={`${it.imageSm} 480w, ${it.image} 960w`}
+                sizes="(min-width: 992px) 30vw, 100vw"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 size-full object-cover transition-transform duration-[620ms] ease-[var(--ease-reveal)] group-hover:scale-[1.04]"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(#060b3359_0%,#060b339e_45%,#060b33f0_100%)]"
+              />
+              <div className="relative p-7">
+                <p className="t-kicker text-bg/[0.72]">{it.eyebrow}</p>
+                <h3 className="t-h3 mt-3">{it.name}</h3>
+                <p className="mt-4 text-[14px] text-bg/[0.85]">{it.body}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div data-reveal className="mt-12 flex flex-wrap items-center justify-center gap-6 text-center max-md:flex-col">
+          <p className="text-slate">{industries.foot}</p>
+          <Button href="/discuss-a-project">Discuss a project</Button>
         </div>
       </div>
     </section>

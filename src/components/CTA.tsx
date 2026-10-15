@@ -1,73 +1,45 @@
-import { useEffect, useRef } from 'react'
-import { ArrowRight } from 'lucide-react'
-import { withMotion } from '../lib/motion'
-import { prefersReducedMotion } from '../lib/reducedMotion'
 import { cta } from '../data/content'
 import { Button } from './ui/Button'
-import { Aurora } from './ui/Aurora'
-import { scrollToId } from '../lib/useSmoothScroll'
 
+/**
+ * Closing CTA, built to the Webflow build: navy band with the headline,
+ * intro and email on the left, the button on the right, and Webflow's thin
+ * periwinkle line drawing stretched behind.
+ */
 export function CTA() {
-  const root = useRef<HTMLDivElement>(null)
-  const aurora = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = root.current
-    if (!el || prefersReducedMotion()) return
-    return withMotion(({ gsap }) => {
-      const ctx = gsap.context(() => {
-        const words = el.querySelectorAll<HTMLElement>('[data-cta-word]')
-        const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 72%' } })
-        tl.from(words, { yPercent: 110, duration: 0.9, ease: 'expo.out', stagger: 0.08 })
-      if (aurora.current) {
-        gsap.fromTo(aurora.current, { opacity: 0.4, scale: 0.92 }, { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 78%' } })
-      }
-      }, el)
-      return () => ctx.revert()
-    })
-  }, [])
-
   return (
-    <section id="cta" className="section">
-      <div className="shell">
-        <div ref={root} className="relative overflow-hidden rounded-card bg-ink px-7 py-[clamp(56px,9vw,110px)] text-center text-white shadow-lg">
-          <div ref={aurora} className="absolute inset-0">
-            <Aurora
-              dark
-              blobs={[
-                { color: 'var(--color-au-peri)', size: 520, top: '-34%', left: '8%', opacity: 0.3, duration: 24 },
-                { color: 'var(--color-au-mint)', size: 460, bottom: '-44%', right: '6%', opacity: 0.26, duration: 28, delay: 1.5 },
-                { color: 'var(--color-au-lilac)', size: 360, top: '20%', right: '34%', opacity: 0.2, duration: 30, delay: 3 },
-              ]}
-            />
-          </div>
+    <section id="contact" aria-labelledby="cta-title" className="section-v2 relative overflow-hidden bg-navy text-bg">
+      <svg
+        aria-hidden
+        viewBox="0 0 1440 400"
+        preserveAspectRatio="none"
+        fill="none"
+        className="pointer-events-none absolute inset-0 size-full opacity-50"
+      >
+        <g stroke="#8080FF" strokeOpacity={0.22}>
+          <path d="M300 0v400M520 0v400M700 0v400M880 0v400" />
+          <path d="M300 120 420 0M520 400 760 120M700 0 880 200M880 400 1100 140" />
+        </g>
+      </svg>
 
-          <div className="relative mx-auto max-w-[42rem]">
-            <h2 className="t-h2 text-white">
-              {cta.h2Lines.map((line) => (
-                <span key={line} className="block overflow-hidden pb-[0.08em]">
-                  <span data-cta-word className="inline-block">{line}</span>
-                </span>
-              ))}
-            </h2>
-            <p className="t-lead mx-auto mt-5 text-white/65">{cta.sub}</p>
-
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button variant="light" className="bg-white text-ink" href="/discuss-a-project">
-                {cta.ctaPrimary}
-                <ArrowRight className="size-4" />
-              </Button>
-              <Button variant="ghost" className="text-white hover:bg-white/10" onClick={() => scrollToId('services')}>
-                {cta.ctaSecondary}
-              </Button>
-            </div>
-            <p className="mt-5 text-[0.85rem] font-600 text-white/50">
-              Prefer email?{' '}
-              <a href={`mailto:${cta.email}`} className="underline underline-offset-2 hover:text-white">
-                {cta.email}
-              </a>
-            </p>
-          </div>
+      <div className="shell relative grid items-center gap-x-16 gap-y-8 min-[992px]:grid-cols-[1fr_auto]">
+        <div data-reveal>
+          <h2 id="cta-title" className="t-h2">
+            <span className="block">{cta.h2Lines[0]}</span>
+            <span className="text-peri">{cta.h2Lines[1]}</span>
+          </h2>
+          <p className="mt-8 max-w-[54ch] text-bg/80">{cta.sub}</p>
+          <p className="mt-8 text-[14px] text-bg/[0.65]">
+            {cta.emailLead}{' '}
+            <a href={`mailto:${cta.email}`} className="text-bg underline hover:text-peri">
+              {cta.email}
+            </a>
+          </p>
+        </div>
+        <div data-reveal className="justify-self-start">
+          <Button variant="light" href="/discuss-a-project">
+            {cta.ctaPrimary}
+          </Button>
         </div>
       </div>
     </section>

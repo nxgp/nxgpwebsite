@@ -1,56 +1,91 @@
 import { cn } from '../../lib/cn'
-import { useMagnetic } from '../../hooks/useMagnetic'
 
-type Variant = 'dark' | 'light' | 'ghost'
+/**
+ * Button set from the Webflow build: square corners, 14px medium label.
+ * Only the background fades (0.32s); Webflow's other transitions are invalid
+ * in its export, so border and text colour switch instantly there too.
+ *  primary — electric blue; navy on hover (.btn-blue)
+ *  light   — soft white on navy; turns blue on hover (.btn)
+ *  ghost   — hairline outline on navy; faint fill on hover (.btn-ghost)
+ */
+type Variant = 'primary' | 'light' | 'ghost'
+type Size = 'md' | 'sm'
 
 const base =
-  'relative inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 ' +
-  'text-[0.95rem] font-700 leading-none transition-[background,color,box-shadow,transform] ' +
-  'duration-200 ease-[cubic-bezier(.22,1,.36,1)] cursor-pointer select-none whitespace-nowrap'
+  'group relative inline-flex items-center justify-center gap-3 border font-500 leading-[1.65] ' +
+  'transition-[background-color] duration-[320ms] ease-[ease] ' +
+  'cursor-pointer select-none whitespace-nowrap'
+
+const sizes: Record<Size, string> = {
+  md: 'px-[22px] py-[14px] text-[14px]',
+  // the header button (.header-btn)
+  sm: 'px-[18px] py-[10px] text-[14px]',
+}
 
 const variants: Record<Variant, string> = {
-  dark: 'bg-ink text-white shadow-sm hover:shadow-soft hover:-translate-y-0.5 active:translate-y-0',
-  light:
-    'bg-surface text-ink border border-line shadow-sm hover:border-ink/20 hover:-translate-y-0.5 active:translate-y-0',
-  ghost: 'bg-transparent text-ink hover:bg-ink/[0.05]',
+  primary: 'border-accent bg-accent text-white hover:border-navy hover:bg-navy',
+  light: 'border-bg bg-bg text-navy hover:border-accent hover:bg-accent hover:text-white',
+  ghost: 'border-bg/50 bg-transparent text-bg hover:border-bg hover:bg-bg/[0.12]',
+}
+
+/** 13px up-right arrow (Webflow .btn-icon); nudges 2px up-right on hover. */
+export function ArrowUpRight({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      aria-hidden
+      className={cn(
+        'size-[13px] shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+        className,
+      )}
+    >
+      <path d="M2 12L12 2M12 9V2H5" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  )
 }
 
 type Props = {
   children: React.ReactNode
   variant?: Variant
+  size?: Size
+  /** show the up-right arrow after the label */
+  arrow?: boolean
   href?: string
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
   className?: string
-  magnetic?: boolean
   type?: 'button' | 'submit'
 } & Record<string, unknown>
 
-/** Primary action. Magnetic by default (springs toward cursor). */
 export function Button({
   children,
-  variant = 'dark',
+  variant = 'primary',
+  size = 'md',
+  arrow = false,
   href,
   onClick,
   className,
-  magnetic = true,
   type = 'button',
   ...rest
 }: Props) {
-  const ref = useMagnetic<HTMLAnchorElement & HTMLButtonElement>(
-    magnetic ? 0.3 : 0,
+  const cls = cn(base, sizes[size], variants[variant], className)
+  const body = (
+    <>
+      {children}
+      {arrow && <ArrowUpRight />}
+    </>
   )
-  const cls = cn(base, variants[variant], className)
 
   if (href) {
     return (
-      <a ref={ref} href={href} className={cls} onClick={onClick} {...rest}>
-        {children}
+      <a href={href} className={cls} onClick={onClick} {...rest}>
+        {body}
       </a>
     )
   }
   return (
-    <button ref={ref} type={type} className={cls} onClick={onClick} {...rest}>
-      {children}
+    <button type={type} className={cls} onClick={onClick} {...rest}>
+      {body}
     </button>
   )
 }

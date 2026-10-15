@@ -3,18 +3,28 @@
 > Nx Growth Partners helps businesses design, build, and operate custom software, AI automation, internal tools, and digital products when off-the-shelf technology isn't enough. Senior operators and engineers work inside your business and ship production software in weekly increments tied to business outcomes. Founded 2018 · 40+ team members · 50+ projects delivered.
 
 Slogan: Your team, extended. From idea to production.
-Contact: hello@nxgp.io · https://nxgp.io · https://www.linkedin.com/company/nx-growth-parnters
-Discuss a project (30-minute intro call): https://calendly.com/ravi-nxgp
+Contact: hello@nxgp.io · [nxgp.io](https://nxgp.io) · [LinkedIn](https://www.linkedin.com/company/nx-growth-parnters)
+Discuss a project (30-minute intro call): [Book on Calendly](https://calendly.com/ravi-nxgp)
 
 ## Pages
 
-- https://nxgp.io/services : AI & workflow automation, software & product delivery, embedded engineering
-- https://nxgp.io/what-we-build : the operating loop, Discover, Prioritize, Deliver, Optimize
-- https://nxgp.io/industries : private equity, enterprise, government
-- https://nxgp.io/work : everything we've built, in production
-- https://nxgp.io/work/agent-hub · https://nxgp.io/work/tera · https://nxgp.io/work/kiotel · https://nxgp.io/work/wd-chat · https://nxgp.io/work/harbor · https://nxgp.io/work/convey · https://nxgp.io/work/elevano · https://nxgp.io/work/vantage : individual product pages
-- https://nxgp.io/about : the team and the numbers
-- https://nxgp.io/faq : the questions buyers ask first
+- [Services](https://nxgp.io/services): AI & workflow automation, software & product delivery, embedded engineering
+- [What we build](https://nxgp.io/what-we-build): the operating loop, Discover, Prioritize, Deliver, Optimize
+- [Industries](https://nxgp.io/industries): private equity, enterprise, government
+- [Work](https://nxgp.io/work): everything we've built, in production
+- [About](https://nxgp.io/about): the team and the numbers
+- [FAQ](https://nxgp.io/faq): the questions buyers ask first
+
+## Product pages
+
+- [Agent Hub](https://nxgp.io/work/agent-hub): agent platform & runtime, built for Western Digital
+- [Tera](https://nxgp.io/work/tera): clinical AI operator for Mentera
+- [Kiotel](https://nxgp.io/work/kiotel): company knowledge engine
+- [WD Chat](https://nxgp.io/work/wd-chat): analytics workspace for Western Digital
+- [Harbor](https://nxgp.io/work/harbor): maintenance operations platform for Harbor Industrial
+- [Convey](https://nxgp.io/work/convey): reliability & SRE agent
+- [Elevano](https://nxgp.io/work/elevano): website concierge AI
+- [Vantage](https://nxgp.io/work/vantage): reputation & pipeline platform
 
 ## Services
 
@@ -76,4 +86,4 @@ Yes. NxGP can own a complete project or embed product, engineering, AI, data, QA
 Yes. NxGP provides ongoing application support, monitoring, maintenance, optimization, and continued development for deployed systems.
 
 ---
-Last updated: 2026-08-14
+Last updated: 2026-10-13

@@ -28,7 +28,7 @@ export function ChatWidget() {
       return // storage blocked: stay quiet rather than nag on every page
     }
 
-    const t = setTimeout(() => {
+    const greet = () => {
       try {
         sessionStorage.setItem(GREETED_KEY, '1')
       } catch {
@@ -37,8 +37,23 @@ export function ChatWidget() {
       auto.current = true
       setLoaded(true)
       setOpen(true)
+    }
+    // The panel sits over the right of the first screen (the centred hero
+    // headline at 1440px), so it waits until the reader has scrolled past it.
+    const past = () => window.scrollY > window.innerHeight * 0.8
+    const onScroll = () => {
+      if (!past()) return
+      window.removeEventListener('scroll', onScroll)
+      greet()
+    }
+    const t = setTimeout(() => {
+      if (past()) greet()
+      else window.addEventListener('scroll', onScroll, { passive: true })
     }, AUTO_OPEN_DELAY)
-    return () => clearTimeout(t)
+    return () => {
+      clearTimeout(t)
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [])
 
   function close() {
@@ -74,7 +89,7 @@ export function ChatWidget() {
         aria-label={open ? 'Close chat' : 'Chat with the Nx Assistant'}
         aria-expanded={open}
         className={cn(
-          'fixed bottom-5 right-5 z-[220] flex size-14 items-center justify-center rounded-full',
+          'chat-fab fixed bottom-5 right-5 z-[220] flex size-14 items-center justify-center rounded-full',
           'bg-accent text-white shadow-lg transition-transform duration-200 ease-[cubic-bezier(.22,1,.36,1)]',
           'hover:scale-105 active:scale-95',
         )}
