@@ -64,12 +64,15 @@ export function Nav({ home = true }: { home?: boolean }) {
     }
   }, [open])
 
-  /** On the home page a link scrolls to its section; elsewhere it goes to /#id. */
-  const linkProps = (id: string, after?: () => void) => ({
-    href: home ? `#${id}` : `/#${id}`,
+  /**
+   * On the home page a section link scrolls to its section; elsewhere it goes
+   * to /#id. A page link (Blog) just navigates.
+   */
+  const linkProps = ({ id, href }: { id?: string; href?: string }, after?: () => void) => ({
+    href: href ?? (home ? `#${id}` : `/#${id}`),
     onClick: (e: React.MouseEvent) => {
       after?.()
-      if (!home || !document.getElementById(id)) return
+      if (href || !id || !home || !document.getElementById(id)) return
       e.preventDefault()
       scrollToId(id)
     },
@@ -115,8 +118,8 @@ export function Nav({ home = true }: { home?: boolean }) {
             <div className="flex items-center">
               {nav.links.map((l) => (
                 <a
-                  key={l.id}
-                  {...linkProps(l.id)}
+                  key={l.label}
+                  {...linkProps(l)}
                   className={cn(
                     'px-4 py-3 text-[14px] transition-colors duration-[320ms] ease-[ease]',
                     light ? 'text-ink hover:text-accent' : 'text-bg/[0.82] hover:text-bg',
@@ -176,8 +179,8 @@ export function Nav({ home = true }: { home?: boolean }) {
       >
         {nav.drawer.map((l) => (
           <a
-            key={l.id}
-            {...linkProps(l.id, () => {
+            key={l.label}
+            {...linkProps(l, () => {
               restore.current = false
               setOpen(false)
             })}

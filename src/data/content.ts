@@ -15,7 +15,8 @@
 export const brand = 'Nx Growth Partners'
 
 // Header links jump to home-page sections (v2 is a single scroll; inner
-// pages link back to /#id).
+// pages link back to /#id). Blog isn't in the Webflow build: it's a page
+// link, added so crawlers reach the blog from the header, not only the footer.
 export const nav = {
   brand,
   links: [
@@ -24,6 +25,7 @@ export const nav = {
     { label: 'Work', id: 'work' },
     { label: 'Industries', id: 'industries' },
     { label: 'Company', id: 'company' },
+    { label: 'Blog', href: '/blog' },
   ],
   // the mobile drawer spells Platform out and adds FAQ (Webflow build)
   drawer: [
@@ -33,6 +35,7 @@ export const nav = {
     { label: 'Industries', id: 'industries' },
     { label: 'Company', id: 'company' },
     { label: 'FAQ', id: 'faq' },
+    { label: 'Blog', href: '/blog' },
   ],
   cta: 'Discuss a project',
 }
