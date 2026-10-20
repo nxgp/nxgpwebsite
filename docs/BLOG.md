@@ -55,3 +55,16 @@ A published post appears once the site rebuilds. Wire that up once:
    - Filter (recommended): content type equals `pageBlogPost`
 
 Publishing then triggers a deploy and the post is live in a minute or two.
+
+## Getting crawled
+
+- **Google** reads `sitemap.xml`. Each post's `<lastmod>` is its Contentful
+  `updatedAt` and `/blog` carries the newest post's date; pages with no real
+  modified date omit the tag rather than report the build date.
+- **Bing and other IndexNow engines** are pinged by `/api/indexnow`, which
+  Vercel Cron runs daily (needs `CRON_SECRET`). It submits every sitemap URL
+  whose `<lastmod>` is in the last 26 hours. To submit the whole site once:
+
+  ```bash
+  curl -H "Authorization: Bearer $CRON_SECRET" "https://nxgp.io/api/indexnow?all=1"
+  ```

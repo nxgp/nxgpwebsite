@@ -37,6 +37,9 @@ export type Route = {
   main: () => React.ReactNode
   /** extra JSON-LD nodes beyond WebPage + BreadcrumbList */
   jsonLd?: () => object[]
+  /** sitemap <lastmod> — only where we know when the content really changed;
+   *  pages without one omit the tag rather than claim the build date */
+  lastmod?: string
 }
 
 const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, n - 1).trimEnd() + '…')
@@ -70,6 +73,7 @@ const blogRoutes: Route[] = posts.map((post) => ({
   title: clip(post.seoTitle ?? `${post.title} | Nx Growth Partners`, 62),
   description: clip(post.seoDescription ?? post.description),
   crumbs: [home, blogCrumb, { label: post.title, href: `/blog/${post.slug}` }],
+  lastmod: post.updatedAt,
   main: () => <BlogPostPage post={post} />,
   jsonLd: () => [
     {
@@ -181,6 +185,8 @@ export const ROUTES: Route[] = [
       'Notes from the team on building custom software, AI automation and internal tools that people actually use.',
     ),
     crumbs: [home, blogCrumb],
+    // the index changes whenever any post does
+    lastmod: posts.map((p) => p.updatedAt).sort().at(-1),
     main: () => (
       <>
         <PageHeader
