@@ -6,7 +6,8 @@
  * Runs after `vite build` (client) + `vite build --ssr` (server bundle).
  *   dist/index.html            — home (full scroll)
  *   dist/<route>/index.html    — one per route in src/routes.tsx
- *   dist/sitemap.xml           — generated, build-dated
+ *   dist/sitemap.xml           — generated; <lastmod> only where a route knows
+ *                                its real modified date (blog posts + index)
  */
 import { readFileSync, writeFileSync, rmSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
@@ -119,10 +120,16 @@ for (const rel of ['privacy.html', '404.html']) {
 
 /* ---------- sitemap, from the same table ---------- */
 
-const today = new Date().toISOString().slice(0, 10)
+// No build-date fallback: stamping every URL with today's date on every deploy
+// teaches Google to ignore our lastmod entirely. A missing tag is neutral.
+// /api/indexnow reads these dates back to decide what to submit.
 const urls = [
   { loc: `${SITE}/`, priority: '1.0' },
-  ...ROUTES.map((r) => ({ loc: `${SITE}${r.path}`, priority: r.path.startsWith('/work/') ? '0.7' : '0.8' })),
+  ...ROUTES.map((r) => ({
+    loc: `${SITE}${r.path}`,
+    lastmod: r.lastmod,
+    priority: r.path.startsWith('/work/') ? '0.7' : '0.8',
+  })),
   { loc: `${SITE}/privacy`, priority: '0.2' },
 ]
 const sitemap =
@@ -131,7 +138,9 @@ const sitemap =
   urls
     .map(
       (u) =>
-        `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${u.priority}</priority>\n  </url>`,
+        `  <url>\n    <loc>${u.loc}</loc>\n` +
+        (u.lastmod ? `    <lastmod>${u.lastmod}</lastmod>\n` : '') +
+        `    <priority>${u.priority}</priority>\n  </url>`,
     )
     .join('\n') +
   `\n</urlset>\n`
