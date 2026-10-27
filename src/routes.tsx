@@ -1,4 +1,4 @@
-import { services, industries, portfolio, about, faq, operatingModel } from './data/content'
+import { services, industries, portfolio, about, faq, operatingModel, findDevelopers } from './data/content'
 import { Services } from './components/Services'
 import { Engagement } from './components/Engagement'
 import { Industries } from './components/Industries'
@@ -11,6 +11,7 @@ import { PageHeader, type Crumb } from './pages/PageHeader'
 import { ProductPage } from './pages/ProductPage'
 import { BlogIndex } from './pages/BlogIndex'
 import { DiscussProject } from './pages/DiscussProject'
+import { FindDevelopers } from './pages/FindDevelopers'
 import { BlogPostPage } from './pages/BlogPostPage'
 import { posts } from './data/blog.generated'
 
@@ -46,6 +47,8 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, n - 1).trim
 
 const home: Crumb = { label: 'Home', href: '/' }
 const workCrumb: Crumb = { label: 'Work', href: '/work' }
+const servicesCrumb: Crumb = { label: 'Services', href: '/services' }
+const findDevCrumbs: Crumb[] = [home, servicesCrumb, { label: 'Find developers', href: '/services/find-developers' }]
 
 const productRoutes: Route[] = portfolio.products.map((p) => ({
   path: `/work/${p.slug}`,
@@ -104,6 +107,32 @@ export const ROUTES: Route[] = [
         <Engagement />
       </>
     ),
+  },
+  {
+    path: '/services/find-developers',
+    title: 'Hire Offshore Software Developers | Nx Growth Partners',
+    // first sentence of the hero copy: the whole paragraph clips mid-word
+    description: clip(findDevelopers.hero.sub.split(/(?<=\.) /)[0]),
+    crumbs: findDevCrumbs,
+    main: () => <FindDevelopers crumbs={findDevCrumbs} />,
+    jsonLd: () => [
+      {
+        '@type': 'Service',
+        name: 'Contract software developers',
+        description: findDevelopers.hero.sub,
+        serviceType: 'Software engineering staff augmentation',
+        provider: { '@type': 'Organization', name: 'Nx Growth Partners', url: 'https://nxgp.io' },
+        url: 'https://nxgp.io/services/find-developers',
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: findDevelopers.faq.items.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+    ],
   },
   {
     path: '/what-we-build',

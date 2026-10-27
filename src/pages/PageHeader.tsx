@@ -9,10 +9,16 @@ export function PageHeader({
   crumbs,
   title,
   sub,
+  eyebrow,
+  children,
 }: {
   crumbs: Crumb[]
   title: string
   sub?: string
+  /** small caps label above the h1 */
+  eyebrow?: string
+  /** anything after the sub, e.g. a button and a supporting line */
+  children?: React.ReactNode
 }) {
   return (
     <div className="shell pb-2 pt-[calc(var(--nav-h)+clamp(28px,5vw,56px))]">
@@ -34,8 +40,10 @@ export function PageHeader({
           ))}
         </ol>
       </nav>
-      <h1 className="t-h2 mt-4 max-w-[46rem]">{title}</h1>
+      {eyebrow && <p className="t-eyebrow mt-6">{eyebrow}</p>}
+      <h1 className={eyebrow ? 't-h2 mt-3 max-w-[46rem]' : 't-h2 mt-4 max-w-[46rem]'}>{title}</h1>
       {sub && <p className="t-lead mt-5 max-w-[46rem]">{sub}</p>}
+      {children}
     </div>
   )
 }

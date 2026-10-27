@@ -17,9 +17,18 @@ export const brand = 'Nx Growth Partners'
 // Header links jump to home-page sections (v2 is a single scroll; inner
 // pages link back to /#id). Blog isn't in the Webflow build: it's a page
 // link, added so crawlers reach the blog from the header, not only the footer.
+// Services is a small dropdown so the service pages are reachable from every
+// page; it isn't in the Webflow build either.
 export const nav = {
   brand,
   links: [
+    {
+      label: 'Services',
+      children: [
+        { label: 'Overview', href: '/services' },
+        { label: 'Find developers', href: '/services/find-developers' },
+      ],
+    },
     { label: 'Approach', id: 'approach' },
     { label: 'Platform', id: 'system' },
     { label: 'Work', id: 'work' },
@@ -29,6 +38,8 @@ export const nav = {
   ],
   // the mobile drawer spells Platform out and adds FAQ (Webflow build)
   drawer: [
+    { label: 'Services', href: '/services' },
+    { label: 'Find developers', href: '/services/find-developers' },
     { label: 'Approach', id: 'approach' },
     { label: 'The Nx delivery system', id: 'system' },
     { label: 'Work', id: 'work' },
@@ -174,6 +185,122 @@ export const engagement = {
       tags: ['Operation', 'Monitoring', 'Continuous improvement'],
     },
   ] as Engagement[],
+}
+
+export type Capability = {
+  /** reserved for a future /services/find-developers/<slug> subpage */
+  slug: string
+  title: string
+  body: string
+  icon: string
+}
+
+// FIND DEVELOPERS — /services/find-developers, contract engineers
+// (staff augmentation). Copy from Gurjeet's "Services Pages" doc. Every
+// action goes to the form with the "Contract developers" option preselected.
+export const findDevelopers = {
+  ctaHref: '/discuss-a-project?interest=developers',
+  hero: {
+    eyebrow: 'Software engineering staff augmentation',
+    h1: 'Hire developers matched to your project.',
+    sub: 'Bring on contract software engineers selected to match your technical requirements, project goals, and budget. We help define the support you need, share relevant candidate profiles, and coordinate interviews so you can choose the right fit.',
+    cta: 'Find Talent',
+    note: 'Nx Growth Partners has staffed 50+ software projects. We help you find offshore engineers with the skills and experience your project needs.',
+  },
+  when: {
+    h2: 'Get the engineering support your next priority needs.',
+    sub: 'Whether you have a defined role or need help figuring out who to bring on, we start with the work you need to accomplish.',
+    items: [
+      { title: 'Add engineering capacity', body: 'Support your roadmap with contract developers who work alongside your internal team, using your tools and development process.', icon: 'UserPlus' },
+      { title: 'Fill a specialist gap', body: 'Bring in experience your team needs for a specific initiative, from backend integrations and cloud infrastructure to data pipelines and AI applications.', icon: 'Puzzle' },
+      { title: 'Build a project team', body: 'Bring together complementary engineering skills for a new application, modernization effort, or internal platform.', icon: 'Users' },
+    ],
+  },
+  capabilities: {
+    h2: 'Find developers with relevant technical experience.',
+    sub: 'We match engineers around the technologies involved, the complexity of the work, and the experience needed to contribute.',
+    items: [
+      { slug: 'full-stack-developers', title: 'Full-stack development', body: 'Build and extend applications across the frontend, backend, and database.', icon: 'Layers' },
+      { slug: 'frontend-developers', title: 'Frontend development', body: 'Create responsive interfaces and improve existing web applications.', icon: 'MonitorSmartphone' },
+      { slug: 'backend-developers', title: 'Backend development & integrations', body: 'Develop APIs, application services, and integrations between your business systems.', icon: 'Server' },
+      { slug: 'ai-engineers', title: 'AI applications & automation', body: 'Connect AI models, business data, and software tools to support practical workflows.', icon: 'Sparkles' },
+      { slug: 'forward-deployed-engineers', title: 'Forward-deployed engineering', body: 'Work directly with your team to turn business requirements into working software, integrations, and AI workflows.', icon: 'Handshake' },
+      { slug: 'data-engineers', title: 'Data engineering', body: 'Build pipelines, connect data sources, and prepare reliable data for reporting and applications.', icon: 'Database' },
+      { slug: 'devops-engineers', title: 'DevOps & cloud infrastructure', body: 'Improve deployment pipelines, cloud environments, monitoring, and infrastructure reliability.', icon: 'Cloud' },
+      { slug: 'qa-engineers', title: 'QA & test automation', body: 'Strengthen release quality through testing, automated coverage, and clear defect reporting.', icon: 'ShieldCheck' },
+    ] as Capability[],
+    foot: 'Don’t know which role you need? Describe the project, and we’ll help clarify the skills and experience to look for.',
+    cta: 'Tell Us About Your Project',
+  },
+  how: {
+    h2: 'From project requirements to relevant developer profiles.',
+    steps: [
+      { n: '01', title: 'Tell us what you need', body: 'Share what you’re building, where you need support, and your priorities for timing and budget. You don’t need a finished job description.' },
+      { n: '02', title: 'Define the right fit', body: 'We clarify the technical requirements, experience level, expected hours, and working arrangement. We also establish who will manage the work.' },
+      { n: '03', title: 'Review relevant profiles', body: 'We share a focused shortlist with each engineer’s background, relevant project experience, availability, pricing, and our reasoning for recommending them.' },
+      { n: '04', title: 'Meet your preferred engineers', body: 'Interview the candidates, discuss your project, and assess how they would work with your team.' },
+      { n: '05', title: 'Agree on terms and get started', body: 'Confirm the engagement scope, hours, working overlap, and onboarding requirements before work begins.' },
+    ] as LoopStep[],
+    note: 'Profile availability and start dates depend on the requirements and are confirmed during the matching process.',
+  },
+  profiles: {
+    h2: 'See why each engineer could fit your project.',
+    sub: 'Every recommendation should help you make a decision. Alongside technical skills and experience, we explain how the engineer’s background connects to your needs.',
+    listLabel: 'Each profile includes:',
+    list: [
+      'Role, experience level, and primary technical skills.',
+      'Relevant projects and individual contributions.',
+      'Why we recommend them for your requirements.',
+      'Technical assessment summary.',
+      'Location and available working-hour overlap.',
+      'Expected availability and weekly capacity.',
+      'Proposed rate and engagement terms.',
+    ],
+    cta: 'Request Developer Profiles',
+    // illustrative only: no real person, client or rate (per the doc, real
+    // profiles need permission and verified availability)
+    sample: {
+      badge: 'Sample profile',
+      role: 'Senior Backend Engineer',
+      experience: '8 years of experience',
+      skills: ['Node.js', 'TypeScript', 'PostgreSQL', 'AWS', 'REST & GraphQL APIs'],
+      fields: [
+        { label: 'Relevant project', value: 'Built the integration layer connecting a logistics company’s order, billing, and CRM systems.' },
+        { label: 'Why we recommend', value: 'Has delivered API integrations at a similar scale and is used to working inside an existing team’s process.' },
+        { label: 'Assessment', value: 'Strong on API design, data modelling, and code review. Clear written communication.' },
+        { label: 'Location', value: 'India' },
+        { label: 'Working-hour overlap', value: '4 hours with US Eastern' },
+        { label: 'Availability', value: 'Full-time, 40 hours a week' },
+        { label: 'Rate', value: 'Shared with your shortlist' },
+      ],
+    },
+  },
+  models: {
+    h2: 'One engineer or a team built around the work.',
+    items: [
+      { title: 'Individual contract engineer', body: 'Add a developer or specialist to your existing team. Your team owns priorities, technical direction, and day-to-day management.' },
+      { title: 'Multiple contract engineers', body: 'Bring in complementary skills across development, infrastructure, data, or QA. Agree on responsibilities and coordination before the engagement begins.' },
+      { title: 'NxGP-managed delivery', body: 'Need help leading the work as well? We can separately scope a delivery engagement with engineering leadership, coordination, and defined responsibilities.', href: '/services', linkLabel: 'See our delivery services' },
+    ] as { title: string; body: string; href?: string; linkLabel?: string }[],
+    note: 'We’ll help determine which arrangement fits your project and your internal team’s capacity.',
+  },
+  faq: {
+    h2a: 'Questions about engaging ',
+    h2Hi: 'offshore developers',
+    items: [
+      { q: 'Can we engage just one developer?', a: 'Yes. We can help with an individual contract engineer, a specialist role, or multiple engineers, depending on your requirements and availability.' },
+      { q: 'Where are your engineers based?', a: 'This offering focuses on engineers based in India. We confirm each candidate’s location, working hours, and available overlap before you decide.' },
+      { q: 'Can we interview developers before moving forward?', a: 'Yes. You can meet recommended engineers, discuss their experience, and assess their fit before agreeing to an engagement.' },
+      { q: 'What if we don’t know which technical skills we need?', a: 'Start with the problem you’re solving and what you want to accomplish. We’ll help clarify the roles, technical skills, and experience needed.' },
+      { q: 'How quickly can we receive profiles or get started?', a: 'Timing depends on the role, technical requirements, availability, and your interview and onboarding process. We confirm an expected timeline after reviewing your needs.' },
+      { q: 'Who manages the developers?', a: 'For staff augmentation engagements, your team manages priorities and day-to-day work. If you need NxGP to lead delivery, we scope and price that responsibility separately.' },
+      { q: 'Can developers work during our business hours?', a: 'We match against your required overlap and confirm the proposed schedule for each candidate. Full working-day overlap depends on availability and the engagement arrangement.' },
+      { q: 'How does pricing work?', a: 'Pricing depends on the engineer’s experience, technical specialization, committed hours, and engagement model. You receive the proposed rate and commercial terms before making a commitment.' },
+      { q: 'How long does an engagement need to be?', a: 'Duration and minimum commitments depend on the role and working arrangement. We agree on the expected term, hours, and notice requirements before work begins.' },
+      { q: 'What happens if an engineer isn’t the right fit?', a: 'Raise the concern with your NxGP contact so we can review the issue and agree on next steps. Any replacement arrangements are defined in your engagement terms.' },
+      { q: 'Can you manage the entire project?', a: 'Yes. NxGP also offers managed software delivery. If you need a team responsible for an agreed scope, tell us in your inquiry so we can discuss the appropriate engagement.' },
+    ],
+  },
 }
 
 export type Industry = {
@@ -463,6 +590,7 @@ export const footer = {
         { label: 'AI & Workflow Automation', href: '/services' },
         { label: 'Software & Product Delivery', href: '/services' },
         { label: 'Embedded Engineering', href: '/services' },
+        { label: 'Find developers', href: '/services/find-developers' },
       ],
     },
     {

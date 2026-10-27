@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { Button } from './ui/Button'
 import { LogoLockup } from './ui/Logo'
 import { nav } from '../data/content'
@@ -114,20 +115,24 @@ export function Nav({ home = true }: { home?: boolean }) {
             <LogoLockup className="h-[27px] max-md:h-6" />
           </a>
 
-          <div className="ml-auto hidden items-center gap-8 min-[992px]:flex">
+          <div className="ml-auto hidden items-center gap-8 max-[1199px]:gap-5 min-[992px]:flex">
             <div className="flex items-center">
-              {nav.links.map((l) => (
-                <a
-                  key={l.label}
-                  {...linkProps(l)}
-                  className={cn(
-                    'px-4 py-3 text-[14px] transition-colors duration-[320ms] ease-[ease]',
-                    light ? 'text-ink hover:text-accent' : 'text-bg/[0.82] hover:text-bg',
-                  )}
-                >
-                  {l.label}
-                </a>
-              ))}
+              {nav.links.map((l) =>
+                l.children ? (
+                  <NavMenu key={l.label} label={l.label} items={l.children} light={light} />
+                ) : (
+                  <a
+                    key={l.label}
+                    {...linkProps(l)}
+                    className={cn(
+                      'px-4 py-3 max-[1199px]:px-2.5 text-[14px] transition-colors duration-[320ms] ease-[ease]',
+                      light ? 'text-ink hover:text-accent' : 'text-bg/[0.82] hover:text-bg',
+                    )}
+                  >
+                    {l.label}
+                  </a>
+                ),
+              )}
             </div>
             <Button size="sm" href="/discuss-a-project">
               {nav.cta}
@@ -201,5 +206,86 @@ export function Nav({ home = true }: { home?: boolean }) {
         </Button>
       </nav>
     </>
+  )
+}
+
+/**
+ * Header dropdown (desktop only): a disclosure button over a short list of
+ * page links. Enter/Space toggle it (native button), Esc closes it and puts
+ * focus back on the button, and a click or focus outside closes it. The
+ * panel is always light so it reads over the navy hero too.
+ */
+function NavMenu({
+  label,
+  items,
+  light,
+}: {
+  label: string
+  items: { label: string; href: string }[]
+  light: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const root = useRef<HTMLDivElement>(null)
+  const button = useRef<HTMLButtonElement>(null)
+  const id = `nav-menu-${label.toLowerCase()}`
+
+  useEffect(() => {
+    if (!open) return
+    const outside = (e: Event) => {
+      if (!root.current?.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      setOpen(false)
+      button.current?.focus()
+    }
+    document.addEventListener('pointerdown', outside)
+    document.addEventListener('focusin', outside)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', outside)
+      document.removeEventListener('focusin', outside)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <div ref={root} className="relative">
+      <button
+        ref={button}
+        type="button"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          'flex items-center gap-1.5 px-4 py-3 max-[1199px]:px-2.5 text-[14px] transition-colors duration-[320ms] ease-[ease]',
+          light ? 'text-ink hover:text-accent' : 'text-bg/[0.82] hover:text-bg',
+        )}
+      >
+        {label}
+        <ChevronDown
+          aria-hidden
+          className={cn('size-3.5 transition-transform duration-[320ms] ease-[ease]', open && 'rotate-180')}
+        />
+      </button>
+      <ul
+        id={id}
+        className={cn(
+          'absolute left-2 top-full mt-1 min-w-[200px] border border-navy/10 bg-bg py-2 shadow-lg transition-[opacity,visibility] duration-[320ms] ease-[ease]',
+          open ? 'visible opacity-100' : 'invisible opacity-0',
+        )}
+      >
+        {items.map((it) => (
+          <li key={it.href}>
+            <a
+              href={it.href}
+              className="block px-4 py-2.5 text-[14px] text-ink transition-colors duration-[320ms] ease-[ease] hover:bg-cloud hover:text-accent"
+            >
+              {it.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
