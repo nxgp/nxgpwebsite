@@ -128,6 +128,8 @@ export type Pillar = { title: string; outcome: string; body: string; caps: strin
 export const services = {
   h2: 'Three pillars. One embedded team.',
   sub: 'Engage one pillar, or a cross-functional team across all three. Each is led by the outcome, and the capabilities are the proof of range.',
+  // shown under the /services page header
+  devLink: { lead: 'Looking for contract developers?', label: 'Find developers', href: '/services/find-developers' },
   pillars: [
     {
       title: 'AI & Workflow Automation',
@@ -205,7 +207,7 @@ export const findDevelopers = {
     h1: 'Hire developers matched to your project.',
     sub: 'Bring on contract software engineers selected to match your technical requirements, project goals, and budget. We help define the support you need, share relevant candidate profiles, and coordinate interviews so you can choose the right fit.',
     cta: 'Find Talent',
-    note: 'Nx Growth Partners has staffed 50+ software projects. We help you find offshore engineers with the skills and experience your project needs.',
+    note: 'Nx Growth Partners has delivered 50+ software projects. We help you find offshore engineers with the skills and experience your project needs.',
   },
   when: {
     h2: 'Get the engineering support your next priority needs.',
