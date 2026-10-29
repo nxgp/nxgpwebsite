@@ -243,7 +243,6 @@ export const findDevelopers = {
       { n: '04', title: 'Meet your preferred engineers', body: 'Interview the candidates, discuss your project, and assess how they would work with your team.' },
       { n: '05', title: 'Agree on terms and get started', body: 'Confirm the engagement scope, hours, working overlap, and onboarding requirements before work begins.' },
     ] as LoopStep[],
-    note: 'Profile availability and start dates depend on the requirements and are confirmed during the matching process.',
   },
   profiles: {
     h2: 'See why each engineer could fit your project.',
@@ -284,7 +283,6 @@ export const findDevelopers = {
       { title: 'Multiple contract engineers', body: 'Bring in complementary skills across development, infrastructure, data, or QA. Agree on responsibilities and coordination before the engagement begins.' },
       { title: 'NxGP-managed delivery', body: 'Need help leading the work as well? We can separately scope a delivery engagement with engineering leadership, coordination, and defined responsibilities.', href: '/services', linkLabel: 'See our delivery services' },
     ] as { title: string; body: string; href?: string; linkLabel?: string }[],
-    note: 'We’ll help determine which arrangement fits your project and your internal team’s capacity.',
   },
   faq: {
     h2a: 'Questions about engaging ',

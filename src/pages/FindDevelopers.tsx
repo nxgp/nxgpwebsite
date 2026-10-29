@@ -20,7 +20,7 @@ import { Card } from '../components/ui/Card'
 import { SectionHeader } from '../components/ui/SectionHeader'
 import { useActiveOnScroll } from '../hooks/useActiveOnScroll'
 import { cn } from '../lib/cn'
-import { PageHeader, type Crumb } from './PageHeader'
+import { PageHeader } from './PageHeader'
 
 /**
  * /services/find-developers — contract engineers (staff augmentation).
@@ -44,10 +44,10 @@ const icons: Record<string, LucideIcon> = {
 
 const { ctaHref, hero, when, capabilities, how, profiles, models, faq } = findDevelopers
 
-export function FindDevelopers({ crumbs }: { crumbs: Crumb[] }) {
+export function FindDevelopers() {
   return (
     <>
-      <PageHeader crumbs={crumbs} eyebrow={hero.eyebrow} title={hero.h1} sub={hero.sub}>
+      <PageHeader eyebrow={hero.eyebrow} title={hero.h1} sub={hero.sub}>
         <div className="mt-8 pb-10">
           <Button href={ctaHref} arrow>
             {hero.cta}
@@ -154,9 +154,6 @@ function HowItWorks() {
             </li>
           ))}
         </ol>
-        <p data-reveal className="mt-6 text-[14px] text-slate">
-          {how.note}
-        </p>
       </div>
     </section>
   )
@@ -237,9 +234,6 @@ function Models() {
             </li>
           ))}
         </ul>
-        <p data-reveal className="mt-6 text-[14px] text-slate">
-          {models.note}
-        </p>
       </div>
     </section>
   )

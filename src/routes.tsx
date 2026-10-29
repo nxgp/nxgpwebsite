@@ -121,7 +121,7 @@ export const ROUTES: Route[] = [
     // first sentence of the hero copy: the whole paragraph clips mid-word
     description: clip(findDevelopers.hero.sub.split(/(?<=\.) /)[0]),
     crumbs: findDevCrumbs,
-    main: () => <FindDevelopers crumbs={findDevCrumbs} />,
+    main: () => <FindDevelopers />,
     jsonLd: () => [
       {
         '@type': 'Service',
