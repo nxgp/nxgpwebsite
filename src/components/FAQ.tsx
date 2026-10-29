@@ -6,17 +6,30 @@ import { cn } from '../lib/cn'
  * FAQ, built to the Webflow build: heading and email prompt beside a
  * one-open-at-a-time accordion. The plus closes to a minus and the answer
  * opens over 0.32s.
+ *
+ * Defaults to the site-wide FAQ; service pages pass their own heading and
+ * items, plus an idPrefix so the section and accordion ids stay unique.
  */
-export function FAQ() {
+export function FAQ({
+  h2a = faq.h2a,
+  h2Hi = faq.h2Hi,
+  items = faq.items,
+  idPrefix = 'faq',
+}: {
+  h2a?: string
+  h2Hi?: string
+  items?: { q: string; a: string }[]
+  idPrefix?: string
+} = {}) {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section id="faq" aria-labelledby="faq-title" className="section-v2 bg-bg text-ink">
+    <section id={idPrefix} aria-labelledby={`${idPrefix}-title`} className="section-v2 bg-bg text-ink">
       <div className="shell grid items-start gap-x-[72px] gap-y-8 min-[992px]:grid-cols-[0.62fr_1fr]">
         <div data-reveal>
-          <h2 id="faq-title" className="t-h2 text-navy">
-            <span className="block">{faq.h2a.trim()}</span>
-            <span className="text-accent">{faq.h2Hi}.</span>
+          <h2 id={`${idPrefix}-title`} className="t-h2 text-navy">
+            <span className="block">{h2a.trim()}</span>
+            <span className="text-accent">{h2Hi}.</span>
           </h2>
           <p className="t-lead mt-6 max-w-[58ch]">
             {faq.sub}{' '}
@@ -27,9 +40,9 @@ export function FAQ() {
         </div>
 
         <div data-reveal className="border-t border-hairline">
-          {faq.items.map((item, i) => {
+          {items.map((item, i) => {
             const isOpen = open === i
-            const id = `faq-${i}`
+            const id = `${idPrefix}-${i}`
             return (
               <div key={item.q} className="border-b border-hairline">
                 <h3>
