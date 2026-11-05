@@ -1,35 +1,59 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) — GA4 property G-NXKF7HCKNV.
-         Two deliberate deviations from Google's copy-paste snippet:
+    <!-- Google tag (gtag.js) — GA4 property G-NXKF7HCKNV — and Google Tag
+         Manager (GTM) container GTM_CONTAINER_ID below. Both share one
+         dataLayer and one loader.
+         - GA4 is wired directly here with gtag.js and owns page views and the
+           app's track() events (src/lib/analytics.ts). Do NOT also add a GA4 /
+           Google tag inside the GTM container: that would double-count.
+         - GTM is for marketing tags, which are managed in the GTM web UI, not
+           in code. Apollo.io website visitor tracking is the first. Anything
+           added there must be disclosed on /privacy.
+         Deliberate deviations from Google's copy-paste snippets:
          1. Loads on the production host only, so Vercel preview deploys and
-            local dev don't pollute the property with fake sessions.
-         2. Measurement only — Google Signals and ad-personalization signals
-            are off, so this stays analytics and never becomes ad tracking
-            (what /privacy promises). Turn them on only if NxGP ever runs
-            Google Ads remarketing.
-         3. The gtag.js fetch waits for the page to load and go idle, so it
-            never competes with the hero, fonts or app bundle. Calls made
-            before then queue in dataLayer and are sent once it arrives.
+            local dev don't pollute GA4 or fire GTM tags with fake sessions.
+         2. GA4 is measurement only — Google Signals and ad-personalization
+            signals are off, so GA4 never becomes ad tracking. Turn them on
+            only if NxGP ever runs Google Ads remarketing.
+         3. The gtag.js and gtm.js fetches wait for the page to load and go
+            idle, so they never compete with the hero, fonts or app bundle.
+            Calls made before then queue in dataLayer and are sent once the
+            scripts arrive.
+         4. No GTM <noscript> iframe: the tags it manages need JavaScript anyway.
          `gtag` is defined either way, so event calls elsewhere in the app are
          no-ops off production rather than errors. Navigation is full page
-         loads (no client router), so page_view fires naturally per page. -->
+         loads (no client router), so page_view fires naturally per page.
+         scripts/prerender.mjs copies this whole block (comment to the first
+         closing script tag) into /privacy and /404, so keep it one block. -->
     <script>
       window.dataLayer = window.dataLayer || []
       function gtag() {
         dataLayer.push(arguments)
       }
       if (location.hostname === 'nxgp.io' || location.hostname === 'www.nxgp.io') {
+        // "nxgp.io" web container in the "Nx Growth Partners" GTM account
+        var GTM_CONTAINER_ID = 'GTM-ML9S2DZV'
         var loadGa = function () {
           var gaScript = document.createElement('script')
           gaScript.async = true
           gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-NXKF7HCKNV'
           document.head.appendChild(gaScript)
         }
+        var loadGtm = function () {
+          dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' })
+          var gtmScript = document.createElement('script')
+          gtmScript.async = true
+          gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_CONTAINER_ID
+          document.head.appendChild(gtmScript)
+        }
+        var loadTags = function () {
+          loadGa()
+          loadGtm()
+        }
         addEventListener('load', function () {
-          if ('requestIdleCallback' in window) requestIdleCallback(loadGa, { timeout: 4000 })
-          else setTimeout(loadGa, 1500)
+          if ('requestIdleCallback' in window) requestIdleCallback(loadTags, { timeout: 4000 })
+          else setTimeout(loadTags, 1500)
         })
         gtag('js', new Date())
         gtag('config', 'G-NXKF7HCKNV', {
