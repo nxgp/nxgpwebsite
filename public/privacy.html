@@ -58,7 +58,7 @@
       </header>
 
       <h1>Privacy notice</h1>
-      <p class="updated">Last updated: August 7, 2026</p>
+      <p class="updated">Last updated: November 5, 2026</p>
 
       <p>
         This page explains what data nxgp.io collects and how it is used. It is written to be
@@ -89,13 +89,24 @@
       </p>
       <ul>
         <li><strong>Measurement only.</strong> We've switched off Google Signals and ad-personalization signals, so this data is not used to build an advertising profile of you or to retarget you elsewhere.</li>
-        <li><strong>No profiles from us.</strong> We look at aggregate patterns, not individuals, and we don't join analytics data to the contact details you share with the assistant.</li>
+        <li><strong>No profiles from us.</strong> We look at Google Analytics data as aggregate patterns, not individuals, and we don't join it to the contact details you share with the assistant.</li>
         <li><strong>Opting out.</strong> Blocking cookies for this site, using a tracker-blocking extension, or Google's <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">opt-out add-on</a> all stop this collection. Nothing on the site stops working if you do.</li>
+      </ul>
+      <p>
+        We also use Apollo.io to identify the organizations that visit the site, so our sales
+        team can see which companies are interested in our services and follow up with them.
+        Apollo's tracker works out which company a visit most likely comes from by matching your
+        IP address and similar signals against its business database.
+      </p>
+      <ul>
+        <li><strong>What it collects.</strong> The pages you view and when, your IP address, and general device and browser details. It may use cookies or similar browser storage to recognize a returning visit.</li>
+        <li><strong>How we use it.</strong> For business-to-business sales outreach: deciding which organizations to contact about working with us.</li>
+        <li><strong>Opting out.</strong> Blocking cookies for this site or using a tracker-blocking extension stops this collection. Nothing on the site stops working if you do.</li>
       </ul>
 
       <h2>What we don't do</h2>
       <ul>
-        <li>No advertising trackers, no retargeting pixels, no fingerprinting.</li>
+        <li>No ad retargeting pixels.</li>
         <li>We do not sell or rent your information to anyone.</li>
         <li>We do not use your conversations to train AI models, only to look up patterns as described above.</li>
       </ul>
@@ -103,7 +114,9 @@
       <h2>Technical basics</h2>
       <p>
         The site is hosted on Vercel; conversation data and inquiries are stored with Supabase;
-        site analytics are processed by Google. IP addresses are used transiently for rate
+        site analytics are processed by Google; visitor identification is processed by Apollo.io
+        under its own privacy terms. Apollo's tracker is loaded through Google Tag Manager, which
+        we use to manage the site's marketing tags. IP addresses are used transiently for rate
         limiting (abuse prevention). If you book a call, scheduling is handled by Calendly under
         its own privacy terms.
       </p>
