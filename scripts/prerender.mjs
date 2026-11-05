@@ -104,7 +104,10 @@ for (const route of ROUTES) {
    /privacy and 404 are plain files in public/, so they never pass through
    the template above and would otherwise be the only untracked pages (404s
    are worth seeing — they show broken inbound links). Inject the SAME
-   snippet from the template rather than keeping copies in sync by hand. */
+   snippet from the template rather than keeping copies in sync by hand.
+   That one <script> block carries both GA4 (gtag.js) and the Google Tag
+   Manager loader (gtm.js), so GTM-managed tags (Apollo) reach these pages too.
+   The skip check keys off GA4's URL; both always ship together. */
 
 const gtagSnippet = template.match(/<!-- Google tag \(gtag\.js\)[\s\S]*?<\/script>/)
 if (!gtagSnippet) throw new Error('prerender: Google tag snippet not found in index.html')
