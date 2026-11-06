@@ -9,6 +9,7 @@ Discuss a project (30-minute intro call): [Book on Calendly](https://calendly.co
 ## Pages
 
 - [Services](https://nxgp.io/services): AI & workflow automation, software & product delivery, embedded engineering
+- [Find developers](https://nxgp.io/services/find-developers): contract software engineers based in India (staff augmentation), matched to your project; you manage the day-to-day work
 - [What we build](https://nxgp.io/what-we-build): the operating loop, Discover, Prioritize, Deliver, Optimize
 - [Industries](https://nxgp.io/industries): private equity, enterprise, government
 - [Work](https://nxgp.io/work): everything we've built, in production

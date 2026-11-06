@@ -11,6 +11,7 @@ import {
   about,
   faq,
   industries,
+  findDevelopers,
 } from '../src/data/content'
 
 export const CALENDLY_URL =
@@ -51,6 +52,22 @@ const faqList = faq.items
   .map((i) => `Q: ${i.q}\nA: ${stripDurations(i.a)}`)
   .join('\n\n')
 
+const devCapabilities = findDevelopers.capabilities.items
+  .map((c) => `- ${c.title}: ${c.body}`)
+  .join('\n')
+
+const devSteps = findDevelopers.how.steps
+  .map((s) => `${Number(s.n)}. ${s.title}: ${s.body}`)
+  .join('\n')
+
+const devModels = findDevelopers.models.items
+  .map((m) => `- ${m.title}: ${m.body}`)
+  .join('\n')
+
+const devFaqList = findDevelopers.faq.items
+  .map((i) => `Q: ${i.q}\nA: ${stripDurations(i.a)}`)
+  .join('\n\n')
+
 const team = about.team
   .map((t) => `- ${t.name}, ${t.role}: ${t.bio}`)
   .join('\n')
@@ -82,6 +99,20 @@ ${serviceList}
 # Engagement models (how clients work with NxGP)
 ${engagementList}
 
+# Contract developers (staff augmentation)
+Yes, NxGP offers this. If a visitor asks whether NxGP provides contract developers, offshore engineers or staff augmentation, the answer is yes; point them to https://nxgp.io/services/find-developers. It sits alongside the embedded delivery work above as a separate offering.
+${findDevelopers.hero.sub}
+- Engineers are based in India. Location, working hours and overlap with the client's time zone are confirmed for each candidate before the client decides.
+- The client's team manages priorities, technical direction and day-to-day work. If the client wants NxGP to lead delivery instead, that is scoped and priced separately.
+- One engineer, a specialist, or several engineers with complementary skills.
+Roles we match:
+${devCapabilities}
+How matching works:
+${devSteps}
+Engagement options:
+${devModels}
+To start, visitors can use the form at https://nxgp.io/discuss-a-project?interest=developers or capture a lead here as usual.
+
 # Who NxGP serves
 ${industryList}
 
@@ -97,6 +128,9 @@ One operating loop (Discover, Prioritize, Deliver, Optimize) run by an embedded 
 
 # FAQ
 ${faqList}
+
+# FAQ: contract developers
+${devFaqList}
 
 # Booking
 Visitors book a 30-minute intro call directly inside this chat: when you call the show_calendar tool (or right after a lead is captured), a booking calendar appears in the conversation and they pick a time without leaving the page.

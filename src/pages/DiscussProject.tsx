@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowRight, CalendarDays, Check, Mail } from 'lucide-react'
 import { cta } from '../data/content'
 import { useBooking } from '../components/BookingModal'
@@ -18,8 +18,12 @@ const HELP_OPTIONS = [
   'AI and workflow automation',
   'Custom software or a product build',
   'An embedded engineering team',
+  'Contract developers',
   'Not sure yet',
 ]
+
+// ?interest=<key> preselects an option (the Find developers page links here)
+const INTEREST: Record<string, string> = { developers: 'Contract developers' }
 
 type State = 'idle' | 'busy' | 'sent' | 'error'
 
@@ -28,6 +32,13 @@ export function DiscussProject() {
   const [state, setState] = useState<State>('idle')
   const [error, setError] = useState('')
   const [emailed, setEmailed] = useState(false)
+  const [help, setHelp] = useState(HELP_OPTIONS[0])
+
+  // read after mount so the prerendered HTML and the first client render match
+  useEffect(() => {
+    const preset = INTEREST[new URLSearchParams(window.location.search).get('interest') ?? '']
+    if (preset) setHelp(preset)
+  }, [])
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -129,7 +140,13 @@ export function DiscussProject() {
               <label className={label} htmlFor="help">
                 What do you need?
               </label>
-              <select id="help" name="help" defaultValue={HELP_OPTIONS[0]} className={field}>
+              <select
+                id="help"
+                name="help"
+                value={help}
+                onChange={(e) => setHelp(e.target.value)}
+                className={field}
+              >
                 {HELP_OPTIONS.map((o) => (
                   <option key={o}>{o}</option>
                 ))}
